@@ -1,0 +1,30 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+function AppComponent_Conditional_0_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0,"\n  ");
+    i0.ɵɵelementStart(1,"div",0);
+    i0.ɵɵtext(2,"\n    Warning content\n  ");
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(3,"\n");
+  }
+}
+function AppComponent_Conditional_2_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0,"\n  ");
+    i0.ɵɵelementStart(1,"div",1);
+    i0.ɵɵtext(2,"\n    Main content\n  ");
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(3,"\n");
+  }
+}
+function AppComponent_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵconditionalCreate(0,AppComponent_Conditional_0_Template,4,0);
+    i0.ɵɵpipe(1,"async");
+    i0.ɵɵconditionalBranchCreate(2,AppComponent_Conditional_2_Template,4,0);
+  }
+  if ((rf & 2)) { i0.ɵɵconditional((i0.ɵɵpipeBind1(1,1,ctx.showWarning)? 0: 2)); }
+}

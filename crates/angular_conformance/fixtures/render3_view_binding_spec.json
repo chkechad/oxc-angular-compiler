@@ -1,0 +1,349 @@
+{
+  "name": "binding_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/render3/view/binding_spec.ts",
+  "test_groups": [
+    {
+      "name": "findMatchingDirectivesAndPipes",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should match directives and detect pipes in eager and deferrable parts of a template",
+          "path": "findMatchingDirectivesAndPipes/should match directives and detect pipes in eager and deferrable parts of a template",
+          "assertions": []
+        },
+        {
+          "name": "should return empty directive list if no selectors are provided",
+          "path": "findMatchingDirectivesAndPipes/should return empty directive list if no selectors are provided",
+          "assertions": []
+        },
+        {
+          "name": "should return a directive and a pipe only once (either as a regular or deferrable)",
+          "path": "findMatchingDirectivesAndPipes/should return a directive and a pipe only once (either as a regular or deferrable)",
+          "assertions": []
+        },
+        {
+          "name": "should handle directives on elements with local refs",
+          "path": "findMatchingDirectivesAndPipes/should handle directives on elements with local refs",
+          "assertions": []
+        }
+      ]
+    },
+    {
+      "name": "t2 binding",
+      "groups": [
+        {
+          "name": "matching inputs to consuming directives",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should work for bound attributes",
+              "path": "t2 binding/matching inputs to consuming directives/should work for bound attributes",
+              "assertions": []
+            },
+            {
+              "name": "should work for text attributes on elements",
+              "path": "t2 binding/matching inputs to consuming directives/should work for text attributes on elements",
+              "assertions": []
+            },
+            {
+              "name": "should work for text attributes on templates",
+              "path": "t2 binding/matching inputs to consuming directives/should work for text attributes on templates",
+              "assertions": []
+            },
+            {
+              "name": "should not match directives on attribute bindings with the same name as an input",
+              "path": "t2 binding/matching inputs to consuming directives/should not match directives on attribute bindings with the same name as an input",
+              "assertions": []
+            },
+            {
+              "name": "should bind to the encompassing node when no directive input is matched",
+              "path": "t2 binding/matching inputs to consuming directives/should bind to the encompassing node when no directive input is matched",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "matching outputs to consuming directives",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should work for bound events",
+              "path": "t2 binding/matching outputs to consuming directives/should work for bound events",
+              "assertions": []
+            },
+            {
+              "name": "should bind to the encompassing node when no directive output is matched",
+              "path": "t2 binding/matching outputs to consuming directives/should bind to the encompassing node when no directive output is matched",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "extracting defer blocks info",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract top-level defer blocks",
+              "path": "t2 binding/extracting defer blocks info/should extract top-level defer blocks",
+              "assertions": []
+            },
+            {
+              "name": "should extract nested defer blocks and associated pipes",
+              "path": "t2 binding/extracting defer blocks info/should extract nested defer blocks and associated pipes",
+              "assertions": []
+            },
+            {
+              "name": "should identify pipes used after a nested defer block as being lazy",
+              "path": "t2 binding/extracting defer blocks info/should identify pipes used after a nested defer block as being lazy",
+              "assertions": []
+            },
+            {
+              "name": "should extract nested defer blocks and associated directives",
+              "path": "t2 binding/extracting defer blocks info/should extract nested defer blocks and associated directives",
+              "assertions": []
+            },
+            {
+              "name": "should identify directives used after a nested defer block as being lazy",
+              "path": "t2 binding/extracting defer blocks info/should identify directives used after a nested defer block as being lazy",
+              "assertions": []
+            },
+            {
+              "name": "should identify a trigger element that is a parent of the deferred block",
+              "path": "t2 binding/extracting defer blocks info/should identify a trigger element that is a parent of the deferred block",
+              "assertions": []
+            },
+            {
+              "name": "should identify a trigger element outside of the deferred block",
+              "path": "t2 binding/extracting defer blocks info/should identify a trigger element outside of the deferred block",
+              "assertions": []
+            },
+            {
+              "name": "should identify a trigger element in a parent embedded view",
+              "path": "t2 binding/extracting defer blocks info/should identify a trigger element in a parent embedded view",
+              "assertions": []
+            },
+            {
+              "name": "should identify a trigger element inside the placeholder",
+              "path": "t2 binding/extracting defer blocks info/should identify a trigger element inside the placeholder",
+              "assertions": []
+            },
+            {
+              "name": "should not identify a trigger inside the main content block",
+              "path": "t2 binding/extracting defer blocks info/should not identify a trigger inside the main content block",
+              "assertions": []
+            },
+            {
+              "name": "should identify a trigger element on a component",
+              "path": "t2 binding/extracting defer blocks info/should identify a trigger element on a component",
+              "assertions": []
+            },
+            {
+              "name": "should identify a trigger element on a directive",
+              "path": "t2 binding/extracting defer blocks info/should identify a trigger element on a directive",
+              "assertions": []
+            },
+            {
+              "name": "should identify an implicit trigger inside the placeholder block",
+              "path": "t2 binding/extracting defer blocks info/should identify an implicit trigger inside the placeholder block",
+              "assertions": []
+            },
+            {
+              "name": "should identify an implicit trigger inside the placeholder block with comments",
+              "path": "t2 binding/extracting defer blocks info/should identify an implicit trigger inside the placeholder block with comments",
+              "assertions": []
+            },
+            {
+              "name": "should not identify an implicit trigger if the placeholder has multiple root nodes",
+              "path": "t2 binding/extracting defer blocks info/should not identify an implicit trigger if the placeholder has multiple root nodes",
+              "assertions": []
+            },
+            {
+              "name": "should not identify an implicit trigger if there is no placeholder",
+              "path": "t2 binding/extracting defer blocks info/should not identify an implicit trigger if there is no placeholder",
+              "assertions": []
+            },
+            {
+              "name": "should not identify an implicit trigger if the placeholder has a single root text node",
+              "path": "t2 binding/extracting defer blocks info/should not identify an implicit trigger if the placeholder has a single root text node",
+              "assertions": []
+            },
+            {
+              "name": "should not identify a trigger inside a sibling embedded view",
+              "path": "t2 binding/extracting defer blocks info/should not identify a trigger inside a sibling embedded view",
+              "assertions": []
+            },
+            {
+              "name": "should not identify a trigger element in an embedded view inside the placeholder",
+              "path": "t2 binding/extracting defer blocks info/should not identify a trigger element in an embedded view inside the placeholder",
+              "assertions": []
+            },
+            {
+              "name": "should not identify a trigger element inside the a deferred block within the placeholder",
+              "path": "t2 binding/extracting defer blocks info/should not identify a trigger element inside the a deferred block within the placeholder",
+              "assertions": []
+            },
+            {
+              "name": "should not identify a trigger element on a template",
+              "path": "t2 binding/extracting defer blocks info/should not identify a trigger element on a template",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "used pipes",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should record pipes used in interpolations",
+              "path": "t2 binding/used pipes/should record pipes used in interpolations",
+              "assertions": []
+            },
+            {
+              "name": "should record pipes used in bound attributes",
+              "path": "t2 binding/used pipes/should record pipes used in bound attributes",
+              "assertions": []
+            },
+            {
+              "name": "should record pipes used in bound template attributes",
+              "path": "t2 binding/used pipes/should record pipes used in bound template attributes",
+              "assertions": []
+            },
+            {
+              "name": "should record pipes used in ICUs",
+              "path": "t2 binding/used pipes/should record pipes used in ICUs",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "selectorless",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should resolve directives applied on a component node",
+              "path": "t2 binding/selectorless/should resolve directives applied on a component node",
+              "assertions": []
+            },
+            {
+              "name": "should resolve directives applied on a directive node",
+              "path": "t2 binding/selectorless/should resolve directives applied on a directive node",
+              "assertions": []
+            },
+            {
+              "name": "should not apply selectorless directives on an element node",
+              "path": "t2 binding/selectorless/should not apply selectorless directives on an element node",
+              "assertions": []
+            },
+            {
+              "name": "should resolve a reference on a component node to the component",
+              "path": "t2 binding/selectorless/should resolve a reference on a component node to the component",
+              "assertions": []
+            },
+            {
+              "name": "should resolve a reference on a directive node to the component",
+              "path": "t2 binding/selectorless/should resolve a reference on a directive node to the component",
+              "assertions": []
+            },
+            {
+              "name": "should resolve a reference on an element when using a selectorless matcher",
+              "path": "t2 binding/selectorless/should resolve a reference on an element when using a selectorless matcher",
+              "assertions": []
+            },
+            {
+              "name": "should get consumer of component bindings",
+              "path": "t2 binding/selectorless/should get consumer of component bindings",
+              "assertions": []
+            },
+            {
+              "name": "should get consumer of directive bindings",
+              "path": "t2 binding/selectorless/should get consumer of directive bindings",
+              "assertions": []
+            },
+            {
+              "name": "should get eagerly-used selectorless directives",
+              "path": "t2 binding/selectorless/should get eagerly-used selectorless directives",
+              "assertions": []
+            },
+            {
+              "name": "should get deferred selectorless directives",
+              "path": "t2 binding/selectorless/should get deferred selectorless directives",
+              "assertions": []
+            },
+            {
+              "name": "should get selectorless directives nested in other code",
+              "path": "t2 binding/selectorless/should get selectorless directives nested in other code",
+              "assertions": []
+            },
+            {
+              "name": "should check whether a referenced directive exists",
+              "path": "t2 binding/selectorless/should check whether a referenced directive exists",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "name": "should bind a simple template",
+          "path": "t2 binding/should bind a simple template",
+          "assertions": []
+        },
+        {
+          "name": "should match directives when binding a simple template",
+          "path": "t2 binding/should match directives when binding a simple template",
+          "assertions": []
+        },
+        {
+          "name": "should match directives on namespaced elements",
+          "path": "t2 binding/should match directives on namespaced elements",
+          "assertions": []
+        },
+        {
+          "name": "should not match directives intended for an element on a microsyntax template",
+          "path": "t2 binding/should not match directives intended for an element on a microsyntax template",
+          "assertions": []
+        },
+        {
+          "name": "should get @let declarations when resolving entities at the root",
+          "path": "t2 binding/should get @let declarations when resolving entities at the root",
+          "assertions": []
+        },
+        {
+          "name": "should scope @let declarations to their current view",
+          "path": "t2 binding/should scope @let declarations to their current view",
+          "assertions": []
+        },
+        {
+          "name": "should resolve expressions to an @let declaration",
+          "path": "t2 binding/should resolve expressions to an @let declaration",
+          "assertions": []
+        },
+        {
+          "name": "should not resolve a `this` access to a template reference",
+          "path": "t2 binding/should not resolve a `this` access to a template reference",
+          "assertions": []
+        },
+        {
+          "name": "should not resolve a `this` access to a template variable",
+          "path": "t2 binding/should not resolve a `this` access to a template variable",
+          "assertions": []
+        },
+        {
+          "name": "should not resolve a `this` access to a `@let` declaration",
+          "path": "t2 binding/should not resolve a `this` access to a `@let` declaration",
+          "assertions": []
+        },
+        {
+          "name": "should resolve the definition node of let declarations",
+          "path": "t2 binding/should resolve the definition node of let declarations",
+          "assertions": []
+        },
+        {
+          "name": "should resolve an element reference without a directive matcher",
+          "path": "t2 binding/should resolve an element reference without a directive matcher",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

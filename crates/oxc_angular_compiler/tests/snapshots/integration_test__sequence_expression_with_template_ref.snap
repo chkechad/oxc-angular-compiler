@@ -1,0 +1,33 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+function TestComponent_button_5_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵelementStart(0,"button");
+    i0.ɵɵtext(1,"test");
+    i0.ɵɵelementEnd();
+  }
+}
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) {
+    const _r1 = i0.ɵɵgetCurrentView();
+    i0.ɵɵelementStart(0,"form");
+    i0.ɵɵtext(1,"\n  ");
+    i0.ɵɵelementStart(2,"input",1,0);
+    i0.ɵɵlistener("blur",function TestComponent_Template_input_blur_2_listener() {
+      i0.ɵɵrestoreView(_r1);
+      ctx.isInputFocused.set(false);
+      return i0.ɵɵresetView(ctx.onTouch());
+    });
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(4,"\n  ");
+    i0.ɵɵtemplate(5,TestComponent_button_5_Template,2,0,"button",2);
+    i0.ɵɵtext(6,"\n");
+    i0.ɵɵelementEnd();
+  }
+  if ((rf & 2)) {
+    i0.ɵɵadvance(5);
+    i0.ɵɵproperty("ngIf",ctx.showBtn);
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [
+    "/crates/oxc_angular_compiler/angular",
+    "/crates/angular_conformance/snapshots/angular.snap.md"
+  ],
+  "singleQuote": true,
+  "experimentalSortPackageJson": true,
+  "experimentalSortImports": {
+    "order": "asc",
+    "newlinesBetween": true,
+    "groups": [
+      ["type-import"],
+      ["type-builtin", "value-builtin"],
+      ["type-external", "value-external", "type-internal", "value-internal"],
+      ["type-parent", "type-sibling", "type-index", "value-parent", "value-sibling", "value-index"],
+      ["ts-equals-import"],
+      ["unknown"]
+    ]
+  },
+  "semi": false
+}

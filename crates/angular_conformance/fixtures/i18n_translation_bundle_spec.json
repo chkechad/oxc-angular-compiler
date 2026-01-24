@@ -1,0 +1,74 @@
+{
+  "name": "translation_bundle_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/i18n/translation_bundle_spec.ts",
+  "test_groups": [
+    {
+      "name": "TranslationBundle",
+      "groups": [
+        {
+          "name": "errors reporting",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should report unknown placeholders",
+              "path": "TranslationBundle/errors reporting/should report unknown placeholders",
+              "assertions": []
+            },
+            {
+              "name": "should report missing translation",
+              "path": "TranslationBundle/errors reporting/should report missing translation",
+              "assertions": []
+            },
+            {
+              "name": "should report missing translation with MissingTranslationStrategy.Warning",
+              "path": "TranslationBundle/errors reporting/should report missing translation with MissingTranslationStrategy.Warning",
+              "assertions": []
+            },
+            {
+              "name": "should not report missing translation with MissingTranslationStrategy.Ignore",
+              "path": "TranslationBundle/errors reporting/should not report missing translation with MissingTranslationStrategy.Ignore",
+              "assertions": []
+            },
+            {
+              "name": "should report missing referenced message",
+              "path": "TranslationBundle/errors reporting/should report missing referenced message",
+              "assertions": []
+            },
+            {
+              "name": "should report invalid translated html",
+              "path": "TranslationBundle/errors reporting/should report invalid translated html",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "name": "should translate a plain text",
+          "path": "TranslationBundle/should translate a plain text",
+          "assertions": []
+        },
+        {
+          "name": "should translate html-like plain text",
+          "path": "TranslationBundle/should translate html-like plain text",
+          "assertions": []
+        },
+        {
+          "name": "should translate a message with placeholder",
+          "path": "TranslationBundle/should translate a message with placeholder",
+          "assertions": []
+        },
+        {
+          "name": "should translate a message with placeholder referencing messages",
+          "path": "TranslationBundle/should translate a message with placeholder referencing messages",
+          "assertions": []
+        },
+        {
+          "name": "should use the original message or throw when a translation is not found",
+          "path": "TranslationBundle/should use the original message or throw when a translation is not found",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

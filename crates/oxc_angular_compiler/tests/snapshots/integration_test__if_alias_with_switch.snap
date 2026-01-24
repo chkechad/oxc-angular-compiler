@@ -1,0 +1,54 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+function TestComponent_Conditional_0_Case_1_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0," ");
+    i0.ɵɵelementStart(1,"div");
+    i0.ɵɵtext(2,"Confirm");
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(3," ");
+  }
+}
+function TestComponent_Conditional_0_Case_2_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0," ");
+    i0.ɵɵelementStart(1,"div");
+    i0.ɵɵtext(2,"Pick");
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(3," ");
+  }
+}
+function TestComponent_Conditional_0_Case_3_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0," ");
+    i0.ɵɵelementStart(1,"div");
+    i0.ɵɵtext(2,"Other");
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(3," ");
+  }
+}
+function TestComponent_Conditional_0_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0,"\n  ");
+    i0.ɵɵconditionalCreate(1,TestComponent_Conditional_0_Case_1_Template,4,0)(2,TestComponent_Conditional_0_Case_2_Template,
+        4,0)(3,TestComponent_Conditional_0_Case_3_Template,4,0);
+    i0.ɵɵtext(4,"\n");
+  }
+  if ((rf & 2)) {
+    let tmp_2_0;
+    i0.ɵɵadvance();
+    i0.ɵɵconditional((((tmp_2_0 = ctx.message.type) === "ConfirmNewCredential")? 1: ((tmp_2_0 === "PickCredential")? 2: 3)));
+  }
+}
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵconditionalCreate(0,TestComponent_Conditional_0_Template,5,1);
+    i0.ɵɵpipe(1,"async");
+  }
+  if ((rf & 2)) {
+    let tmp_0_0;
+    i0.ɵɵconditional(((tmp_0_0 = i0.ɵɵpipeBind1(1,1,ctx.data$))? 0: -1),tmp_0_0);
+  }
+}

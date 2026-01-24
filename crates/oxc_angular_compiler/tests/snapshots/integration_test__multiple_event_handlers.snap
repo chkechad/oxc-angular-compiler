@@ -1,0 +1,15 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵelementStart(0,"div",0);
+    i0.ɵɵlistener("click",function TestComponent_Template_div_click_0_listener() {
+      return ctx.onClick();
+    })("mouseover",function TestComponent_Template_div_mouseover_0_listener() {
+      return ctx.onHover();
+    });
+    i0.ɵɵelementEnd();
+  }
+}

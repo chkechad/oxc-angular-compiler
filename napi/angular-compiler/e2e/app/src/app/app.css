@@ -1,0 +1,18 @@
+:host {
+  --primary-color: blue;
+  --text-color: black;
+  display: block;
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+h1 {
+  color: var(--primary-color);
+  font-size: 2rem;
+  margin: 0 0 10px 0;
+}
+
+.description {
+  color: var(--text-color);
+  margin: 0;
+}

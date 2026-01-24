@@ -1,0 +1,18 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+function TestComponent_Defer_0_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0," ");
+    i0.ɵɵelement(1,"heavy-component");
+    i0.ɵɵtext(2," ");
+  }
+}
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵdomTemplate(0,TestComponent_Defer_0_Template,3,0);
+    i0.ɵɵdefer(1,0);
+    i0.ɵɵdeferOnIdle();
+  }
+}

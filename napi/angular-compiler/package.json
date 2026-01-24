@@ -1,0 +1,95 @@
+{
+  "name": "@voidzero-dev/vite-plugin-angular",
+  "version": "0.0.0",
+  "description": "Oxc Angular Compiler Vite plugin",
+  "keywords": [
+    "angular",
+    "compiler",
+    "oxc",
+    "template"
+  ],
+  "homepage": "https://github.com/voidzero-dev/oxc-angular-compiler",
+  "bugs": "https://github.com/voidzero-dev/oxc-angular-compiler/issues",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/voidzero-dev/oxc-angular-compiler.git",
+    "directory": "napi/angular-compiler"
+  },
+  "files": [
+    "index.d.ts",
+    "index.js",
+    "dist/**/*"
+  ],
+  "type": "module",
+  "typesVersions": {
+    "*": {
+      "build-optimizer": [
+        "./dist/angular-build-optimizer-plugin.d.mts"
+      ],
+      "vite-plugin": [
+        "./dist/index.d.mts"
+      ]
+    }
+  },
+  "imports": {
+    "#binding": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./api": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "scripts": {
+    "artifacts": "napi artifacts",
+    "build-dev": "oxnode build.ts --esm --platform --features allocator",
+    "build-test": "pnpm run build-dev --features cross_file_elision",
+    "build": "pnpm run build:native && pnpm run build:ts",
+    "build:native": "pnpm run build-dev --release",
+    "build:ts": "tsdown",
+    "test": "vitest run --dir ./test",
+    "test:e2e": "playwright test --config=e2e/playwright.config.ts",
+    "prepublishOnly": "napi pre-publish -t npm"
+  },
+  "dependencies": {
+    "obug": "^2.1.1"
+  },
+  "devDependencies": {
+    "@angular/compiler": "^21.0.0",
+    "@angular/compiler-cli": "^21.0.0",
+    "@napi-rs/cli": "catalog:",
+    "@oxc-node/cli": "catalog:",
+    "@playwright/test": "^1.58.0",
+    "@types/node": "catalog:",
+    "oxfmt": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "vite": ">=8.0.0-beta.10"
+  },
+  "napi": {
+    "binaryName": "angular-compiler",
+    "packageName": "@voidzero-dev/vite-plugin-angular",
+    "targets": [
+      "aarch64-apple-darwin",
+      "aarch64-pc-windows-msvc",
+      "aarch64-unknown-linux-gnu",
+      "aarch64-unknown-linux-musl",
+      "x86_64-apple-darwin",
+      "x86_64-pc-windows-msvc",
+      "x86_64-unknown-linux-gnu",
+      "x86_64-unknown-linux-musl"
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "name": "util_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/util_spec.ts",
+  "test_groups": [
+    {
+      "name": "util",
+      "groups": [
+        {
+          "name": "splitAtColon",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should split when a single \":\" is present",
+              "path": "util/splitAtColon/should split when a single \":\" is present",
+              "assertions": []
+            },
+            {
+              "name": "should trim parts",
+              "path": "util/splitAtColon/should trim parts",
+              "assertions": []
+            },
+            {
+              "name": "should support multiple \":\"",
+              "path": "util/splitAtColon/should support multiple \":\"",
+              "assertions": []
+            },
+            {
+              "name": "should use the default value when no \":\" is present",
+              "path": "util/splitAtColon/should use the default value when no \":\" is present",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "RegExp",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should escape regexp",
+              "path": "util/RegExp/should escape regexp",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "utf8encode",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should encode to utf8",
+              "path": "util/utf8encode/should encode to utf8",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "stringify()",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should handle objects with no prototype.",
+              "path": "util/stringify()/should handle objects with no prototype.",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

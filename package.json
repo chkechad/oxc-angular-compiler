@@ -1,0 +1,19 @@
+{
+  "name": "oxc-angular",
+  "private": true,
+  "scripts": {
+    "build": "pnpm --filter ./napi/angular-compiler build",
+    "build-dev": "pnpm --filter ./napi/angular-compiler build-dev",
+    "check": "oxfmt --check && oxlint --type-aware --type-check",
+    "test": "pnpm --filter ./napi/angular-compiler test",
+    "test:e2e": "pnpm --filter ./napi/angular-compiler test:e2e",
+    "playground": "pnpm --filter ./napi/playground run dev"
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "^1.42.0",
+    "oxlint-tsgolint": "^0.11.3"
+  },
+  "packageManager": "pnpm@10.28.2"
+}

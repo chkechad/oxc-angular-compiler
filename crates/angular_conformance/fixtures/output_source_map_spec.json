@@ -1,0 +1,75 @@
+{
+  "name": "source_map_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/output/source_map_spec.ts",
+  "test_groups": [
+    {
+      "name": "source map generation",
+      "groups": [
+        {
+          "name": "generation",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should generate a valid source map",
+              "path": "source map generation/generation/should generate a valid source map",
+              "assertions": []
+            },
+            {
+              "name": "should include the files and their contents",
+              "path": "source map generation/generation/should include the files and their contents",
+              "assertions": []
+            },
+            {
+              "name": "should not generate source maps when there is no mapping",
+              "path": "source map generation/generation/should not generate source maps when there is no mapping",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "encodeB64String",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should return the b64 encoded value",
+              "path": "source map generation/encodeB64String/should return the b64 encoded value",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "errors",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should throw when mappings are added out of order",
+              "path": "source map generation/errors/should throw when mappings are added out of order",
+              "assertions": []
+            },
+            {
+              "name": "should throw when adding segments before any line is created",
+              "path": "source map generation/errors/should throw when adding segments before any line is created",
+              "assertions": []
+            },
+            {
+              "name": "should throw when adding segments referencing unknown sources",
+              "path": "source map generation/errors/should throw when adding segments referencing unknown sources",
+              "assertions": []
+            },
+            {
+              "name": "should throw when adding segments without column",
+              "path": "source map generation/errors/should throw when adding segments without column",
+              "assertions": []
+            },
+            {
+              "name": "should throw when adding segments with a source url but no position",
+              "path": "source map generation/errors/should throw when adding segments with a source url but no position",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

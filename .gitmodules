@@ -1,0 +1,3 @@
+[submodule "crates/oxc_angular_compiler/angular"]
+	path = crates/oxc_angular_compiler/angular
+	url = https://github.com/angular/angular.git

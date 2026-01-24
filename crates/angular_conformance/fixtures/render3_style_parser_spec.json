@@ -1,0 +1,177 @@
+{
+  "name": "style_parser_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/render3/style_parser_spec.ts",
+  "test_groups": [
+    {
+      "name": "style parsing",
+      "groups": [
+        {
+          "name": "should not remove quotes",
+          "groups": [],
+          "tests": [
+            {
+              "name": "from string data types",
+              "path": "style parsing/should not remove quotes/from string data types",
+              "assertions": [
+                {
+                  "type": "ParseStyle",
+                  "input": "content: \"foo\"",
+                  "expected": ["content", "\"foo\""]
+                }
+              ]
+            },
+            {
+              "name": "that changes the value context from invalid to valid",
+              "path": "style parsing/should not remove quotes/that changes the value context from invalid to valid",
+              "assertions": [
+                {
+                  "type": "ParseStyle",
+                  "input": "width: \"1px\"",
+                  "expected": ["width", "\"1px\""]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "camelCasing => hyphenation",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should convert a camel-cased value to a hyphenated value",
+              "path": "style parsing/camelCasing => hyphenation/should convert a camel-cased value to a hyphenated value",
+              "assertions": [
+                {
+                  "type": "Hyphenate",
+                  "input": "fooBar",
+                  "expected": "foo-bar"
+                },
+                {
+                  "type": "Hyphenate",
+                  "input": "fooBarMan",
+                  "expected": "foo-bar-man"
+                },
+                {
+                  "type": "Hyphenate",
+                  "input": "-fooBar-man",
+                  "expected": "-foo-bar-man"
+                }
+              ]
+            },
+            {
+              "name": "should make everything lowercase",
+              "path": "style parsing/camelCasing => hyphenation/should make everything lowercase",
+              "assertions": [
+                {
+                  "type": "Hyphenate",
+                  "input": "-WebkitAnimation",
+                  "expected": "-webkit-animation"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "name": "should parse empty or blank strings",
+          "path": "style parsing/should parse empty or blank strings",
+          "assertions": [
+            {
+              "type": "ParseStyle",
+              "input": "",
+              "expected": []
+            },
+            {
+              "type": "ParseStyle",
+              "input": "    ",
+              "expected": []
+            }
+          ]
+        },
+        {
+          "name": "should parse a string into a key/value map",
+          "path": "style parsing/should parse a string into a key/value map",
+          "assertions": [
+            {
+              "type": "ParseStyle",
+              "input": "width:100px;height:200px;opacity:0",
+              "expected": ["width", "100px", "height", "200px", "opacity", "0"]
+            }
+          ]
+        },
+        {
+          "name": "should allow empty values",
+          "path": "style parsing/should allow empty values",
+          "assertions": [
+            {
+              "type": "ParseStyle",
+              "input": "width:;height:   ;",
+              "expected": ["width", "", "height", ""]
+            }
+          ]
+        },
+        {
+          "name": "should trim values and properties",
+          "path": "style parsing/should trim values and properties",
+          "assertions": [
+            {
+              "type": "ParseStyle",
+              "input": "width :333px ; height:666px    ; opacity: 0.5;",
+              "expected": ["width", "333px", "height", "666px", "opacity", "0.5"]
+            }
+          ]
+        },
+        {
+          "name": "should not mess up with quoted strings that contain [:;] values",
+          "path": "style parsing/should not mess up with quoted strings that contain [:;] values",
+          "assertions": [
+            {
+              "type": "ParseStyle",
+              "input": "content: \"foo; man: guy\"; width: 100px",
+              "expected": ["content", "\"foo; man: guy\"", "width", "100px"]
+            }
+          ]
+        },
+        {
+          "name": "should not mess up with quoted strings that contain inner quote values",
+          "path": "style parsing/should not mess up with quoted strings that contain inner quote values",
+          "assertions": []
+        },
+        {
+          "name": "should respect parenthesis that are placed within a style",
+          "path": "style parsing/should respect parenthesis that are placed within a style",
+          "assertions": [
+            {
+              "type": "ParseStyle",
+              "input": "background-image: url(\"foo.jpg\")",
+              "expected": ["background-image", "url(\"foo.jpg\")"]
+            }
+          ]
+        },
+        {
+          "name": "should respect multi-level parenthesis that contain special [:;] characters",
+          "path": "style parsing/should respect multi-level parenthesis that contain special [:;] characters",
+          "assertions": [
+            {
+              "type": "ParseStyle",
+              "input": "color: rgba(calc(50 * 4), var(--cool), :5;); height: 100px;",
+              "expected": ["color", "rgba(calc(50 * 4), var(--cool), :5;)", "height", "100px"]
+            }
+          ]
+        },
+        {
+          "name": "should hyphenate style properties from camel case",
+          "path": "style parsing/should hyphenate style properties from camel case",
+          "assertions": [
+            {
+              "type": "ParseStyle",
+              "input": "borderWidth: 200px",
+              "expected": ["border-width", "200px"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

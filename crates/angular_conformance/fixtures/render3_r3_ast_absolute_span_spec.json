@@ -1,0 +1,1081 @@
+{
+  "name": "r3_ast_absolute_span_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/render3/r3_ast_absolute_span_spec.ts",
+  "test_groups": [
+    {
+      "name": "expression AST absolute source spans",
+      "groups": [
+        {
+          "name": "binary expression",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a binary expression",
+              "path": "expression AST absolute source spans/binary expression/should provide absolute offsets of a binary expression",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{1 + 2}}<div>",
+                  "expected": [["1 + 2"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in a binary expression",
+              "path": "expression AST absolute source spans/binary expression/should provide absolute offsets of expressions in a binary expression",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{1 + 2}}<div>",
+                  "expected": [["1"], ["2"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "conditional",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a conditional",
+              "path": "expression AST absolute source spans/conditional/should provide absolute offsets of a conditional",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{bool ? 1 : 0}}<div>",
+                  "expected": [["bool ? 1 : 0"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in a conditional",
+              "path": "expression AST absolute source spans/conditional/should provide absolute offsets of expressions in a conditional",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{bool ? 1 : 0}}<div>",
+                  "expected": [["bool"], ["1"], ["0"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "chain",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a chain",
+              "path": "expression AST absolute source spans/chain/should provide absolute offsets of a chain",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div (click)=\"a(); b();\"><div>",
+                  "expected": [["a(); b();"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in a chain",
+              "path": "expression AST absolute source spans/chain/should provide absolute offsets of expressions in a chain",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div (click)=\"a(); b();\"><div>",
+                  "expected": [["a()"], ["b()"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "function call",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a function call",
+              "path": "expression AST absolute source spans/function call/should provide absolute offsets of a function call",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{fn()()}}<div>",
+                  "expected": [["fn()()"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in a function call",
+              "path": "expression AST absolute source spans/function call/should provide absolute offsets of expressions in a function call",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{fn()(param)}}<div>",
+                  "expected": [["param"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "interpolation",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of an interpolation",
+              "path": "expression AST absolute source spans/interpolation/should provide absolute offsets of an interpolation",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{1 + foo.length}}<div>",
+                  "expected": [["{{ 1 + foo.length }}"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": true,
+                  "unparse_full_interpolation": true
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in an interpolation",
+              "path": "expression AST absolute source spans/interpolation/should provide absolute offsets of expressions in an interpolation",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{1 + 2}}<div>",
+                  "expected": [["1"], ["2"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should handle HTML entity before interpolation",
+              "path": "expression AST absolute source spans/interpolation/should handle HTML entity before interpolation",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "&nbsp;{{abc}}",
+                  "expected": [["abc"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should handle many HTML entities and many interpolations",
+              "path": "expression AST absolute source spans/interpolation/should handle many HTML entities and many interpolations",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "&quot;{{abc}}&quot;{{def}}&nbsp;{{ghi}}",
+                  "expected": [["abc"], ["def"], ["ghi"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should handle interpolation in attribute",
+              "path": "expression AST absolute source spans/interpolation/should handle interpolation in attribute",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div class=\"{{abc}}\"><div>",
+                  "expected": [["abc"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should handle interpolation preceded by HTML entity in attribute",
+              "path": "expression AST absolute source spans/interpolation/should handle interpolation preceded by HTML entity in attribute",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div class=\"&nbsp;{{abc}}\"><div>",
+                  "expected": [["abc"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should handle many interpolation with HTML entities in attribute",
+              "path": "expression AST absolute source spans/interpolation/should handle many interpolation with HTML entities in attribute",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div class=\"&quot;{{abc}}&quot;&nbsp;{{def}}\"><div>",
+                  "expected": [["abc"], ["def"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "keyed read",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a keyed read",
+              "path": "expression AST absolute source spans/keyed read/should provide absolute offsets of a keyed read",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{obj[key]}}<div>",
+                  "expected": [["obj[key]"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in a keyed read",
+              "path": "expression AST absolute source spans/keyed read/should provide absolute offsets of expressions in a keyed read",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{obj[key]}}<div>",
+                  "expected": [["key"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "keyed write",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a keyed write",
+              "path": "expression AST absolute source spans/keyed write/should provide absolute offsets of a keyed write",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{obj[key] = 0}}<div>",
+                  "expected": [["obj[key] = 0"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in a keyed write",
+              "path": "expression AST absolute source spans/keyed write/should provide absolute offsets of expressions in a keyed write",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{obj[key] = 0}}<div>",
+                  "expected": [["key"], ["0"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "literal array",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a literal array",
+              "path": "expression AST absolute source spans/literal array/should provide absolute offsets of a literal array",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{[0, 1, 2]}}<div>",
+                  "expected": [["[0, 1, 2]"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in a literal array",
+              "path": "expression AST absolute source spans/literal array/should provide absolute offsets of expressions in a literal array",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{[0, 1, 2]}}<div>",
+                  "expected": [["0"], ["1"], ["2"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "literal map",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a literal map",
+              "path": "expression AST absolute source spans/literal map/should provide absolute offsets of a literal map",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{ {a: 0} }}<div>",
+                  "expected": [["{a: 0}"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in a literal map",
+              "path": "expression AST absolute source spans/literal map/should provide absolute offsets of expressions in a literal map",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{ {a: 0} }}<div>",
+                  "expected": [["0"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "method call",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a method call",
+              "path": "expression AST absolute source spans/method call/should provide absolute offsets of a method call",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{method()}}</div>",
+                  "expected": [["method()"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in a method call",
+              "path": "expression AST absolute source spans/method call/should provide absolute offsets of expressions in a method call",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{method(param)}}<div>",
+                  "expected": [["param"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "non-null assert",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a non-null assert",
+              "path": "expression AST absolute source spans/non-null assert/should provide absolute offsets of a non-null assert",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{prop!}}</div>",
+                  "expected": [["prop!"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in a non-null assert",
+              "path": "expression AST absolute source spans/non-null assert/should provide absolute offsets of expressions in a non-null assert",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{prop!}}<div>",
+                  "expected": [["prop"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "pipe",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a pipe",
+              "path": "expression AST absolute source spans/pipe/should provide absolute offsets of a pipe",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{prop | pipe}}<div>",
+                  "expected": [["(prop | pipe)"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": true,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets expressions in a pipe",
+              "path": "expression AST absolute source spans/pipe/should provide absolute offsets expressions in a pipe",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{prop | pipe}}<div>",
+                  "expected": [["prop"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "property read",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a property read",
+              "path": "expression AST absolute source spans/property read/should provide absolute offsets of a property read",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{prop.obj}}<div>",
+                  "expected": [["prop.obj"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in a property read",
+              "path": "expression AST absolute source spans/property read/should provide absolute offsets of expressions in a property read",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{prop.obj}}<div>",
+                  "expected": [["prop"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "property write",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a property write",
+              "path": "expression AST absolute source spans/property write/should provide absolute offsets of a property write",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div (click)=\"prop = 0\"></div>",
+                  "expected": [["prop = 0"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of an accessed property write",
+              "path": "expression AST absolute source spans/property write/should provide absolute offsets of an accessed property write",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div (click)=\"prop.inner = 0\"></div>",
+                  "expected": [["prop.inner = 0"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in a property write",
+              "path": "expression AST absolute source spans/property write/should provide absolute offsets of expressions in a property write",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div (click)=\"prop = 0\"></div>",
+                  "expected": [["0"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "\"not\" prefix",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a \"not\" prefix",
+              "path": "expression AST absolute source spans/\"not\" prefix/should provide absolute offsets of a \"not\" prefix",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{!prop}}</div>",
+                  "expected": [["!prop"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in a \"not\" prefix",
+              "path": "expression AST absolute source spans/\"not\" prefix/should provide absolute offsets of expressions in a \"not\" prefix",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{!prop}}<div>",
+                  "expected": [["prop"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "safe method call",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a safe method call",
+              "path": "expression AST absolute source spans/safe method call/should provide absolute offsets of a safe method call",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{prop?.safe()}}<div>",
+                  "expected": [["prop?.safe()"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in safe method call",
+              "path": "expression AST absolute source spans/safe method call/should provide absolute offsets of expressions in safe method call",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{prop?.safe()}}<div>",
+                  "expected": [["prop"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "safe property read",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should provide absolute offsets of a safe property read",
+              "path": "expression AST absolute source spans/safe property read/should provide absolute offsets of a safe property read",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{prop?.safe}}<div>",
+                  "expected": [["prop?.safe"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should provide absolute offsets of expressions in safe property read",
+              "path": "expression AST absolute source spans/safe property read/should provide absolute offsets of expressions in safe property read",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div>{{prop?.safe}}<div>",
+                  "expected": [["prop"]],
+                  "options": null,
+                  "extract_sub_expressions": true,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": false,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "absolute offsets for template expressions",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should work for simple cases",
+              "path": "expression AST absolute source spans/absolute offsets for template expressions/should work for simple cases",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div *ngFor=\"let item of items\">{{item}}</div>",
+                  "expected": [["items"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": true,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            },
+            {
+              "name": "should work with multiple bindings",
+              "path": "expression AST absolute source spans/absolute offsets for template expressions/should work with multiple bindings",
+              "assertions": [
+                {
+                  "type": "HumanizeExpressionSource",
+                  "input": "<div *ngFor=\"let a of As; let b of Bs\"></div>",
+                  "expected": [["As"], ["Bs"]],
+                  "options": null,
+                  "extract_sub_expressions": false,
+                  "find_implicit_receiver": false,
+                  "template_expressions_only": true,
+                  "use_unparser": false,
+                  "unparse_full_interpolation": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ICU expressions",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for variables and placeholders",
+              "path": "expression AST absolute source spans/ICU expressions/is correct for variables and placeholders",
+              "assertions": []
+            },
+            {
+              "name": "is correct for variables and placeholders",
+              "path": "expression AST absolute source spans/ICU expressions/is correct for variables and placeholders",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "object literal",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for object literals with shorthand property declarations",
+              "path": "expression AST absolute source spans/object literal/is correct for object literals with shorthand property declarations",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "name": "should handle comment in interpolation",
+          "path": "expression AST absolute source spans/should handle comment in interpolation",
+          "assertions": [
+            {
+              "type": "HumanizeExpressionSource",
+              "input": "{{foo // comment}}",
+              "expected": [["foo"]],
+              "options": {
+                "preserve_whitespaces": true
+              },
+              "extract_sub_expressions": false,
+              "find_implicit_receiver": false,
+              "template_expressions_only": false,
+              "use_unparser": false,
+              "unparse_full_interpolation": false
+            }
+          ]
+        },
+        {
+          "name": "should handle whitespace in interpolation",
+          "path": "expression AST absolute source spans/should handle whitespace in interpolation",
+          "assertions": [
+            {
+              "type": "HumanizeExpressionSource",
+              "input": "{{  foo  }}",
+              "expected": [["foo"]],
+              "options": {
+                "preserve_whitespaces": true
+              },
+              "extract_sub_expressions": false,
+              "find_implicit_receiver": false,
+              "template_expressions_only": false,
+              "use_unparser": false,
+              "unparse_full_interpolation": false
+            }
+          ]
+        },
+        {
+          "name": "should handle whitespace and comment in interpolation",
+          "path": "expression AST absolute source spans/should handle whitespace and comment in interpolation",
+          "assertions": [
+            {
+              "type": "HumanizeExpressionSource",
+              "input": "{{  foo // comment  }}",
+              "expected": [["foo"]],
+              "options": {
+                "preserve_whitespaces": true
+              },
+              "extract_sub_expressions": false,
+              "find_implicit_receiver": false,
+              "template_expressions_only": false,
+              "use_unparser": false,
+              "unparse_full_interpolation": false
+            }
+          ]
+        },
+        {
+          "name": "should handle comment in an action binding",
+          "path": "expression AST absolute source spans/should handle comment in an action binding",
+          "assertions": [
+            {
+              "type": "HumanizeExpressionSource",
+              "input": "<button (click)=\"foo = true // comment\">Save</button>",
+              "expected": [["foo = true"]],
+              "options": {
+                "preserve_whitespaces": true
+              },
+              "extract_sub_expressions": false,
+              "find_implicit_receiver": false,
+              "template_expressions_only": false,
+              "use_unparser": false,
+              "unparse_full_interpolation": false
+            }
+          ]
+        },
+        {
+          "name": "should provide absolute offsets with arbitrary whitespace",
+          "path": "expression AST absolute source spans/should provide absolute offsets with arbitrary whitespace",
+          "assertions": [
+            {
+              "type": "HumanizeExpressionSource",
+              "input": "<div>\n  \n{{foo}}</div>",
+              "expected": [["\n  \n{{ foo }}"]],
+              "options": {
+                "preserve_whitespaces": true
+              },
+              "extract_sub_expressions": false,
+              "find_implicit_receiver": false,
+              "template_expressions_only": false,
+              "use_unparser": true,
+              "unparse_full_interpolation": true
+            }
+          ]
+        },
+        {
+          "name": "should provide absolute offsets of an expression in a bound text",
+          "path": "expression AST absolute source spans/should provide absolute offsets of an expression in a bound text",
+          "assertions": [
+            {
+              "type": "HumanizeExpressionSource",
+              "input": "<div>{{foo}}</div>",
+              "expected": [["{{ foo }}"]],
+              "options": null,
+              "extract_sub_expressions": false,
+              "find_implicit_receiver": false,
+              "template_expressions_only": false,
+              "use_unparser": true,
+              "unparse_full_interpolation": true
+            }
+          ]
+        },
+        {
+          "name": "should provide absolute offsets of an expression in a bound event",
+          "path": "expression AST absolute source spans/should provide absolute offsets of an expression in a bound event",
+          "assertions": [
+            {
+              "type": "HumanizeExpressionSource",
+              "input": "<div (click)=\"foo();bar();\"></div>",
+              "expected": [["foo(); bar();"]],
+              "options": null,
+              "extract_sub_expressions": false,
+              "find_implicit_receiver": false,
+              "template_expressions_only": false,
+              "use_unparser": true,
+              "unparse_full_interpolation": false
+            },
+            {
+              "type": "HumanizeExpressionSource",
+              "input": "<div on-click=\"foo();bar();\"></div>",
+              "expected": [["foo(); bar();"]],
+              "options": null,
+              "extract_sub_expressions": false,
+              "find_implicit_receiver": false,
+              "template_expressions_only": false,
+              "use_unparser": true,
+              "unparse_full_interpolation": false
+            }
+          ]
+        },
+        {
+          "name": "should provide absolute offsets of an expression in a bound attribute",
+          "path": "expression AST absolute source spans/should provide absolute offsets of an expression in a bound attribute",
+          "assertions": [
+            {
+              "type": "HumanizeExpressionSource",
+              "input": "<input [disabled]=\"condition ? true : false\" />",
+              "expected": [["condition ? true : false"]],
+              "options": null,
+              "extract_sub_expressions": false,
+              "find_implicit_receiver": false,
+              "template_expressions_only": false,
+              "use_unparser": true,
+              "unparse_full_interpolation": false
+            },
+            {
+              "type": "HumanizeExpressionSource",
+              "input": "<input bind-disabled=\"condition ? true : false\" />",
+              "expected": [["condition ? true : false"]],
+              "options": null,
+              "extract_sub_expressions": false,
+              "find_implicit_receiver": false,
+              "template_expressions_only": false,
+              "use_unparser": true,
+              "unparse_full_interpolation": false
+            }
+          ]
+        },
+        {
+          "name": "should provide absolute offsets of an expression in a template attribute",
+          "path": "expression AST absolute source spans/should provide absolute offsets of an expression in a template attribute",
+          "assertions": [
+            {
+              "type": "HumanizeExpressionSource",
+              "input": "<div *ngIf=\"value | async\"></div>",
+              "expected": [["(value | async)"]],
+              "options": null,
+              "extract_sub_expressions": false,
+              "find_implicit_receiver": false,
+              "template_expressions_only": false,
+              "use_unparser": true,
+              "unparse_full_interpolation": false
+            }
+          ]
+        },
+        {
+          "name": "should provide absolute offsets of an implicit receiver",
+          "path": "expression AST absolute source spans/should provide absolute offsets of an implicit receiver",
+          "assertions": [
+            {
+              "type": "HumanizeExpressionSource",
+              "input": "<div>{{a.b}}<div>",
+              "expected": [[""]],
+              "options": null,
+              "extract_sub_expressions": true,
+              "find_implicit_receiver": true,
+              "template_expressions_only": false,
+              "use_unparser": false,
+              "unparse_full_interpolation": false
+            }
+          ]
+        },
+        {
+          "name": "should provide absolute offsets of a literal primitive",
+          "path": "expression AST absolute source spans/should provide absolute offsets of a literal primitive",
+          "assertions": [
+            {
+              "type": "HumanizeExpressionSource",
+              "input": "<div>{{100}}<div>",
+              "expected": [["100"]],
+              "options": null,
+              "extract_sub_expressions": false,
+              "find_implicit_receiver": false,
+              "template_expressions_only": false,
+              "use_unparser": false,
+              "unparse_full_interpolation": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

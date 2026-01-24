@@ -1,0 +1,23 @@
+{
+  "name": "oxc-angular-e2e-fixture",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite"
+  },
+  "dependencies": {
+    "@angular/common": "^21.0.0",
+    "@angular/compiler": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/platform-browser": "^21.0.0",
+    "rxjs": "catalog:",
+    "tslib": "catalog:"
+  },
+  "devDependencies": {
+    "@angular/compiler-cli": "^21.0.0",
+    "@voidzero-dev/vite-plugin-angular": "workspace:^",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}

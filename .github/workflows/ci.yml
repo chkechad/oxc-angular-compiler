@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+
+      - name: Check
+        run: cargo check --all-features
+
+      - name: Test
+        run: cargo test
+
+      - name: Format
+        run: cargo fmt --all -- --check
+
+      - name: Conformance
+        run: |
+          cargo run -p oxc_angular_conformance
+          git diff --exit-code
+
+  napi:
+    name: NAPI Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: |
+          pnpm build-dev
+          pnpm --filter ./napi/angular-compiler build:ts
+
+      - name: Lint
+        run: pnpm check
+
+      - name: Test
+        run: |
+          pnpm test
+          pnpm --filter ./napi/angular-compiler exec playwright install --with-deps
+          pnpm test:e2e
+      - name: Compare tests
+        run: pnpm --filter @oxc/angular-compare compare --fixtures

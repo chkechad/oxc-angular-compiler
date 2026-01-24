@@ -1,0 +1,17 @@
+{
+  "name": "parse_template_options_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/render3/view/parse_template_options_spec.ts",
+  "test_groups": [
+    {
+      "name": "collectCommentNodes",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should include an array of HTML comment nodes on the returned R3 AST",
+          "path": "collectCommentNodes/should include an array of HTML comment nodes on the returned R3 AST",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

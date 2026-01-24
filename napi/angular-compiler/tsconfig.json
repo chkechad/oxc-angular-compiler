@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "allowJs": true,
+    "composite": true,
+    "resolveJsonModule": true
+  },
+  "include": ["vite-plugin/**/*"],
+  "exclude": ["node_modules", "dist", "test", "playground"],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}

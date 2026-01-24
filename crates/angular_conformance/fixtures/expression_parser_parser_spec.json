@@ -1,0 +1,2759 @@
+{
+  "name": "parser_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/expression_parser/parser_spec.ts",
+  "test_groups": [
+    {
+      "name": "parser",
+      "groups": [
+        {
+          "name": "parseAction",
+          "groups": [
+            {
+              "name": "literals",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should parse array",
+                  "path": "parser/parseAction/literals/should parse array",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "[1][0]",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "[[1]][0][0]",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "[]",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "[].length",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "[1, 2].length",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "[1, 2,]",
+                      "expected": "[1, 2]"
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse map",
+                  "path": "parser/parseAction/literals/should parse map",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "{}",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "{a: 1, \"b\": 2}[2]",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "{}[\"a\"]",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "{a: 1, b: 2,}",
+                      "expected": "{a: 1, b: 2}"
+                    }
+                  ]
+                },
+                {
+                  "name": "should only allow identifier, string, or keyword as map key",
+                  "path": "parser/parseAction/literals/should only allow identifier, string, or keyword as map key",
+                  "assertions": [
+                    {
+                      "type": "ExpectActionError",
+                      "input": "{(:0}",
+                      "error_contains": "expected identifier, keyword, or string"
+                    },
+                    {
+                      "type": "ExpectActionError",
+                      "input": "{1234:0}",
+                      "error_contains": "expected identifier, keyword, or string"
+                    },
+                    {
+                      "type": "ExpectActionError",
+                      "input": "{#myField:0}",
+                      "error_contains": "expected identifier, keyword or string"
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse property shorthand declarations",
+                  "path": "parser/parseAction/literals/should parse property shorthand declarations",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "{a, b, c}",
+                      "expected": "{a: a, b: b, c: c}"
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "{a: 1, b}",
+                      "expected": "{a: 1, b: b}"
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "{a, b: 1}",
+                      "expected": "{a: a, b: 1}"
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "{a: 1, b, c: 2}",
+                      "expected": "{a: 1, b: b, c: 2}"
+                    }
+                  ]
+                },
+                {
+                  "name": "should not allow property shorthand declaration on quoted properties",
+                  "path": "parser/parseAction/literals/should not allow property shorthand declaration on quoted properties",
+                  "assertions": [
+                    {
+                      "type": "ExpectActionError",
+                      "input": "{\"a-b\"}",
+                      "error_contains": "expected : at column 7"
+                    }
+                  ]
+                },
+                {
+                  "name": "should not infer invalid identifiers as shorthand property declarations",
+                  "path": "parser/parseAction/literals/should not infer invalid identifiers as shorthand property declarations",
+                  "assertions": [
+                    {
+                      "type": "ExpectActionError",
+                      "input": "{a.b}",
+                      "error_contains": "expected } at column 3"
+                    },
+                    {
+                      "type": "ExpectActionError",
+                      "input": "{a[\"b\"]}",
+                      "error_contains": "expected } at column 3"
+                    },
+                    {
+                      "type": "ExpectActionError",
+                      "input": "{1234}",
+                      "error_contains": " expected identifier, keyword, or string at column 2"
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse spread assignments in object literals",
+                  "path": "parser/parseAction/literals/should parse spread assignments in object literals",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "{...foo}",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "{one: 1, ...foo, two: 2}",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "{...foo, middle: true, ...bar}",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "{...{...{...{foo: 1}}}}",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should spread elements in array literals",
+                  "path": "parser/parseAction/literals/should spread elements in array literals",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "[...foo]",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "[1, ...foo, 2]",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "[...foo, middle, ...bar]",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "[...[...[...[1]]]]",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "[a, ...b, ...[1, 2, 3]]",
+                      "expected": null
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "member access",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should parse field access",
+                  "path": "parser/parseAction/member access/should parse field access",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "a",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "this.a",
+                      "expected": "a"
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "a.a",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should error for private identifiers with implicit receiver",
+                  "path": "parser/parseAction/member access/should error for private identifiers with implicit receiver",
+                  "assertions": [
+                    {
+                      "type": "CheckActionWithError",
+                      "input": "#privateField",
+                      "expected": "",
+                      "error_contains": "Private identifiers are not supported. Unexpected private identifier: #privateField at column 1"
+                    }
+                  ]
+                },
+                {
+                  "name": "should only allow identifier or keyword as member names",
+                  "path": "parser/parseAction/member access/should only allow identifier or keyword as member names",
+                  "assertions": [
+                    {
+                      "type": "CheckActionWithError",
+                      "input": "x.",
+                      "expected": "x.",
+                      "error_contains": "identifier or keyword"
+                    },
+                    {
+                      "type": "CheckActionWithError",
+                      "input": "x.(",
+                      "expected": "x.",
+                      "error_contains": "identifier or keyword"
+                    },
+                    {
+                      "type": "CheckActionWithError",
+                      "input": "x. 1234",
+                      "expected": "x.",
+                      "error_contains": "identifier or keyword"
+                    },
+                    {
+                      "type": "CheckActionWithError",
+                      "input": "x.\"foo\"",
+                      "expected": "x.",
+                      "error_contains": "identifier or keyword"
+                    },
+                    {
+                      "type": "CheckActionWithError",
+                      "input": "x.#privateField",
+                      "expected": "x.",
+                      "error_contains": "Private identifiers are not supported. Unexpected private identifier: #privateField, expected identifier or keyword"
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse safe field access",
+                  "path": "parser/parseAction/member access/should parse safe field access",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "a?.a",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "a.a?.a",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse incomplete safe field accesses",
+                  "path": "parser/parseAction/member access/should parse incomplete safe field accesses",
+                  "assertions": [
+                    {
+                      "type": "CheckActionWithError",
+                      "input": "a?.a.",
+                      "expected": "a?.a.",
+                      "error_contains": "identifier or keyword"
+                    },
+                    {
+                      "type": "CheckActionWithError",
+                      "input": "a.a?.a.",
+                      "expected": "a.a?.a.",
+                      "error_contains": "identifier or keyword"
+                    },
+                    {
+                      "type": "CheckActionWithError",
+                      "input": "a.a?.a?. 1234",
+                      "expected": "a.a?.a?.",
+                      "error_contains": "identifier or keyword"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "property write",
+              "groups": [
+                {
+                  "name": "malformed property writes",
+                  "groups": [],
+                  "tests": [
+                    {
+                      "name": "should recover on empty rvalues",
+                      "path": "parser/parseAction/property write/malformed property writes/should recover on empty rvalues",
+                      "assertions": [
+                        {
+                          "type": "CheckActionWithError",
+                          "input": "a.a = ",
+                          "expected": "a.a = ",
+                          "error_contains": "Unexpected end of expression"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should recover on incomplete rvalues",
+                      "path": "parser/parseAction/property write/malformed property writes/should recover on incomplete rvalues",
+                      "assertions": [
+                        {
+                          "type": "CheckActionWithError",
+                          "input": "a.a = 1 + ",
+                          "expected": "a.a = 1 + ",
+                          "error_contains": "Unexpected end of expression"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should recover on missing properties",
+                      "path": "parser/parseAction/property write/malformed property writes/should recover on missing properties",
+                      "assertions": [
+                        {
+                          "type": "CheckActionWithError",
+                          "input": "a. = 1",
+                          "expected": "a. = 1",
+                          "error_contains": "Expected identifier for property access at column 2"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should error on writes after a property write",
+                      "path": "parser/parseAction/property write/malformed property writes/should error on writes after a property write",
+                      "assertions": []
+                    }
+                  ]
+                }
+              ],
+              "tests": [
+                {
+                  "name": "should parse property writes",
+                  "path": "parser/parseAction/property write/should parse property writes",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "a.a = 1 + 2",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "this.a.a = 1 + 2",
+                      "expected": "a.a = 1 + 2"
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "a.a.a = 1 + 2",
+                      "expected": null
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "calls",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should parse calls",
+                  "path": "parser/parseAction/calls/should parse calls",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "fn()",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "add(1, 2)",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "a.add(1, 2)",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "fn().add(1, 2)",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "fn()(1, 2)",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse an EmptyExpr with a correct span for a trailing empty argument",
+                  "path": "parser/parseAction/calls/should parse an EmptyExpr with a correct span for a trailing empty argument",
+                  "assertions": []
+                },
+                {
+                  "name": "should parse safe calls",
+                  "path": "parser/parseAction/calls/should parse safe calls",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "fn?.()",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "add?.(1, 2)",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "a.add?.(1, 2)",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "a?.add?.(1, 2)",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "fn?.().add?.(1, 2)",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "fn?.()?.(1, 2)",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse rest arguments in calls",
+                  "path": "parser/parseAction/calls/should parse rest arguments in calls",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "fn(...foo)",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "fn(1, ...foo, 2)",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "fn(...foo, middle, ...bar)",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "fn(a, ...b, ...[1, 2, 3])",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse rest arguments in safe calls",
+                  "path": "parser/parseAction/calls/should parse rest arguments in safe calls",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "fn?.(...foo)",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "fn?.(1, ...foo, 2)",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "fn?.(...foo, middle, ...bar)",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "fn?.(a, ...b, ...[1, 2, 3])",
+                      "expected": null
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "keyed read",
+              "groups": [
+                {
+                  "name": "malformed keyed reads",
+                  "groups": [],
+                  "tests": [
+                    {
+                      "name": "should recover on missing keys",
+                      "path": "parser/parseAction/keyed read/malformed keyed reads/should recover on missing keys",
+                      "assertions": [
+                        {
+                          "type": "CheckActionWithError",
+                          "input": "a[]",
+                          "expected": "a[]",
+                          "error_contains": "Key access cannot be empty"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should recover on incomplete expression keys",
+                      "path": "parser/parseAction/keyed read/malformed keyed reads/should recover on incomplete expression keys",
+                      "assertions": [
+                        {
+                          "type": "CheckActionWithError",
+                          "input": "a[1 + ]",
+                          "expected": "a[1 + ]",
+                          "error_contains": "Unexpected token ]"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should recover on unterminated keys",
+                      "path": "parser/parseAction/keyed read/malformed keyed reads/should recover on unterminated keys",
+                      "assertions": [
+                        {
+                          "type": "CheckActionWithError",
+                          "input": "a[1 + 2",
+                          "expected": "a[1 + 2]",
+                          "error_contains": "Missing expected ] at the end of the expression"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should recover on incomplete and unterminated keys",
+                      "path": "parser/parseAction/keyed read/malformed keyed reads/should recover on incomplete and unterminated keys",
+                      "assertions": [
+                        {
+                          "type": "CheckActionWithError",
+                          "input": "a[1 + ",
+                          "expected": "a[1 + ]",
+                          "error_contains": "Missing expected ] at the end of the expression"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "tests": [
+                {
+                  "name": "should parse keyed reads",
+                  "path": "parser/parseAction/keyed read/should parse keyed reads",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "a[\"a\"]",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "this.a[\"a\"]",
+                      "expected": "a[\"a\"]"
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "a.a[\"a\"]",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse safe keyed reads",
+                  "path": "parser/parseAction/keyed read/should parse safe keyed reads",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "a?.[\"a\"]",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "this.a?.[\"a\"]",
+                      "expected": "a?.[\"a\"]"
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "a.a?.[\"a\"]",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "a.a?.[\"a\" | foo]",
+                      "expected": "a.a?.[(\"a\" | foo)]"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "keyed write",
+              "groups": [
+                {
+                  "name": "malformed keyed writes",
+                  "groups": [],
+                  "tests": [
+                    {
+                      "name": "should recover on empty rvalues",
+                      "path": "parser/parseAction/keyed write/malformed keyed writes/should recover on empty rvalues",
+                      "assertions": [
+                        {
+                          "type": "CheckActionWithError",
+                          "input": "a[\"a\"] = ",
+                          "expected": "a[\"a\"] = ",
+                          "error_contains": "Unexpected end of expression"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should recover on incomplete rvalues",
+                      "path": "parser/parseAction/keyed write/malformed keyed writes/should recover on incomplete rvalues",
+                      "assertions": [
+                        {
+                          "type": "CheckActionWithError",
+                          "input": "a[\"a\"] = 1 + ",
+                          "expected": "a[\"a\"] = 1 + ",
+                          "error_contains": "Unexpected end of expression"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should recover on missing keys",
+                      "path": "parser/parseAction/keyed write/malformed keyed writes/should recover on missing keys",
+                      "assertions": [
+                        {
+                          "type": "CheckActionWithError",
+                          "input": "a[] = 1",
+                          "expected": "a[] = 1",
+                          "error_contains": "Key access cannot be empty"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should recover on incomplete expression keys",
+                      "path": "parser/parseAction/keyed write/malformed keyed writes/should recover on incomplete expression keys",
+                      "assertions": [
+                        {
+                          "type": "CheckActionWithError",
+                          "input": "a[1 + ] = 1",
+                          "expected": "a[1 + ] = 1",
+                          "error_contains": "Unexpected token ]"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should recover on unterminated keys",
+                      "path": "parser/parseAction/keyed write/malformed keyed writes/should recover on unterminated keys",
+                      "assertions": [
+                        {
+                          "type": "CheckActionWithError",
+                          "input": "a[1 + 2 = 1",
+                          "expected": "a[1 + 2] = 1",
+                          "error_contains": "Missing expected ]"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should recover on incomplete and unterminated keys",
+                      "path": "parser/parseAction/keyed write/malformed keyed writes/should recover on incomplete and unterminated keys",
+                      "assertions": []
+                    },
+                    {
+                      "name": "should error on writes after a keyed write",
+                      "path": "parser/parseAction/keyed write/malformed keyed writes/should error on writes after a keyed write",
+                      "assertions": []
+                    },
+                    {
+                      "name": "should recover on parenthesized empty rvalues",
+                      "path": "parser/parseAction/keyed write/malformed keyed writes/should recover on parenthesized empty rvalues",
+                      "assertions": []
+                    }
+                  ]
+                }
+              ],
+              "tests": [
+                {
+                  "name": "should parse keyed writes",
+                  "path": "parser/parseAction/keyed write/should parse keyed writes",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "a[\"a\"] = 1 + 2",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "this.a[\"a\"] = 1 + 2",
+                      "expected": "a[\"a\"] = 1 + 2"
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "a.a[\"a\"] = 1 + 2",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should report on safe keyed writes",
+                  "path": "parser/parseAction/keyed write/should report on safe keyed writes",
+                  "assertions": [
+                    {
+                      "type": "ExpectActionError",
+                      "input": "a?.[\"a\"] = 123",
+                      "error_contains": "cannot be used in the assignment"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "conditional",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should parse ternary/conditional expressions",
+                  "path": "parser/parseAction/conditional/should parse ternary/conditional expressions",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "7 == 3 + 4 ? 10 : 20",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "false ? 10 : 20",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should report incorrect ternary operator syntax",
+                  "path": "parser/parseAction/conditional/should report incorrect ternary operator syntax",
+                  "assertions": [
+                    {
+                      "type": "ExpectActionError",
+                      "input": "true?1",
+                      "error_contains": "Conditional expression true?1 requires all 3 expressions"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "assignment",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should support field assignments",
+                  "path": "parser/parseAction/assignment/should support field assignments",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "a = 12",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "a.a.a = 123",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckAction",
+                      "input": "a = 123; b = 234;",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should report on safe field assignments",
+                  "path": "parser/parseAction/assignment/should report on safe field assignments",
+                  "assertions": [
+                    {
+                      "type": "ExpectActionError",
+                      "input": "a?.a = 123",
+                      "error_contains": "cannot be used in the assignment"
+                    }
+                  ]
+                },
+                {
+                  "name": "should support array updates",
+                  "path": "parser/parseAction/assignment/should support array updates",
+                  "assertions": [
+                    {
+                      "type": "CheckAction",
+                      "input": "a[0] = 200",
+                      "expected": null
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "template literals",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should parse template literals without interpolations",
+                  "path": "parser/parseAction/template literals/should parse template literals without interpolations",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "`hello world`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "`foo $`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "`foo }`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "`foo $ {}`",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse template literals with interpolations",
+                  "path": "parser/parseAction/template literals/should parse template literals with interpolations",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "`hello ${name}`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "`${name} Johnson`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "`foo${bar}baz`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "`${a} - ${b} - ${c}`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "`foo ${{$: true}} baz`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "`foo ${`hello ${`${a} - b`}`} baz`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "[`hello ${name}`, `see ${name} later`]",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "`hello ${name}` + 123",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse template literals with pipes inside interpolations",
+                  "path": "parser/parseAction/template literals/should parse template literals with pipes inside interpolations",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "`hello ${name | capitalize}!!!`",
+                      "expected": "`hello ${(name | capitalize)}!!!`"
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "`hello ${(name | capitalize)}!!!`",
+                      "expected": "`hello ${((name | capitalize))}!!!`"
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse template literals in objects literals",
+                  "path": "parser/parseAction/template literals/should parse template literals in objects literals",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "{\"a\": `${name}`}",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "{\"a\": `hello ${name}!`}",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "{\"a\": `hello ${`hello ${`hello`}`}!`}",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "{\"a\": `hello ${{\"b\": `hello`}}`}",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should report error if interpolation is empty",
+                  "path": "parser/parseAction/template literals/should report error if interpolation is empty",
+                  "assertions": [
+                    {
+                      "type": "ExpectBindingError",
+                      "input": "`hello ${}`",
+                      "error_contains": "Template literal interpolation cannot be empty"
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse tagged template literals with no interpolations",
+                  "path": "parser/parseAction/template literals/should parse tagged template literals with no interpolations",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "tag`hello!`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "tags.first`hello!`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "tags[0]`hello!`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "tag()`hello!`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "(tag ?? otherTag)`hello!`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "tag!`hello!`",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse tagged template literals with interpolations",
+                  "path": "parser/parseAction/template literals/should parse tagged template literals with interpolations",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "tag`hello ${name}!`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "tags.first`hello ${name}!`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "tags[0]`hello ${name}!`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "tag()`hello ${name}!`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "(tag ?? otherTag)`hello ${name}!`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "tag!`hello ${name}!`",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should not mistake operator for tagged literal tag",
+                  "path": "parser/parseAction/template literals/should not mistake operator for tagged literal tag",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "typeof `hello!`",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "typeof `hello ${name}!`",
+                      "expected": null
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "regular expression literals",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should parse a regular expression literal without flags",
+                  "path": "parser/parseAction/regular expression literals/should parse a regular expression literal without flags",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "/abc/",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "/[a/]$/",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "/a\\w+/",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "/^http:\\/\\/foo\\.bar/",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a regular expression literal with flags",
+                  "path": "parser/parseAction/regular expression literals/should parse a regular expression literal with flags",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "/abc/g",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "/[a/]$/gi",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "/a\\w+/gim",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "/^http:\\/\\/foo\\.bar/i",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a regular expression that is a part of other expressions",
+                  "path": "parser/parseAction/regular expression literals/should parse a regular expression that is a part of other expressions",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "/abc/.test(\"foo\")",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "\"foo\".match(/(abc)/)[1].toUpperCase()",
+                      "expected": null
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "/abc/.test(\"foo\") && something || somethingElse",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should report invalid regular expression flag",
+                  "path": "parser/parseAction/regular expression literals/should report invalid regular expression flag",
+                  "assertions": [
+                    {
+                      "type": "ExpectBindingError",
+                      "input": "\"foo\".match(/abc/O)",
+                      "error_contains": "Unsupported regular expression flag \"O\""
+                    }
+                  ]
+                },
+                {
+                  "name": "should report duplicated regular expression flags",
+                  "path": "parser/parseAction/regular expression literals/should report duplicated regular expression flags",
+                  "assertions": [
+                    {
+                      "type": "ExpectBindingError",
+                      "input": "\"foo\".match(/abc/gig)",
+                      "error_contains": "Duplicate regular expression flag \"g\""
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "tests": [
+            {
+              "name": "should parse numbers",
+              "path": "parser/parseAction/should parse numbers",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "1",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse strings",
+              "path": "parser/parseAction/should parse strings",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "'1'",
+                  "expected": "\"1\""
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "\"1\"",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse null",
+              "path": "parser/parseAction/should parse null",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "null",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse undefined",
+              "path": "parser/parseAction/should parse undefined",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "undefined",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse unary - and + expressions",
+              "path": "parser/parseAction/should parse unary - and + expressions",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "-1",
+                  "expected": "-1"
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "+1",
+                  "expected": "+1"
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "-'1'",
+                  "expected": "-\"1\""
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "+'1'",
+                  "expected": "+\"1\""
+                }
+              ]
+            },
+            {
+              "name": "should parse unary ! expressions",
+              "path": "parser/parseAction/should parse unary ! expressions",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "!true",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "!!true",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "!!!true",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse postfix ! expression",
+              "path": "parser/parseAction/should parse postfix ! expression",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "true!",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a!.b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a!!!!.b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a!()",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a.b!()",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse exponentiation expressions",
+              "path": "parser/parseAction/should parse exponentiation expressions",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "1*2**3",
+                  "expected": "1 * 2 ** 3"
+                }
+              ]
+            },
+            {
+              "name": "should parse multiplicative expressions",
+              "path": "parser/parseAction/should parse multiplicative expressions",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "3*4/2%5",
+                  "expected": "3 * 4 / 2 % 5"
+                }
+              ]
+            },
+            {
+              "name": "should parse additive expressions",
+              "path": "parser/parseAction/should parse additive expressions",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "3 + 6 - 2",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse relational expressions",
+              "path": "parser/parseAction/should parse relational expressions",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "2 < 3",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "2 > 3",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "2 <= 2",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "2 >= 2",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "\"key\" in obj",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "foo instanceof Foo",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse equality expressions",
+              "path": "parser/parseAction/should parse equality expressions",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "2 == 3",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "2 != 3",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse strict equality expressions",
+              "path": "parser/parseAction/should parse strict equality expressions",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "2 === 3",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "2 !== 3",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse expressions",
+              "path": "parser/parseAction/should parse expressions",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "true && true",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "true || false",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "null ?? 0",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "null ?? undefined ?? 0",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse typeof expression",
+              "path": "parser/parseAction/should parse typeof expression",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "typeof {} === \"object\"",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "(!(typeof {} === \"number\"))",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse void expression",
+              "path": "parser/parseAction/should parse void expression",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "void 0",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "(!(void 0))",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse grouped expressions",
+              "path": "parser/parseAction/should parse grouped expressions",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "(1 + 2) * 3",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse in expressions",
+              "path": "parser/parseAction/should parse in expressions",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "'key' in obj",
+                  "expected": "\"key\" in obj"
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "('key' in obj) && true",
+                  "expected": "(\"key\" in obj) && true"
+                }
+              ]
+            },
+            {
+              "name": "should ignore comments in expressions",
+              "path": "parser/parseAction/should ignore comments in expressions",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "a //comment",
+                  "expected": "a"
+                }
+              ]
+            },
+            {
+              "name": "should parse instanceof expressions",
+              "path": "parser/parseAction/should parse instanceof expressions",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "obj instanceof MyClass",
+                  "expected": "obj instanceof MyClass"
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "(obj instanceof MyClass) || false",
+                  "expected": "(obj instanceof MyClass) || false"
+                }
+              ]
+            },
+            {
+              "name": "should retain // in string literals",
+              "path": "parser/parseAction/should retain // in string literals",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "\"http://www.google.com\"",
+                  "expected": "\"http://www.google.com\""
+                }
+              ]
+            },
+            {
+              "name": "should parse an empty string",
+              "path": "parser/parseAction/should parse an empty string",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse assignment operators with property reads",
+              "path": "parser/parseAction/should parse assignment operators with property reads",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "a = b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a += b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a -= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a *= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a /= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a %= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a **= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a &&= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a ||= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a ??= b",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should parse assignment operators with keyed reads",
+              "path": "parser/parseAction/should parse assignment operators with keyed reads",
+              "assertions": [
+                {
+                  "type": "CheckAction",
+                  "input": "a[0] = b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a[0] += b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a[0] -= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a[0] *= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a[0] /= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a[0] %= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a[0] **= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a[0] &&= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a[0] ||= b",
+                  "expected": null
+                },
+                {
+                  "type": "CheckAction",
+                  "input": "a[0] ??= b",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should error when using pipes",
+              "path": "parser/parseAction/should error when using pipes",
+              "assertions": [
+                {
+                  "type": "ExpectActionError",
+                  "input": "x|blah",
+                  "error_contains": "Cannot have a pipe"
+                }
+              ]
+            },
+            {
+              "name": "should report when encountering interpolation",
+              "path": "parser/parseAction/should report when encountering interpolation",
+              "assertions": [
+                {
+                  "type": "ExpectActionError",
+                  "input": "{{a()}}",
+                  "error_contains": "Got interpolation ({{}}) where expression was expected"
+                }
+              ]
+            },
+            {
+              "name": "should not report interpolation inside a string",
+              "path": "parser/parseAction/should not report interpolation inside a string",
+              "assertions": [
+                {
+                  "type": "ExpectNoActionError",
+                  "input": "\"{{a()}}\""
+                },
+                {
+                  "type": "ExpectNoActionError",
+                  "input": "'{{a()}}'"
+                },
+                {
+                  "type": "ExpectNoActionError",
+                  "input": "\"{{a('\\\"')}}\""
+                },
+                {
+                  "type": "ExpectNoActionError",
+                  "input": "'{{a(\"\\'\")}}'"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "parse spans",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should record property read span",
+              "path": "parser/parse spans/should record property read span",
+              "assertions": []
+            },
+            {
+              "name": "should record accessed property read span",
+              "path": "parser/parse spans/should record accessed property read span",
+              "assertions": []
+            },
+            {
+              "name": "should record safe property read span",
+              "path": "parser/parse spans/should record safe property read span",
+              "assertions": []
+            },
+            {
+              "name": "should record call span",
+              "path": "parser/parse spans/should record call span",
+              "assertions": []
+            },
+            {
+              "name": "should record call argument span",
+              "path": "parser/parse spans/should record call argument span",
+              "assertions": []
+            },
+            {
+              "name": "should record accessed call span",
+              "path": "parser/parse spans/should record accessed call span",
+              "assertions": []
+            },
+            {
+              "name": "should record property write span",
+              "path": "parser/parse spans/should record property write span",
+              "assertions": []
+            },
+            {
+              "name": "should record accessed property write span",
+              "path": "parser/parse spans/should record accessed property write span",
+              "assertions": []
+            },
+            {
+              "name": "should record spans for untagged template literals with no interpolations",
+              "path": "parser/parse spans/should record spans for untagged template literals with no interpolations",
+              "assertions": []
+            },
+            {
+              "name": "should record spans for untagged template literals with interpolations",
+              "path": "parser/parse spans/should record spans for untagged template literals with interpolations",
+              "assertions": []
+            },
+            {
+              "name": "should record spans for tagged template literal with no interpolations",
+              "path": "parser/parse spans/should record spans for tagged template literal with no interpolations",
+              "assertions": []
+            },
+            {
+              "name": "should record spans for tagged template literal with interpolations",
+              "path": "parser/parse spans/should record spans for tagged template literal with interpolations",
+              "assertions": []
+            },
+            {
+              "name": "should record spans for binary assignment operations",
+              "path": "parser/parse spans/should record spans for binary assignment operations",
+              "assertions": []
+            },
+            {
+              "name": "should include parenthesis in spans",
+              "path": "parser/parse spans/should include parenthesis in spans",
+              "assertions": []
+            },
+            {
+              "name": "should produce correct span for typeof expression",
+              "path": "parser/parse spans/should produce correct span for typeof expression",
+              "assertions": []
+            },
+            {
+              "name": "should produce correct span for void expression",
+              "path": "parser/parse spans/should produce correct span for void expression",
+              "assertions": []
+            },
+            {
+              "name": "should record span for a regex without flags",
+              "path": "parser/parse spans/should record span for a regex without flags",
+              "assertions": []
+            },
+            {
+              "name": "should record span for a regex with flags",
+              "path": "parser/parse spans/should record span for a regex with flags",
+              "assertions": []
+            },
+            {
+              "name": "should record span for literal map keys",
+              "path": "parser/parse spans/should record span for literal map keys",
+              "assertions": []
+            },
+            {
+              "name": "should record span for spread elements",
+              "path": "parser/parse spans/should record span for spread elements",
+              "assertions": []
+            },
+            {
+              "name": "should record span for rest arguments in functions",
+              "path": "parser/parse spans/should record span for rest arguments in functions",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "general error handling",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should report an unexpected token",
+              "path": "parser/general error handling/should report an unexpected token",
+              "assertions": [
+                {
+                  "type": "ExpectActionError",
+                  "input": "[1,2] trac",
+                  "error_contains": "Unexpected token 'trac'"
+                }
+              ]
+            },
+            {
+              "name": "should report reasonable error for unconsumed tokens",
+              "path": "parser/general error handling/should report reasonable error for unconsumed tokens",
+              "assertions": [
+                {
+                  "type": "ExpectActionError",
+                  "input": ")",
+                  "error_contains": "Unexpected token ) at column 1 in [)]"
+                }
+              ]
+            },
+            {
+              "name": "should report a missing expected token",
+              "path": "parser/general error handling/should report a missing expected token",
+              "assertions": [
+                {
+                  "type": "ExpectActionError",
+                  "input": "a(b",
+                  "error_contains": "Missing expected ) at the end of the expression [a(b]"
+                }
+              ]
+            },
+            {
+              "name": "should report a single error for an `as` expression inside a parenthesized expression",
+              "path": "parser/general error handling/should report a single error for an `as` expression inside a parenthesized expression",
+              "assertions": [
+                {
+                  "type": "ExpectActionError",
+                  "input": "foo(($event.target as HTMLElement).value)",
+                  "error_contains": "Missing closing parentheses at column 20"
+                },
+                {
+                  "type": "ExpectActionError",
+                  "input": "foo(((($event.target as HTMLElement))).value)",
+                  "error_contains": "Missing closing parentheses at column 22"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "parseBinding",
+          "groups": [
+            {
+              "name": "pipes",
+              "groups": [
+                {
+                  "name": "should parse incomplete pipes",
+                  "groups": [],
+                  "tests": [
+                    {
+                      "name": "unnamed",
+                      "path": "parser/parseBinding/pipes/should parse incomplete pipes/unnamed",
+                      "assertions": []
+                    },
+                    {
+                      "name": "should parse an incomplete pipe with a source span that includes trailing whitespace",
+                      "path": "parser/parseBinding/pipes/should parse incomplete pipes/should parse an incomplete pipe with a source span that includes trailing whitespace",
+                      "assertions": []
+                    },
+                    {
+                      "name": "should parse pipes with the correct type when supportsDirectPipeReferences is enabled",
+                      "path": "parser/parseBinding/pipes/should parse incomplete pipes/should parse pipes with the correct type when supportsDirectPipeReferences is enabled",
+                      "assertions": []
+                    },
+                    {
+                      "name": "should parse pipes with the correct type when supportsDirectPipeReferences is disabled",
+                      "path": "parser/parseBinding/pipes/should parse incomplete pipes/should parse pipes with the correct type when supportsDirectPipeReferences is disabled",
+                      "assertions": []
+                    }
+                  ]
+                }
+              ],
+              "tests": [
+                {
+                  "name": "should parse pipes",
+                  "path": "parser/parseBinding/pipes/should parse pipes",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "a(b | c)",
+                      "expected": "a((b | c))"
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "a.b(c.d(e) | f)",
+                      "expected": "a.b((c.d(e) | f))"
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "[1, 2, 3] | a",
+                      "expected": "([1, 2, 3] | a)"
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "{a: 1, \"b\": 2} | c",
+                      "expected": "({a: 1, \"b\": 2} | c)"
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "a[b] | c",
+                      "expected": "(a[b] | c)"
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "a?.b | c",
+                      "expected": "(a?.b | c)"
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "true | a",
+                      "expected": "(true | a)"
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "a | b:c | d",
+                      "expected": "((a | b:c) | d)"
+                    },
+                    {
+                      "type": "CheckBinding",
+                      "input": "a | b:(c | d)",
+                      "expected": "(a | b:((c | d)))"
+                    }
+                  ]
+                },
+                {
+                  "name": "should only allow identifier or keyword as formatter names",
+                  "path": "parser/parseBinding/pipes/should only allow identifier or keyword as formatter names",
+                  "assertions": [
+                    {
+                      "type": "ExpectBindingError",
+                      "input": "\"Foo\"|(",
+                      "error_contains": "identifier or keyword"
+                    },
+                    {
+                      "type": "ExpectBindingError",
+                      "input": "\"Foo\"|1234",
+                      "error_contains": "identifier or keyword"
+                    },
+                    {
+                      "type": "ExpectBindingError",
+                      "input": "\"Foo\"|\"uppercase\"",
+                      "error_contains": "identifier or keyword"
+                    },
+                    {
+                      "type": "ExpectBindingError",
+                      "input": "\"Foo\"|#privateIdentifier\"",
+                      "error_contains": "identifier or keyword"
+                    }
+                  ]
+                },
+                {
+                  "name": "should not crash when prefix part is not tokenizable",
+                  "path": "parser/parseBinding/pipes/should not crash when prefix part is not tokenizable",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "\"a:b\"",
+                      "expected": "\"a:b\""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "arrow functions",
+              "groups": [
+                {
+                  "name": "arrow function spans",
+                  "groups": [],
+                  "tests": [
+                    {
+                      "name": "should produce spans for the entire arrow function",
+                      "path": "parser/parseBinding/arrow functions/arrow function spans/should produce spans for the entire arrow function",
+                      "assertions": []
+                    },
+                    {
+                      "name": "should produce spans for the arrow function parameters",
+                      "path": "parser/parseBinding/arrow functions/arrow function spans/should produce spans for the arrow function parameters",
+                      "assertions": []
+                    }
+                  ]
+                },
+                {
+                  "name": "arrow function validations",
+                  "groups": [],
+                  "tests": [
+                    {
+                      "name": "should not allow pipe to be used inside an arrow function",
+                      "path": "parser/parseBinding/arrow functions/arrow function validations/should not allow pipe to be used inside an arrow function",
+                      "assertions": [
+                        {
+                          "type": "ExpectBindingError",
+                          "input": "(a, b) => (a + b | pipe)",
+                          "error_contains": "Cannot have a pipe in an action expression"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should report an error for an arrow function with a body",
+                      "path": "parser/parseBinding/arrow functions/arrow function validations/should report an error for an arrow function with a body",
+                      "assertions": [
+                        {
+                          "type": "ExpectBindingError",
+                          "input": "() => {}",
+                          "error_contains": "Multi-line arrow functions are not supported"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should report missing comma between arrow function parameters",
+                      "path": "parser/parseBinding/arrow functions/arrow function validations/should report missing comma between arrow function parameters",
+                      "assertions": [
+                        {
+                          "type": "ExpectBindingError",
+                          "input": "(a b) => a + b",
+                          "error_contains": "Missing expected ,"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should report arrow function parameter starting with a comma",
+                      "path": "parser/parseBinding/arrow functions/arrow function validations/should report arrow function parameter starting with a comma",
+                      "assertions": [
+                        {
+                          "type": "ExpectBindingError",
+                          "input": "(, a) => a",
+                          "error_contains": "Unexpected token ,"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should report arrow function parameter with a trailing comma",
+                      "path": "parser/parseBinding/arrow functions/arrow function validations/should report arrow function parameter with a trailing comma",
+                      "assertions": [
+                        {
+                          "type": "ExpectBindingError",
+                          "input": "(a, ) => a",
+                          "error_contains": "Unexpected token )"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should report an arrow function without a closing paren",
+                      "path": "parser/parseBinding/arrow functions/arrow function validations/should report an arrow function without a closing paren",
+                      "assertions": [
+                        {
+                          "type": "ExpectBindingError",
+                          "input": "(a => a + 1",
+                          "error_contains": "Missing closing parentheses at the end of the expression"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should report an arrow function without an opening paren",
+                      "path": "parser/parseBinding/arrow functions/arrow function validations/should report an arrow function without an opening paren",
+                      "assertions": [
+                        {
+                          "type": "ExpectBindingError",
+                          "input": "a) => a + 1",
+                          "error_contains": "Unexpected token ')'"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should report missing comma between arrow function parameters",
+                      "path": "parser/parseBinding/arrow functions/arrow function validations/should report missing comma between arrow function parameters",
+                      "assertions": [
+                        {
+                          "type": "ExpectBindingError",
+                          "input": "(a b) => a + b",
+                          "error_contains": "Missing expected ,"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should report an error inside the arrow function expression",
+                      "path": "parser/parseBinding/arrow functions/arrow function validations/should report an error inside the arrow function expression",
+                      "assertions": [
+                        {
+                          "type": "ExpectBindingError",
+                          "input": "(a) => a. + 1",
+                          "error_contains": "Unexpected token +, expected identifier or keyword"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should report an error for chained expression in arrow function",
+                      "path": "parser/parseBinding/arrow functions/arrow function validations/should report an error for chained expression in arrow function",
+                      "assertions": [
+                        {
+                          "type": "ExpectBindingError",
+                          "input": "() => foo(); bar()",
+                          "error_contains": "Binding expression cannot contain chained expression"
+                        },
+                        {
+                          "type": "ExpectBindingError",
+                          "input": "() => (foo; bar)",
+                          "error_contains": "Binding expression cannot contain chained expression"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "tests": [
+                {
+                  "name": "should parse a single-parameter arrow function",
+                  "path": "parser/parseBinding/arrow functions/should parse a single-parameter arrow function",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "a => a",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a single-parameter arrow function with parentheses",
+                  "path": "parser/parseBinding/arrow functions/should parse a single-parameter arrow function with parentheses",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "(a) => a",
+                      "expected": "a => a"
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse an arrow function with not parameters",
+                  "path": "parser/parseBinding/arrow functions/should parse an arrow function with not parameters",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "() => 1",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse an arrow function with multiple parameters",
+                  "path": "parser/parseBinding/arrow functions/should parse an arrow function with multiple parameters",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "(a, b, c, d, e) => a / b + c * d",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse an immediately-invoked arrow function",
+                  "path": "parser/parseBinding/arrow functions/should parse an immediately-invoked arrow function",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "((a, b) => a + b)(1, 2)",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse an arrow function that returns other arrow functions",
+                  "path": "parser/parseBinding/arrow functions/should parse an arrow function that returns other arrow functions",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "(a, b) => c => (d, e) => () => a + b + c + d + e",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse an arrow function that returns an object literal",
+                  "path": "parser/parseBinding/arrow functions/should parse an arrow function that returns an object literal",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "() => ({a: 1, b: 2})",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse an arrow function containing an assignment",
+                  "path": "parser/parseBinding/arrow functions/should parse an arrow function containing an assignment",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "(a, b) => c = a + b",
+                      "expected": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should be able to pass an arrow function through a pipe",
+                  "path": "parser/parseBinding/arrow functions/should be able to pass an arrow function through a pipe",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "(a, b) => a + b | pipe",
+                      "expected": "((a, b) => a + b | pipe)"
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse an arrow function that returns an array",
+                  "path": "parser/parseBinding/arrow functions/should parse an arrow function that returns an array",
+                  "assertions": [
+                    {
+                      "type": "CheckBinding",
+                      "input": "(a, b) => [a, b, foo]",
+                      "expected": null
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "tests": [
+            {
+              "name": "should store the source in the result",
+              "path": "parser/parseBinding/should store the source in the result",
+              "assertions": []
+            },
+            {
+              "name": "should report chain expressions",
+              "path": "parser/parseBinding/should report chain expressions",
+              "assertions": []
+            },
+            {
+              "name": "should report assignment",
+              "path": "parser/parseBinding/should report assignment",
+              "assertions": []
+            },
+            {
+              "name": "should report when encountering interpolation",
+              "path": "parser/parseBinding/should report when encountering interpolation",
+              "assertions": [
+                {
+                  "type": "ExpectBindingError",
+                  "input": "{{a.b}}",
+                  "error_contains": "Got interpolation ({{}}) where expression was expected"
+                }
+              ]
+            },
+            {
+              "name": "should not report interpolation inside a string",
+              "path": "parser/parseBinding/should not report interpolation inside a string",
+              "assertions": [
+                {
+                  "type": "ExpectNoBindingError",
+                  "input": "\"{{exp}}\""
+                },
+                {
+                  "type": "ExpectNoBindingError",
+                  "input": "'{{exp}}'"
+                },
+                {
+                  "type": "ExpectNoBindingError",
+                  "input": "'{{\\\"}}'"
+                },
+                {
+                  "type": "ExpectNoBindingError",
+                  "input": "'{{\\'}}'"
+                }
+              ]
+            },
+            {
+              "name": "should parse conditional expression",
+              "path": "parser/parseBinding/should parse conditional expression",
+              "assertions": [
+                {
+                  "type": "CheckBinding",
+                  "input": "a < b ? a : b",
+                  "expected": null
+                }
+              ]
+            },
+            {
+              "name": "should ignore comments in bindings",
+              "path": "parser/parseBinding/should ignore comments in bindings",
+              "assertions": [
+                {
+                  "type": "CheckBinding",
+                  "input": "a //comment",
+                  "expected": "a"
+                }
+              ]
+            },
+            {
+              "name": "should retain // in string literals",
+              "path": "parser/parseBinding/should retain // in string literals",
+              "assertions": [
+                {
+                  "type": "CheckBinding",
+                  "input": "\"http://www.google.com\"",
+                  "expected": "\"http://www.google.com\""
+                }
+              ]
+            },
+            {
+              "name": "should expose object shorthand information in AST",
+              "path": "parser/parseBinding/should expose object shorthand information in AST",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "parseTemplateBindings",
+          "groups": [
+            {
+              "name": "\"let\" binding",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should support single declaration",
+                  "path": "parser/parseTemplateBindings/\"let\" binding/should support single declaration",
+                  "assertions": []
+                },
+                {
+                  "name": "should support multiple declarations",
+                  "path": "parser/parseTemplateBindings/\"let\" binding/should support multiple declarations",
+                  "assertions": []
+                },
+                {
+                  "name": "should support empty string assignment",
+                  "path": "parser/parseTemplateBindings/\"let\" binding/should support empty string assignment",
+                  "assertions": []
+                },
+                {
+                  "name": "should support key and value names with dash",
+                  "path": "parser/parseTemplateBindings/\"let\" binding/should support key and value names with dash",
+                  "assertions": []
+                },
+                {
+                  "name": "should support declarations with or without value assignment",
+                  "path": "parser/parseTemplateBindings/\"let\" binding/should support declarations with or without value assignment",
+                  "assertions": []
+                },
+                {
+                  "name": "should support declaration before an expression",
+                  "path": "parser/parseTemplateBindings/\"let\" binding/should support declaration before an expression",
+                  "assertions": []
+                }
+              ]
+            },
+            {
+              "name": "\"as\" binding",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should support single declaration",
+                  "path": "parser/parseTemplateBindings/\"as\" binding/should support single declaration",
+                  "assertions": []
+                },
+                {
+                  "name": "should support declaration after an expression",
+                  "path": "parser/parseTemplateBindings/\"as\" binding/should support declaration after an expression",
+                  "assertions": []
+                },
+                {
+                  "name": "should support key and value names with dash",
+                  "path": "parser/parseTemplateBindings/\"as\" binding/should support key and value names with dash",
+                  "assertions": []
+                }
+              ]
+            },
+            {
+              "name": "source, key, value spans",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should map empty expression",
+                  "path": "parser/parseTemplateBindings/source, key, value spans/should map empty expression",
+                  "assertions": []
+                },
+                {
+                  "name": "should map variable declaration via \"let\"",
+                  "path": "parser/parseTemplateBindings/source, key, value spans/should map variable declaration via \"let\"",
+                  "assertions": []
+                },
+                {
+                  "name": "shoud map multiple variable declarations via \"let\"",
+                  "path": "parser/parseTemplateBindings/source, key, value spans/shoud map multiple variable declarations via \"let\"",
+                  "assertions": []
+                },
+                {
+                  "name": "shoud map expression with pipe",
+                  "path": "parser/parseTemplateBindings/source, key, value spans/shoud map expression with pipe",
+                  "assertions": []
+                },
+                {
+                  "name": "should report unexpected token when encountering interpolation",
+                  "path": "parser/parseTemplateBindings/source, key, value spans/should report unexpected token when encountering interpolation",
+                  "assertions": []
+                },
+                {
+                  "name": "should map variable declaration via \"as\"",
+                  "path": "parser/parseTemplateBindings/source, key, value spans/should map variable declaration via \"as\"",
+                  "assertions": []
+                },
+                {
+                  "name": "should map literal array",
+                  "path": "parser/parseTemplateBindings/source, key, value spans/should map literal array",
+                  "assertions": []
+                }
+              ]
+            }
+          ],
+          "tests": [
+            {
+              "name": "should parse key and value",
+              "path": "parser/parseTemplateBindings/should parse key and value",
+              "assertions": []
+            },
+            {
+              "name": "should variable declared via let",
+              "path": "parser/parseTemplateBindings/should variable declared via let",
+              "assertions": []
+            },
+            {
+              "name": "should allow multiple pairs",
+              "path": "parser/parseTemplateBindings/should allow multiple pairs",
+              "assertions": []
+            },
+            {
+              "name": "should allow space and colon as separators",
+              "path": "parser/parseTemplateBindings/should allow space and colon as separators",
+              "assertions": []
+            },
+            {
+              "name": "should store the templateUrl",
+              "path": "parser/parseTemplateBindings/should store the templateUrl",
+              "assertions": []
+            },
+            {
+              "name": "should support common usage of ngIf",
+              "path": "parser/parseTemplateBindings/should support common usage of ngIf",
+              "assertions": []
+            },
+            {
+              "name": "should support common usage of ngFor",
+              "path": "parser/parseTemplateBindings/should support common usage of ngFor",
+              "assertions": []
+            },
+            {
+              "name": "should parse pipes",
+              "path": "parser/parseTemplateBindings/should parse pipes",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "parseInterpolation",
+          "groups": [
+            {
+              "name": "comments",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should ignore comments in interpolation expressions",
+                  "path": "parser/parseInterpolation/comments/should ignore comments in interpolation expressions",
+                  "assertions": []
+                },
+                {
+                  "name": "should error when interpolation only contains a comment",
+                  "path": "parser/parseInterpolation/comments/should error when interpolation only contains a comment",
+                  "assertions": []
+                },
+                {
+                  "name": "should retain // in single quote strings",
+                  "path": "parser/parseInterpolation/comments/should retain // in single quote strings",
+                  "assertions": []
+                },
+                {
+                  "name": "should retain // in double quote strings",
+                  "path": "parser/parseInterpolation/comments/should retain // in double quote strings",
+                  "assertions": []
+                },
+                {
+                  "name": "should ignore comments after string literals",
+                  "path": "parser/parseInterpolation/comments/should ignore comments after string literals",
+                  "assertions": []
+                },
+                {
+                  "name": "should retain // in complex strings",
+                  "path": "parser/parseInterpolation/comments/should retain // in complex strings",
+                  "assertions": []
+                },
+                {
+                  "name": "should retain // in nested, unterminated strings",
+                  "path": "parser/parseInterpolation/comments/should retain // in nested, unterminated strings",
+                  "assertions": []
+                },
+                {
+                  "name": "should ignore quotes inside a comment",
+                  "path": "parser/parseInterpolation/comments/should ignore quotes inside a comment",
+                  "assertions": []
+                }
+              ]
+            }
+          ],
+          "tests": [
+            {
+              "name": "should return null if no interpolation",
+              "path": "parser/parseInterpolation/should return null if no interpolation",
+              "assertions": []
+            },
+            {
+              "name": "should not parse malformed interpolations as strings",
+              "path": "parser/parseInterpolation/should not parse malformed interpolations as strings",
+              "assertions": []
+            },
+            {
+              "name": "should parse no prefix/suffix interpolation",
+              "path": "parser/parseInterpolation/should parse no prefix/suffix interpolation",
+              "assertions": []
+            },
+            {
+              "name": "should parse interpolation inside quotes",
+              "path": "parser/parseInterpolation/should parse interpolation inside quotes",
+              "assertions": []
+            },
+            {
+              "name": "should parse interpolation with interpolation characters inside quotes",
+              "path": "parser/parseInterpolation/should parse interpolation with interpolation characters inside quotes",
+              "assertions": []
+            },
+            {
+              "name": "should parse interpolation with escaped quotes",
+              "path": "parser/parseInterpolation/should parse interpolation with escaped quotes",
+              "assertions": []
+            },
+            {
+              "name": "should parse interpolation with escaped backslashes",
+              "path": "parser/parseInterpolation/should parse interpolation with escaped backslashes",
+              "assertions": []
+            },
+            {
+              "name": "should not parse interpolation with mismatching quotes",
+              "path": "parser/parseInterpolation/should not parse interpolation with mismatching quotes",
+              "assertions": []
+            },
+            {
+              "name": "should parse prefix/suffix with multiple interpolation",
+              "path": "parser/parseInterpolation/should parse prefix/suffix with multiple interpolation",
+              "assertions": []
+            },
+            {
+              "name": "should report empty interpolation expressions",
+              "path": "parser/parseInterpolation/should report empty interpolation expressions",
+              "assertions": []
+            },
+            {
+              "name": "should produce an empty expression ast for empty interpolations",
+              "path": "parser/parseInterpolation/should produce an empty expression ast for empty interpolations",
+              "assertions": []
+            },
+            {
+              "name": "should parse conditional expression",
+              "path": "parser/parseInterpolation/should parse conditional expression",
+              "assertions": []
+            },
+            {
+              "name": "should parse expression with newline characters",
+              "path": "parser/parseInterpolation/should parse expression with newline characters",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "parseSimpleBinding",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should parse a field access",
+              "path": "parser/parseSimpleBinding/should parse a field access",
+              "assertions": []
+            },
+            {
+              "name": "should report when encountering pipes",
+              "path": "parser/parseSimpleBinding/should report when encountering pipes",
+              "assertions": []
+            },
+            {
+              "name": "should report when encountering interpolation",
+              "path": "parser/parseSimpleBinding/should report when encountering interpolation",
+              "assertions": []
+            },
+            {
+              "name": "should not report interpolation inside a string",
+              "path": "parser/parseSimpleBinding/should not report interpolation inside a string",
+              "assertions": [
+                {
+                  "type": "ExpectNoBindingError",
+                  "input": "\"{{exp}}\""
+                },
+                {
+                  "type": "ExpectNoBindingError",
+                  "input": "'{{exp}}'"
+                },
+                {
+                  "type": "ExpectNoBindingError",
+                  "input": "'{{\\\"}}'"
+                },
+                {
+                  "type": "ExpectNoBindingError",
+                  "input": "'{{\\'}}'"
+                }
+              ]
+            },
+            {
+              "name": "should report when encountering field write",
+              "path": "parser/parseSimpleBinding/should report when encountering field write",
+              "assertions": []
+            },
+            {
+              "name": "should throw if a pipe is used inside a conditional",
+              "path": "parser/parseSimpleBinding/should throw if a pipe is used inside a conditional",
+              "assertions": []
+            },
+            {
+              "name": "should throw if a pipe is used inside a call",
+              "path": "parser/parseSimpleBinding/should throw if a pipe is used inside a call",
+              "assertions": []
+            },
+            {
+              "name": "should throw if a pipe is used inside a call to a property access",
+              "path": "parser/parseSimpleBinding/should throw if a pipe is used inside a call to a property access",
+              "assertions": []
+            },
+            {
+              "name": "should throw if a pipe is used inside a call to a safe property access",
+              "path": "parser/parseSimpleBinding/should throw if a pipe is used inside a call to a safe property access",
+              "assertions": []
+            },
+            {
+              "name": "should throw if a pipe is used inside a property access",
+              "path": "parser/parseSimpleBinding/should throw if a pipe is used inside a property access",
+              "assertions": []
+            },
+            {
+              "name": "should throw if a pipe is used inside a keyed read expression",
+              "path": "parser/parseSimpleBinding/should throw if a pipe is used inside a keyed read expression",
+              "assertions": []
+            },
+            {
+              "name": "should throw if a pipe is used inside a safe property read",
+              "path": "parser/parseSimpleBinding/should throw if a pipe is used inside a safe property read",
+              "assertions": []
+            },
+            {
+              "name": "should throw if a pipe is used inside a non-null assertion",
+              "path": "parser/parseSimpleBinding/should throw if a pipe is used inside a non-null assertion",
+              "assertions": []
+            },
+            {
+              "name": "should throw if a pipe is used inside a prefix not expression",
+              "path": "parser/parseSimpleBinding/should throw if a pipe is used inside a prefix not expression",
+              "assertions": []
+            },
+            {
+              "name": "should throw if a pipe is used inside a binary expression",
+              "path": "parser/parseSimpleBinding/should throw if a pipe is used inside a binary expression",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "wrapLiteralPrimitive",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should wrap a literal primitive",
+              "path": "parser/wrapLiteralPrimitive/should wrap a literal primitive",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "error recovery",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should be able to recover from an extra paren",
+              "path": "parser/error recovery/should be able to recover from an extra paren",
+              "assertions": []
+            },
+            {
+              "name": "should be able to recover from an extra bracket",
+              "path": "parser/error recovery/should be able to recover from an extra bracket",
+              "assertions": []
+            },
+            {
+              "name": "should be able to recover from a missing )",
+              "path": "parser/error recovery/should be able to recover from a missing )",
+              "assertions": []
+            },
+            {
+              "name": "should be able to recover from a missing ]",
+              "path": "parser/error recovery/should be able to recover from a missing ]",
+              "assertions": []
+            },
+            {
+              "name": "should be able to recover from a missing selector",
+              "path": "parser/error recovery/should be able to recover from a missing selector",
+              "assertions": []
+            },
+            {
+              "name": "should be able to recover from a missing selector in a array literal",
+              "path": "parser/error recovery/should be able to recover from a missing selector in a array literal",
+              "assertions": []
+            },
+            {
+              "name": "should recover from parenthesized `as` expressions",
+              "path": "parser/error recovery/should recover from parenthesized `as` expressions",
+              "assertions": []
+            },
+            {
+              "name": "should be able to recover from a broken expression in a template literal",
+              "path": "parser/error recovery/should be able to recover from a broken expression in a template literal",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "offsets",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should retain the offsets of an interpolation",
+              "path": "parser/offsets/should retain the offsets of an interpolation",
+              "assertions": []
+            },
+            {
+              "name": "should retain the offsets into the expression AST of interpolations",
+              "path": "parser/offsets/should retain the offsets into the expression AST of interpolations",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

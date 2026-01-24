@@ -1,0 +1,4214 @@
+{
+  "name": "lexer_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/expression_parser/lexer_spec.ts",
+  "test_groups": [
+    {
+      "name": "lexer",
+      "groups": [
+        {
+          "name": "token",
+          "groups": [
+            {
+              "name": "template literals",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should tokenize template literal with no interpolations",
+                  "path": "lexer/token/template literals/should tokenize template literal with no interpolations",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`hello world`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 13,
+                          "value": "hello world"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize template literal containing strings",
+                  "path": "lexer/token/template literals/should tokenize template literal containing strings",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`a \"b\" c`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 9,
+                          "value": "a \"b\" c"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`a 'b' c`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 9,
+                          "value": "a 'b' c"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`a \\`b\\` c`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 11,
+                          "value": "a `b` c"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`a \"'\\`b\\`'\" c`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 15,
+                          "value": "a \"'`b`'\" c"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`a \"'\\`b\\`'\" c`",
+                      "expected_token_count": null,
+                      "token_assertions": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize unicode inside a template string",
+                  "path": "lexer/token/template literals/should tokenize unicode inside a template string",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`\\u00A0`",
+                      "expected_token_count": null,
+                      "token_assertions": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize template literal with an interpolation in the end",
+                  "path": "lexer/token/template literals/should tokenize template literal with an interpolation in the end",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`hello ${name}`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 7,
+                          "value": "hello "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 7,
+                          "end": 9,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 9,
+                          "end": 13,
+                          "value": "name"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 3,
+                          "start": 13,
+                          "end": 14,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 4,
+                          "start": 14,
+                          "end": 15,
+                          "value": ""
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize template literal with an interpolation in the beginning",
+                  "path": "lexer/token/template literals/should tokenize template literal with an interpolation in the beginning",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`${name} Johnson`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": ""
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 1,
+                          "end": 3,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 3,
+                          "end": 7,
+                          "value": "name"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 3,
+                          "start": 7,
+                          "end": 8,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 4,
+                          "start": 8,
+                          "end": 17,
+                          "value": " Johnson"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize template literal with an interpolation in the middle",
+                  "path": "lexer/token/template literals/should tokenize template literal with an interpolation in the middle",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`foo${bar}baz`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 4,
+                          "value": "foo"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 4,
+                          "end": 6,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 6,
+                          "end": 9,
+                          "value": "bar"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 3,
+                          "start": 9,
+                          "end": 10,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 4,
+                          "start": 10,
+                          "end": 14,
+                          "value": "baz"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should be able to use interpolation characters inside template string",
+                  "path": "lexer/token/template literals/should be able to use interpolation characters inside template string",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`foo $`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 7,
+                          "value": "foo $"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`foo }`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 7,
+                          "value": "foo }"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`foo $ {}`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 10,
+                          "value": "foo $ {}"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`foo \\${bar}`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 13,
+                          "value": "foo ${bar}"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`foo \\${bar}`",
+                      "expected_token_count": null,
+                      "token_assertions": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize template literal with several interpolations",
+                  "path": "lexer/token/template literals/should tokenize template literal with several interpolations",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`${a} - ${b} - ${c}`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": ""
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 1,
+                          "end": 3,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 3,
+                          "end": 4,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 3,
+                          "start": 4,
+                          "end": 5,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 4,
+                          "start": 5,
+                          "end": 8,
+                          "value": " - "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 5,
+                          "start": 8,
+                          "end": 10,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 6,
+                          "start": 10,
+                          "end": 11,
+                          "value": "b"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 7,
+                          "start": 11,
+                          "end": 12,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 8,
+                          "start": 12,
+                          "end": 15,
+                          "value": " - "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 9,
+                          "start": 15,
+                          "end": 17,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 10,
+                          "start": 17,
+                          "end": 18,
+                          "value": "c"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 11,
+                          "start": 18,
+                          "end": 19,
+                          "value": "}"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize template literal with an object literal inside the interpolation",
+                  "path": "lexer/token/template literals/should tokenize template literal with an object literal inside the interpolation",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`foo ${{$: true}} baz`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 5,
+                          "value": "foo "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 5,
+                          "end": 7,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 2,
+                          "start": 7,
+                          "end": 8,
+                          "value": "{"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 3,
+                          "start": 8,
+                          "end": 9,
+                          "value": "$"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 4,
+                          "start": 9,
+                          "end": 10,
+                          "value": ":"
+                        },
+                        {
+                          "assertion_type": "Keyword",
+                          "token_index": 5,
+                          "start": 11,
+                          "end": 15,
+                          "value": "true"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 6,
+                          "start": 15,
+                          "end": 16,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 7,
+                          "start": 16,
+                          "end": 17,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 8,
+                          "start": 17,
+                          "end": 22,
+                          "value": " baz"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize template literal with template literals inside the interpolation",
+                  "path": "lexer/token/template literals/should tokenize template literal with template literals inside the interpolation",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`foo ${`hello ${`${a} - b`}`} baz`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 5,
+                          "value": "foo "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 5,
+                          "end": 7,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 2,
+                          "start": 7,
+                          "end": 14,
+                          "value": "hello "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 3,
+                          "start": 14,
+                          "end": 16,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 4,
+                          "start": 16,
+                          "end": 17,
+                          "value": ""
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 5,
+                          "start": 17,
+                          "end": 19,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 6,
+                          "start": 19,
+                          "end": 20,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 7,
+                          "start": 20,
+                          "end": 21,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 8,
+                          "start": 21,
+                          "end": 26,
+                          "value": " - b"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 9,
+                          "start": 26,
+                          "end": 27,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 10,
+                          "start": 27,
+                          "end": 28,
+                          "value": ""
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 11,
+                          "start": 28,
+                          "end": 29,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 12,
+                          "start": 29,
+                          "end": 34,
+                          "value": " baz"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize two template literal right after each other",
+                  "path": "lexer/token/template literals/should tokenize two template literal right after each other",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`hello ${name}``see ${name} later`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 7,
+                          "value": "hello "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 7,
+                          "end": 9,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 9,
+                          "end": 13,
+                          "value": "name"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 3,
+                          "start": 13,
+                          "end": 14,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 4,
+                          "start": 14,
+                          "end": 15,
+                          "value": ""
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 5,
+                          "start": 15,
+                          "end": 20,
+                          "value": "see "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 6,
+                          "start": 20,
+                          "end": 22,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 7,
+                          "start": 22,
+                          "end": 26,
+                          "value": "name"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 8,
+                          "start": 26,
+                          "end": 27,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 9,
+                          "start": 27,
+                          "end": 34,
+                          "value": " later"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a concatenated template literal",
+                  "path": "lexer/token/template literals/should tokenize a concatenated template literal",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`hello ${name}` + 123",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 7,
+                          "value": "hello "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 7,
+                          "end": 9,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 9,
+                          "end": 13,
+                          "value": "name"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 3,
+                          "start": 13,
+                          "end": 14,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 4,
+                          "start": 14,
+                          "end": 15,
+                          "value": ""
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 5,
+                          "start": 16,
+                          "end": 17,
+                          "value": "+"
+                        },
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 6,
+                          "start": 18,
+                          "end": 21,
+                          "value": 123.0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a template literal with a pipe inside an interpolation",
+                  "path": "lexer/token/template literals/should tokenize a template literal with a pipe inside an interpolation",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`hello ${name | capitalize}!!!`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 7,
+                          "value": "hello "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 7,
+                          "end": 9,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 9,
+                          "end": 13,
+                          "value": "name"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 3,
+                          "start": 14,
+                          "end": 15,
+                          "value": "|"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 4,
+                          "start": 16,
+                          "end": 26,
+                          "value": "capitalize"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 5,
+                          "start": 26,
+                          "end": 27,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 6,
+                          "start": 27,
+                          "end": 31,
+                          "value": "!!!"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a template literal with a pipe inside a parenthesized interpolation",
+                  "path": "lexer/token/template literals/should tokenize a template literal with a pipe inside a parenthesized interpolation",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`hello ${(name | capitalize)}!!!`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 7,
+                          "value": "hello "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 7,
+                          "end": 9,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 2,
+                          "start": 9,
+                          "end": 10,
+                          "value": "("
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 3,
+                          "start": 10,
+                          "end": 14,
+                          "value": "name"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 4,
+                          "start": 15,
+                          "end": 16,
+                          "value": "|"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 5,
+                          "start": 17,
+                          "end": 27,
+                          "value": "capitalize"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 6,
+                          "start": 27,
+                          "end": 28,
+                          "value": ")"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 7,
+                          "start": 28,
+                          "end": 29,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 8,
+                          "start": 29,
+                          "end": 33,
+                          "value": "!!!"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a template literal in an literal object value",
+                  "path": "lexer/token/template literals/should tokenize a template literal in an literal object value",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "{foo: `${name}`}",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": "{"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 1,
+                          "start": 1,
+                          "end": 4,
+                          "value": "foo"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 2,
+                          "start": 4,
+                          "end": 5,
+                          "value": ":"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 3,
+                          "start": 6,
+                          "end": 7,
+                          "value": ""
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 4,
+                          "start": 7,
+                          "end": 9,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 5,
+                          "start": 9,
+                          "end": 13,
+                          "value": "name"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 6,
+                          "start": 13,
+                          "end": 14,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 7,
+                          "start": 14,
+                          "end": 15,
+                          "value": ""
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 8,
+                          "start": 15,
+                          "end": 16,
+                          "value": "}"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should produce an error if a template literal is not terminated",
+                  "path": "lexer/token/template literals/should produce an error if a template literal is not terminated",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`hello",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Error",
+                          "token_index": 0,
+                          "start": 6,
+                          "end": 6,
+                          "value": "Lexer Error: Unterminated template literal at column 6 in expression [`hello]"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`hello",
+                      "expected_token_count": null,
+                      "token_assertions": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should produce an error for an unterminated template literal with an interpolation",
+                  "path": "lexer/token/template literals/should produce an error for an unterminated template literal with an interpolation",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`hello ${name}!",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 7,
+                          "value": "hello "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 7,
+                          "end": 9,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 9,
+                          "end": 13,
+                          "value": "name"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 3,
+                          "start": 13,
+                          "end": 14,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "Error",
+                          "token_index": 4,
+                          "start": 15,
+                          "end": 15,
+                          "value": "Lexer Error: Unterminated template literal at column 15 in expression [`hello ${name}!]"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should produce an error for an unterminate template literal interpolation",
+                  "path": "lexer/token/template literals/should produce an error for an unterminate template literal interpolation",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "`hello ${name!`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 7,
+                          "value": "hello "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 7,
+                          "end": 9,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 9,
+                          "end": 13,
+                          "value": "name"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 3,
+                          "start": 13,
+                          "end": 14,
+                          "value": "!"
+                        },
+                        {
+                          "assertion_type": "Error",
+                          "token_index": 4,
+                          "start": 15,
+                          "end": 15,
+                          "value": "Lexer Error: Unterminated template literal at column 15 in expression [`hello ${name!`]"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize tagged template literal with no interpolations",
+                  "path": "lexer/token/template literals/should tokenize tagged template literal with no interpolations",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "tag`hello world`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 3,
+                          "value": "tag"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 1,
+                          "start": 3,
+                          "end": 16,
+                          "value": "hello world"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize nested tagged template literals",
+                  "path": "lexer/token/template literals/should tokenize nested tagged template literals",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "tag`hello ${tag`world`}`",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 3,
+                          "value": "tag"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 1,
+                          "start": 3,
+                          "end": 10,
+                          "value": "hello "
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 2,
+                          "start": 10,
+                          "end": 12,
+                          "value": "${"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 3,
+                          "start": 12,
+                          "end": 15,
+                          "value": "tag"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 4,
+                          "start": 15,
+                          "end": 22,
+                          "value": "world"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 5,
+                          "start": 22,
+                          "end": 23,
+                          "value": "}"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 6,
+                          "start": 23,
+                          "end": 24,
+                          "value": ""
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "regular expressions",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should tokenize a simple regex",
+                  "path": "lexer/token/regular expressions/should tokenize a simple regex",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "/abc/",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 5,
+                          "value": "abc"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a regex with flags",
+                  "path": "lexer/token/regular expressions/should tokenize a regex with flags",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "/abc/gim",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 5,
+                          "value": "abc"
+                        },
+                        {
+                          "assertion_type": "RegExpFlags",
+                          "token_index": 1,
+                          "start": 5,
+                          "end": 8,
+                          "value": "gim"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize an identifier immediately after a regex",
+                  "path": "lexer/token/regular expressions/should tokenize an identifier immediately after a regex",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "/abc/ g",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 5,
+                          "value": "abc"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 1,
+                          "start": 6,
+                          "end": 7,
+                          "value": "g"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a regex with an escaped slashes",
+                  "path": "lexer/token/regular expressions/should tokenize a regex with an escaped slashes",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "/^http:\\/\\/foo\\.bar/",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 20,
+                          "value": "^http:\\/\\/foo\\.bar"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a regex with un-escaped slashes in a character class",
+                  "path": "lexer/token/regular expressions/should tokenize a regex with un-escaped slashes in a character class",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "/[a/]$/",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 7,
+                          "value": "[a/]$"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a regex with a backslash",
+                  "path": "lexer/token/regular expressions/should tokenize a regex with a backslash",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "/a\\w+/",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 6,
+                          "value": "a\\w+"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a regex after an operator",
+                  "path": "lexer/token/regular expressions/should tokenize a regex after an operator",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "a = /b/",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 2,
+                          "end": 3,
+                          "value": "="
+                        },
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 2,
+                          "start": 4,
+                          "end": 7,
+                          "value": "b"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a regex inside parentheses",
+                  "path": "lexer/token/regular expressions/should tokenize a regex inside parentheses",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "log(/a/)",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 3,
+                          "value": "log"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 1,
+                          "start": 3,
+                          "end": 4,
+                          "value": "("
+                        },
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 2,
+                          "start": 4,
+                          "end": 7,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 3,
+                          "start": 7,
+                          "end": 8,
+                          "value": ")"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a regex at the beggining of an array",
+                  "path": "lexer/token/regular expressions/should tokenize a regex at the beggining of an array",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "[/a/]",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": "["
+                        },
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 1,
+                          "start": 1,
+                          "end": 4,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 2,
+                          "start": 4,
+                          "end": 5,
+                          "value": "]"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a regex in the middle of an array",
+                  "path": "lexer/token/regular expressions/should tokenize a regex in the middle of an array",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "[1, /a/, 2]",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": "["
+                        },
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 1,
+                          "start": 1,
+                          "end": 2,
+                          "value": 1.0
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 2,
+                          "start": 2,
+                          "end": 3,
+                          "value": ","
+                        },
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 3,
+                          "start": 4,
+                          "end": 7,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 4,
+                          "start": 7,
+                          "end": 8,
+                          "value": ","
+                        },
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 5,
+                          "start": 9,
+                          "end": 10,
+                          "value": 2.0
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 6,
+                          "start": 10,
+                          "end": 11,
+                          "value": "]"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a regex inside an object literal",
+                  "path": "lexer/token/regular expressions/should tokenize a regex inside an object literal",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "{a: /b/}",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": "{"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 1,
+                          "start": 1,
+                          "end": 2,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 2,
+                          "start": 2,
+                          "end": 3,
+                          "value": ":"
+                        },
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 3,
+                          "start": 4,
+                          "end": 7,
+                          "value": "b"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 4,
+                          "start": 7,
+                          "end": 8,
+                          "value": "}"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a regex after a negation operator",
+                  "path": "lexer/token/regular expressions/should tokenize a regex after a negation operator",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "log(!/a/.test(\"1\"))",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 3,
+                          "value": "log"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 1,
+                          "start": 3,
+                          "end": 4,
+                          "value": "("
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 2,
+                          "start": 4,
+                          "end": 5,
+                          "value": "!"
+                        },
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 3,
+                          "start": 5,
+                          "end": 8,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 4,
+                          "start": 8,
+                          "end": 9,
+                          "value": "."
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 5,
+                          "start": 9,
+                          "end": 13,
+                          "value": "test"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 6,
+                          "start": 13,
+                          "end": 14,
+                          "value": "("
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 7,
+                          "start": 14,
+                          "end": 17,
+                          "value": "1"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 8,
+                          "start": 17,
+                          "end": 18,
+                          "value": ")"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 9,
+                          "start": 18,
+                          "end": 19,
+                          "value": ")"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a regex after several negation operators",
+                  "path": "lexer/token/regular expressions/should tokenize a regex after several negation operators",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "log(!!!!!!/a/.test(\"1\"))",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 3,
+                          "value": "log"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 1,
+                          "start": 3,
+                          "end": 4,
+                          "value": "("
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 2,
+                          "start": 4,
+                          "end": 5,
+                          "value": "!"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 3,
+                          "start": 5,
+                          "end": 6,
+                          "value": "!"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 4,
+                          "start": 6,
+                          "end": 7,
+                          "value": "!"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 5,
+                          "start": 7,
+                          "end": 8,
+                          "value": "!"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 6,
+                          "start": 8,
+                          "end": 9,
+                          "value": "!"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 7,
+                          "start": 9,
+                          "end": 10,
+                          "value": "!"
+                        },
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 8,
+                          "start": 10,
+                          "end": 13,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 9,
+                          "start": 13,
+                          "end": 14,
+                          "value": "."
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 10,
+                          "start": 14,
+                          "end": 18,
+                          "value": "test"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 11,
+                          "start": 18,
+                          "end": 19,
+                          "value": "("
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 12,
+                          "start": 19,
+                          "end": 22,
+                          "value": "1"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 13,
+                          "start": 22,
+                          "end": 23,
+                          "value": ")"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 14,
+                          "start": 23,
+                          "end": 24,
+                          "value": ")"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a method call on a regex",
+                  "path": "lexer/token/regular expressions/should tokenize a method call on a regex",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "/abc/.test(\"foo\")",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 5,
+                          "value": "abc"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 1,
+                          "start": 5,
+                          "end": 6,
+                          "value": "."
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 6,
+                          "end": 10,
+                          "value": "test"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 3,
+                          "start": 10,
+                          "end": 11,
+                          "value": "("
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 4,
+                          "start": 11,
+                          "end": 16,
+                          "value": "foo"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 5,
+                          "start": 16,
+                          "end": 17,
+                          "value": ")"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize a method call with a regex parameter",
+                  "path": "lexer/token/regular expressions/should tokenize a method call with a regex parameter",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "\"foo\".match(/abc/)",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 5,
+                          "value": "foo"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 1,
+                          "start": 5,
+                          "end": 6,
+                          "value": "."
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 6,
+                          "end": 11,
+                          "value": "match"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 3,
+                          "start": 11,
+                          "end": 12,
+                          "value": "("
+                        },
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 4,
+                          "start": 12,
+                          "end": 17,
+                          "value": "abc"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 5,
+                          "start": 17,
+                          "end": 18,
+                          "value": ")"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should not tokenize a regex preceded by a square bracket",
+                  "path": "lexer/token/regular expressions/should not tokenize a regex preceded by a square bracket",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "a[0] /= b",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 1,
+                          "start": 1,
+                          "end": 2,
+                          "value": "["
+                        },
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 2,
+                          "start": 2,
+                          "end": 3,
+                          "value": 0.0
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 3,
+                          "start": 3,
+                          "end": 4,
+                          "value": "]"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 4,
+                          "start": 5,
+                          "end": 7,
+                          "value": "/="
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 5,
+                          "start": 8,
+                          "end": 9,
+                          "value": "b"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should not tokenize a regex preceded by an identifier",
+                  "path": "lexer/token/regular expressions/should not tokenize a regex preceded by an identifier",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "a / b",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 2,
+                          "end": 3,
+                          "value": "/"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 4,
+                          "end": 5,
+                          "value": "b"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should not tokenize a regex preceded by a number",
+                  "path": "lexer/token/regular expressions/should not tokenize a regex preceded by a number",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "1 / b",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": 1.0
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 2,
+                          "end": 3,
+                          "value": "/"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 4,
+                          "end": 5,
+                          "value": "b"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should not tokenize a regex that is preceded by a string",
+                  "path": "lexer/token/regular expressions/should not tokenize a regex that is preceded by a string",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "\"a\" / b",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "String",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 3,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 4,
+                          "end": 5,
+                          "value": "/"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 6,
+                          "end": 7,
+                          "value": "b"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should not tokenize a regex preceded by a closing parenthesis",
+                  "path": "lexer/token/regular expressions/should not tokenize a regex preceded by a closing parenthesis",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "(a) / b",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": "("
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 1,
+                          "start": 1,
+                          "end": 2,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 2,
+                          "start": 2,
+                          "end": 3,
+                          "value": ")"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 3,
+                          "start": 4,
+                          "end": 5,
+                          "value": "/"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 4,
+                          "start": 6,
+                          "end": 7,
+                          "value": "b"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should not tokenize a regex that is preceded by a keyword",
+                  "path": "lexer/token/regular expressions/should not tokenize a regex that is preceded by a keyword",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "this / b",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Keyword",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 4,
+                          "value": "this"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 5,
+                          "end": 6,
+                          "value": "/"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 7,
+                          "end": 8,
+                          "value": "b"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should not tokenize a regex preceded by a non-null assertion on an identifier",
+                  "path": "lexer/token/regular expressions/should not tokenize a regex preceded by a non-null assertion on an identifier",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "foo! / 2",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 3,
+                          "value": "foo"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 3,
+                          "end": 4,
+                          "value": "!"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 2,
+                          "start": 5,
+                          "end": 6,
+                          "value": "/"
+                        },
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 3,
+                          "start": 7,
+                          "end": 8,
+                          "value": 2.0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should not tokenize a regex preceded by a non-null assertion on a function call",
+                  "path": "lexer/token/regular expressions/should not tokenize a regex preceded by a non-null assertion on a function call",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "foo()! / 2",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 3,
+                          "value": "foo"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 1,
+                          "start": 3,
+                          "end": 4,
+                          "value": "("
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 2,
+                          "start": 4,
+                          "end": 5,
+                          "value": ")"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 3,
+                          "start": 5,
+                          "end": 6,
+                          "value": "!"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 4,
+                          "start": 7,
+                          "end": 8,
+                          "value": "/"
+                        },
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 5,
+                          "start": 9,
+                          "end": 10,
+                          "value": 2.0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should not tokenize a regex preceded by a non-null assertion on an array",
+                  "path": "lexer/token/regular expressions/should not tokenize a regex preceded by a non-null assertion on an array",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "[1]! / 2",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": "["
+                        },
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 1,
+                          "start": 1,
+                          "end": 2,
+                          "value": 1.0
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 2,
+                          "start": 2,
+                          "end": 3,
+                          "value": "]"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 3,
+                          "start": 3,
+                          "end": 4,
+                          "value": "!"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 4,
+                          "start": 5,
+                          "end": 6,
+                          "value": "/"
+                        },
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 5,
+                          "start": 7,
+                          "end": 8,
+                          "value": 2.0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should not tokenize consecutive regexes",
+                  "path": "lexer/token/regular expressions/should not tokenize consecutive regexes",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "/ 1 / 2 / 3 / 4",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "RegExpBody",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 5,
+                          "value": " 1 "
+                        },
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 1,
+                          "start": 6,
+                          "end": 7,
+                          "value": 2.0
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 2,
+                          "start": 8,
+                          "end": 9,
+                          "value": "/"
+                        },
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 3,
+                          "start": 10,
+                          "end": 11,
+                          "value": 3.0
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 4,
+                          "start": 12,
+                          "end": 13,
+                          "value": "/"
+                        },
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 5,
+                          "start": 14,
+                          "end": 15,
+                          "value": 4.0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should not tokenize regex-like characters inside of a pipe",
+                  "path": "lexer/token/regular expressions/should not tokenize regex-like characters inside of a pipe",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "foo / 1000 | date: 'M/d/yy'",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 3,
+                          "value": "foo"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 4,
+                          "end": 5,
+                          "value": "/"
+                        },
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 2,
+                          "start": 6,
+                          "end": 10,
+                          "value": 1000.0
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 3,
+                          "start": 11,
+                          "end": 12,
+                          "value": "|"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 4,
+                          "start": 13,
+                          "end": 17,
+                          "value": "date"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 5,
+                          "start": 17,
+                          "end": 18,
+                          "value": ":"
+                        },
+                        {
+                          "assertion_type": "String",
+                          "token_index": 6,
+                          "start": 19,
+                          "end": 27,
+                          "value": "M/d/yy"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should produce an error for an unterminated regex",
+                  "path": "lexer/token/regular expressions/should produce an error for an unterminated regex",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "/a",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Error",
+                          "token_index": 0,
+                          "start": 2,
+                          "end": 2,
+                          "value": "Lexer Error: Unterminated regular expression at column 2 in expression [/a]"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "/a",
+                      "expected_token_count": null,
+                      "token_assertions": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize an arrow function without parenthesis",
+                  "path": "lexer/token/regular expressions/should tokenize an arrow function without parenthesis",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "a => a + 1",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 1,
+                          "start": 2,
+                          "end": 4,
+                          "value": "=>"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 2,
+                          "start": 5,
+                          "end": 6,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 3,
+                          "start": 7,
+                          "end": 8,
+                          "value": "+"
+                        },
+                        {
+                          "assertion_type": "Number",
+                          "token_index": 4,
+                          "start": 9,
+                          "end": 10,
+                          "value": 1.0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should tokenize an arrow function with parenthesis",
+                  "path": "lexer/token/regular expressions/should tokenize an arrow function with parenthesis",
+                  "assertions": [
+                    {
+                      "type": "ExpressionLexerTest",
+                      "input": "(a, b) => a + b",
+                      "expected_token_count": null,
+                      "token_assertions": [
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 0,
+                          "start": 0,
+                          "end": 1,
+                          "value": "("
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 1,
+                          "start": 1,
+                          "end": 2,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 2,
+                          "start": 2,
+                          "end": 3,
+                          "value": ","
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 3,
+                          "start": 4,
+                          "end": 5,
+                          "value": "b"
+                        },
+                        {
+                          "assertion_type": "Character",
+                          "token_index": 4,
+                          "start": 5,
+                          "end": 6,
+                          "value": ")"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 5,
+                          "start": 7,
+                          "end": 9,
+                          "value": "=>"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 6,
+                          "start": 10,
+                          "end": 11,
+                          "value": "a"
+                        },
+                        {
+                          "assertion_type": "Operator",
+                          "token_index": 7,
+                          "start": 12,
+                          "end": 13,
+                          "value": "+"
+                        },
+                        {
+                          "assertion_type": "Identifier",
+                          "token_index": 8,
+                          "start": 14,
+                          "end": 15,
+                          "value": "b"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "tests": [
+            {
+              "name": "should tokenize a simple identifier",
+              "path": "lexer/token/should tokenize a simple identifier",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "j",
+                  "expected_token_count": 1,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "j"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize \"this\"",
+              "path": "lexer/token/should tokenize \"this\"",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "this",
+                  "expected_token_count": 1,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Keyword",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 4,
+                      "value": "this"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize a dotted identifier",
+              "path": "lexer/token/should tokenize a dotted identifier",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "j.k",
+                  "expected_token_count": 3,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "j"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 1,
+                      "start": 1,
+                      "end": 2,
+                      "value": "."
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 2,
+                      "start": 2,
+                      "end": 3,
+                      "value": "k"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize a private identifier",
+              "path": "lexer/token/should tokenize a private identifier",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "#a",
+                  "expected_token_count": 1,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "PrivateIdentifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 2,
+                      "value": "#a"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize a property access with private identifier",
+              "path": "lexer/token/should tokenize a property access with private identifier",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "j.#k",
+                  "expected_token_count": 3,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "j"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 1,
+                      "start": 1,
+                      "end": 2,
+                      "value": "."
+                    },
+                    {
+                      "assertion_type": "PrivateIdentifier",
+                      "token_index": 2,
+                      "start": 2,
+                      "end": 4,
+                      "value": "#k"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "unnamed",
+              "path": "lexer/token/unnamed",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "#",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Error",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "Lexer Error: Invalid character [#] at column 0 in expression [#]"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "#0",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Error",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "Lexer Error: Invalid character [#] at column 0 in expression [#0]"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "#0",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should tokenize an operator",
+              "path": "lexer/token/should tokenize an operator",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "j-k",
+                  "expected_token_count": 3,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 1,
+                      "start": 1,
+                      "end": 2,
+                      "value": "-"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize an indexed operator",
+              "path": "lexer/token/should tokenize an indexed operator",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "j[k]",
+                  "expected_token_count": 4,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 1,
+                      "start": 1,
+                      "end": 2,
+                      "value": "["
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 3,
+                      "start": 3,
+                      "end": 4,
+                      "value": "]"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize a safe indexed operator",
+              "path": "lexer/token/should tokenize a safe indexed operator",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "j?.[k]",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 1,
+                      "start": 1,
+                      "end": 3,
+                      "value": "?."
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 2,
+                      "start": 3,
+                      "end": 4,
+                      "value": "["
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 4,
+                      "start": 5,
+                      "end": 6,
+                      "value": "]"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize numbers",
+              "path": "lexer/token/should tokenize numbers",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "88",
+                  "expected_token_count": 1,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 2,
+                      "value": 88.0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize numbers within index ops",
+              "path": "lexer/token/should tokenize numbers within index ops",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "a[22]",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 2,
+                      "start": 2,
+                      "end": 4,
+                      "value": 22.0
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "a[22]",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should tokenize simple quoted strings",
+              "path": "lexer/token/should tokenize simple quoted strings",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "\"a\"",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "String",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 3,
+                      "value": "a"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "\"a\"",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should tokenize quoted strings with escaped quotes",
+              "path": "lexer/token/should tokenize quoted strings with escaped quotes",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "\"a\\\"\"",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "String",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 5,
+                      "value": "a\""
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "\"a\\\"\"",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should tokenize a string",
+              "path": "lexer/token/should tokenize a string",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "j-a.bc[22]+1.3|f:'a\\'c':\"d\\\"e\"",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "j"
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 1,
+                      "start": 1,
+                      "end": 2,
+                      "value": "-"
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 2,
+                      "start": 2,
+                      "end": 3,
+                      "value": "a"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 3,
+                      "start": 3,
+                      "end": 4,
+                      "value": "."
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 4,
+                      "start": 4,
+                      "end": 6,
+                      "value": "bc"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 5,
+                      "start": 6,
+                      "end": 7,
+                      "value": "["
+                    },
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 6,
+                      "start": 7,
+                      "end": 9,
+                      "value": 22.0
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 7,
+                      "start": 9,
+                      "end": 10,
+                      "value": "]"
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 8,
+                      "start": 10,
+                      "end": 11,
+                      "value": "+"
+                    },
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 9,
+                      "start": 11,
+                      "end": 14,
+                      "value": 1.3
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 10,
+                      "start": 14,
+                      "end": 15,
+                      "value": "|"
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 11,
+                      "start": 15,
+                      "end": 16,
+                      "value": "f"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 12,
+                      "start": 16,
+                      "end": 17,
+                      "value": ":"
+                    },
+                    {
+                      "assertion_type": "String",
+                      "token_index": 13,
+                      "start": 17,
+                      "end": 23,
+                      "value": "a'c"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 14,
+                      "start": 23,
+                      "end": 24,
+                      "value": ":"
+                    },
+                    {
+                      "assertion_type": "String",
+                      "token_index": 15,
+                      "start": 24,
+                      "end": 30,
+                      "value": "d\"e"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize undefined",
+              "path": "lexer/token/should tokenize undefined",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "undefined",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Keyword",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 9,
+                      "value": "undefined"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize typeof",
+              "path": "lexer/token/should tokenize typeof",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "typeof",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Keyword",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 6,
+                      "value": "typeof"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize void",
+              "path": "lexer/token/should tokenize void",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "void",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Keyword",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 4,
+                      "value": "void"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize in keyword",
+              "path": "lexer/token/should tokenize in keyword",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "in",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Keyword",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 2,
+                      "value": "in"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize instanceof keyword",
+              "path": "lexer/token/should tokenize instanceof keyword",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "instanceof",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Keyword",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 10,
+                      "value": "instanceof"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should ignore whitespace",
+              "path": "lexer/token/should ignore whitespace",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "a \t \n \r b",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "a"
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 1,
+                      "start": 8,
+                      "end": 9,
+                      "value": "b"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize quoted string",
+              "path": "lexer/token/should tokenize quoted string",
+              "assertions": []
+            },
+            {
+              "name": "should tokenize escaped quoted string",
+              "path": "lexer/token/should tokenize escaped quoted string",
+              "assertions": []
+            },
+            {
+              "name": "should tokenize unicode",
+              "path": "lexer/token/should tokenize unicode",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "\"\\u00A0\"",
+                  "expected_token_count": 1,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should tokenize relation",
+              "path": "lexer/token/should tokenize relation",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "! == != < > <= >= === !==",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "!"
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 1,
+                      "start": 2,
+                      "end": 4,
+                      "value": "=="
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 2,
+                      "start": 5,
+                      "end": 7,
+                      "value": "!="
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 3,
+                      "start": 8,
+                      "end": 9,
+                      "value": "<"
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 4,
+                      "start": 10,
+                      "end": 11,
+                      "value": ">"
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 5,
+                      "start": 12,
+                      "end": 14,
+                      "value": "<="
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 6,
+                      "start": 15,
+                      "end": 17,
+                      "value": ">="
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 7,
+                      "start": 18,
+                      "end": 21,
+                      "value": "==="
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 8,
+                      "start": 22,
+                      "end": 25,
+                      "value": "!=="
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize statements",
+              "path": "lexer/token/should tokenize statements",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "a;b;",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "a"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 1,
+                      "start": 1,
+                      "end": 2,
+                      "value": ";"
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 2,
+                      "start": 2,
+                      "end": 3,
+                      "value": "b"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 3,
+                      "start": 3,
+                      "end": 4,
+                      "value": ";"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize function invocation",
+              "path": "lexer/token/should tokenize function invocation",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "a()",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "a"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 1,
+                      "start": 1,
+                      "end": 2,
+                      "value": "("
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 2,
+                      "start": 2,
+                      "end": 3,
+                      "value": ")"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize simple method invocations",
+              "path": "lexer/token/should tokenize simple method invocations",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "a.method()",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 2,
+                      "start": 2,
+                      "end": 8,
+                      "value": "method"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize method invocation",
+              "path": "lexer/token/should tokenize method invocation",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "a.b.c (d) - e.f()",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "a"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 1,
+                      "start": 1,
+                      "end": 2,
+                      "value": "."
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 2,
+                      "start": 2,
+                      "end": 3,
+                      "value": "b"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 3,
+                      "start": 3,
+                      "end": 4,
+                      "value": "."
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 4,
+                      "start": 4,
+                      "end": 5,
+                      "value": "c"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 5,
+                      "start": 6,
+                      "end": 7,
+                      "value": "("
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 6,
+                      "start": 7,
+                      "end": 8,
+                      "value": "d"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 7,
+                      "start": 8,
+                      "end": 9,
+                      "value": ")"
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 8,
+                      "start": 10,
+                      "end": 11,
+                      "value": "-"
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 9,
+                      "start": 12,
+                      "end": 13,
+                      "value": "e"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 10,
+                      "start": 13,
+                      "end": 14,
+                      "value": "."
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 11,
+                      "start": 14,
+                      "end": 15,
+                      "value": "f"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 12,
+                      "start": 15,
+                      "end": 16,
+                      "value": "("
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 13,
+                      "start": 16,
+                      "end": 17,
+                      "value": ")"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize safe function invocation",
+              "path": "lexer/token/should tokenize safe function invocation",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "a?.()",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "a"
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 1,
+                      "start": 1,
+                      "end": 3,
+                      "value": "?."
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 2,
+                      "start": 3,
+                      "end": 4,
+                      "value": "("
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 3,
+                      "start": 4,
+                      "end": 5,
+                      "value": ")"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize a safe method invocations",
+              "path": "lexer/token/should tokenize a safe method invocations",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "a.method?.()",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "a"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 1,
+                      "start": 1,
+                      "end": 2,
+                      "value": "."
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 2,
+                      "start": 2,
+                      "end": 8,
+                      "value": "method"
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 3,
+                      "start": 8,
+                      "end": 10,
+                      "value": "?."
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 4,
+                      "start": 10,
+                      "end": 11,
+                      "value": "("
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 5,
+                      "start": 11,
+                      "end": 12,
+                      "value": ")"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize number",
+              "path": "lexer/token/should tokenize number",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "0.5",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 3,
+                      "value": 0.5
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "0.5",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should tokenize multiplication and exponentiation",
+              "path": "lexer/token/should tokenize multiplication and exponentiation",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "1 * 2 ** 3",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": 1.0
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 1,
+                      "start": 2,
+                      "end": 3,
+                      "value": "*"
+                    },
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 2,
+                      "start": 4,
+                      "end": 5,
+                      "value": 2.0
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 3,
+                      "start": 6,
+                      "end": 8,
+                      "value": "**"
+                    },
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 4,
+                      "start": 9,
+                      "end": 10,
+                      "value": 3.0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should tokenize number with exponent",
+              "path": "lexer/token/should tokenize number with exponent",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "0.5E-10",
+                  "expected_token_count": 1,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 7,
+                      "value": 5e-11
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "0.5E+10",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 7,
+                      "value": 5000000000.0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should return exception for invalid exponent",
+              "path": "lexer/token/should return exception for invalid exponent",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "0.5E-",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Error",
+                      "token_index": 0,
+                      "start": 4,
+                      "end": 5,
+                      "value": "Lexer Error: Invalid exponent at column 4 in expression [0.5E-]"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "0.5E-A",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Error",
+                      "token_index": 0,
+                      "start": 4,
+                      "end": 5,
+                      "value": "Lexer Error: Invalid exponent at column 4 in expression [0.5E-A]"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "0.5E-A",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should tokenize number starting with a dot",
+              "path": "lexer/token/should tokenize number starting with a dot",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": ".5",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 2,
+                      "value": 0.5
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": ".5",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should throw error on invalid unicode",
+              "path": "lexer/token/should throw error on invalid unicode",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "'\\u1''bla'",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Error",
+                      "token_index": 0,
+                      "start": 2,
+                      "end": 2,
+                      "value": "Lexer Error: Invalid unicode escape [\\u1''b] at column 2 in expression ['\\u1''bla']"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "'\\u1''bla'",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should tokenize ?. as operator",
+              "path": "lexer/token/should tokenize ?. as operator",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "?.",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 2,
+                      "value": "?."
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "?.",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should tokenize ?? as operator",
+              "path": "lexer/token/should tokenize ?? as operator",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "??",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 2,
+                      "value": "??"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "??",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should tokenize number with separator",
+              "path": "lexer/token/should tokenize number with separator",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "123_456",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 7,
+                      "value": 123456.0
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "1_000_000_000",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 13,
+                      "value": 1000000000.0
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "123_456.78",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 10,
+                      "value": 123456.78
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "123_456_789.123_456_789",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 23,
+                      "value": 123456789.12345679
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "1_2_3_4",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 7,
+                      "value": 1234.0
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "1_2_3_4.5_6_7_8",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Number",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 15,
+                      "value": 1234.5678
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "1_2_3_4.5_6_7_8",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should tokenize number starting with an underscore as an identifier",
+              "path": "lexer/token/should tokenize number starting with an underscore as an identifier",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "_123",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 4,
+                      "value": "_123"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "_123_",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 5,
+                      "value": "_123_"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "_1_2_3_",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 7,
+                      "value": "_1_2_3_"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "_1_2_3_",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should throw error for invalid number separators",
+              "path": "lexer/token/should throw error for invalid number separators",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "123_",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Error",
+                      "token_index": 0,
+                      "start": 3,
+                      "end": 3,
+                      "value": "Lexer Error: Invalid numeric separator at column 3 in expression [123_]"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "12__3",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Error",
+                      "token_index": 0,
+                      "start": 2,
+                      "end": 2,
+                      "value": "Lexer Error: Invalid numeric separator at column 2 in expression [12__3]"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "1_2_3_.456",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Error",
+                      "token_index": 0,
+                      "start": 5,
+                      "end": 5,
+                      "value": "Lexer Error: Invalid numeric separator at column 5 in expression [1_2_3_.456]"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "1_2_3._456",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Error",
+                      "token_index": 0,
+                      "start": 6,
+                      "end": 6,
+                      "value": "Lexer Error: Invalid numeric separator at column 6 in expression [1_2_3._456]"
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "1_2_3._456",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should tokenize assignment operators",
+              "path": "lexer/token/should tokenize assignment operators",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "=",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "="
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "+=",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 2,
+                      "value": "+="
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "-=",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 2,
+                      "value": "-="
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "*=",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 2,
+                      "value": "*="
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "a /= b",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 1,
+                      "start": 2,
+                      "end": 4,
+                      "value": "/="
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "%=",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 2,
+                      "value": "%="
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "**=",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 3,
+                      "value": "**="
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "&&=",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 3,
+                      "value": "&&="
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "||=",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 3,
+                      "value": "||="
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "??=",
+                  "expected_token_count": null,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 3,
+                      "value": "??="
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "??=",
+                  "expected_token_count": null,
+                  "token_assertions": []
+                }
+              ]
+            },
+            {
+              "name": "should tokenize a spread operator",
+              "path": "lexer/token/should tokenize a spread operator",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "{...foo}",
+                  "expected_token_count": 4,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "{"
+                    },
+                    {
+                      "assertion_type": "Operator",
+                      "token_index": 1,
+                      "start": 1,
+                      "end": 4,
+                      "value": "..."
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 2,
+                      "start": 4,
+                      "end": 7,
+                      "value": "foo"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 3,
+                      "start": 7,
+                      "end": 8,
+                      "value": "}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "should produce an error for a spread with two dots",
+              "path": "lexer/token/should produce an error for a spread with two dots",
+              "assertions": [
+                {
+                  "type": "ExpressionLexerTest",
+                  "input": "{..foo}",
+                  "expected_token_count": 4,
+                  "token_assertions": [
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 0,
+                      "start": 0,
+                      "end": 1,
+                      "value": "{"
+                    },
+                    {
+                      "assertion_type": "Error",
+                      "token_index": 1,
+                      "start": 3,
+                      "end": 3,
+                      "value": "Lexer Error: Unexpected character [.] at column 3 in expression [{..foo}]"
+                    },
+                    {
+                      "assertion_type": "Identifier",
+                      "token_index": 2,
+                      "start": 3,
+                      "end": 6,
+                      "value": "foo"
+                    },
+                    {
+                      "assertion_type": "Character",
+                      "token_index": 3,
+                      "start": 6,
+                      "end": 7,
+                      "value": "}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

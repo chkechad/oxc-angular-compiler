@@ -1,0 +1,27 @@
+# Rust
+target/
+**/*.rs.bk
+
+# Wasm
+**/*.wasm
+
+# node_modules
+node_modules
+/napi/*/npm-dir
+
+# Ignore accidental files from the root
+/*.js
+/*.jsx
+/*.ts
+/*.tsx
+/*.ast.txt
+/*.cfg.txt
+/*.dot
+*.node
+/napi/angular-compiler/npm
+
+# Claude Code
+.claude
+
+# NOTE: For non-project files such as `.vscode` or `.idea`, please add them to your `.gitignore_global`.
+# In `.gitconfig`, add `[core] excludesfile = ~/.gitignore_global`

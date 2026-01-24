@@ -1,0 +1,100 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+function TestComponent_Conditional_5_Conditional_4_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0,"\n        ");
+    i0.ɵɵelementStart(1,"span");
+    i0.ɵɵtext(2);
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(3,"\n      ");
+  }
+  if ((rf & 2)) {
+    i0.ɵɵnextContext(2);
+    const widget_r2 = i0.ɵɵreference(3);
+    i0.ɵɵadvance(2);
+    i0.ɵɵtextInterpolate(widget_r2.value);
+  }
+}
+function TestComponent_Conditional_5_Template(rf,ctx) {
+  if ((rf & 1)) {
+    const _r1 = i0.ɵɵgetCurrentView();
+    i0.ɵɵtext(0,"\n      ");
+    i0.ɵɵelementStart(1,"button",2);
+    i0.ɵɵlistener("click",function TestComponent_Conditional_5_Template_button_click_1_listener() {
+      i0.ɵɵrestoreView(_r1);
+      i0.ɵɵnextContext();
+      const widget_r2 = i0.ɵɵreference(3);
+      return i0.ɵɵresetView(widget_r2.focus());
+    });
+    i0.ɵɵtext(2,"A");
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(3,"\n      ");
+    i0.ɵɵconditionalCreate(4,TestComponent_Conditional_5_Conditional_4_Template,4,
+        1);
+  }
+  if ((rf & 2)) {
+    const ctx_r2 = i0.ɵɵnextContext();
+    i0.ɵɵadvance(4);
+    i0.ɵɵconditional((ctx_r2.showNested? 4: -1));
+  }
+}
+function TestComponent_Conditional_6_Template(rf,ctx) {
+  if ((rf & 1)) {
+    const _r4 = i0.ɵɵgetCurrentView();
+    i0.ɵɵtext(0,"\n      ");
+    i0.ɵɵelementStart(1,"div",2);
+    i0.ɵɵlistener("click",function TestComponent_Conditional_6_Template_div_click_1_listener() {
+      i0.ɵɵrestoreView(_r4);
+      i0.ɵɵnextContext();
+      const widget_r2 = i0.ɵɵreference(3);
+      return i0.ɵɵresetView(widget_r2.click());
+    });
+    i0.ɵɵtext(2,"B");
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(3,"\n    ");
+  }
+}
+function TestComponent_Conditional_11_Template(rf,ctx) {
+  if ((rf & 1)) {
+    const _r5 = i0.ɵɵgetCurrentView();
+    i0.ɵɵtext(0,"\n      ");
+    i0.ɵɵelementStart(1,"span",2);
+    i0.ɵɵlistener("click",function TestComponent_Conditional_11_Template_span_click_1_listener() {
+      i0.ɵɵrestoreView(_r5);
+      i0.ɵɵnextContext();
+      const cb_r6 = i0.ɵɵreference(9);
+      return i0.ɵɵresetView(cb_r6.reset());
+    });
+    i0.ɵɵtext(2,"C");
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(3,"\n    ");
+  }
+}
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵelementStart(0,"div");
+    i0.ɵɵtext(1,"\n  ");
+    i0.ɵɵelementStart(2,"div",null,0);
+    i0.ɵɵtext(4,"\n    ");
+    i0.ɵɵconditionalCreate(5,TestComponent_Conditional_5_Template,5,1);
+    i0.ɵɵconditionalCreate(6,TestComponent_Conditional_6_Template,4,0);
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(7,"\n  ");
+    i0.ɵɵelementStart(8,"div",null,1);
+    i0.ɵɵtext(10,"\n    ");
+    i0.ɵɵconditionalCreate(11,TestComponent_Conditional_11_Template,4,0);
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(12,"\n");
+    i0.ɵɵelementEnd();
+  }
+  if ((rf & 2)) {
+    i0.ɵɵadvance(5);
+    i0.ɵɵconditional((ctx.showA? 5: -1));
+    i0.ɵɵadvance();
+    i0.ɵɵconditional((ctx.showB? 6: -1));
+    i0.ɵɵadvance(5);
+    i0.ɵɵconditional((ctx.showC? 11: -1));
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "xmb_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/i18n/serializers/xmb_spec.ts",
+  "test_groups": [
+    {
+      "name": "XMB serializer",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should write a valid xmb file",
+          "path": "XMB serializer/should write a valid xmb file",
+          "assertions": []
+        },
+        {
+          "name": "should throw when trying to load an xmb file",
+          "path": "XMB serializer/should throw when trying to load an xmb file",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "name": "keyframes_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/shadow_css/keyframes_spec.ts",
+  "test_groups": [
+    {
+      "name": "ShadowCss, keyframes and animations",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should scope keyframes rules",
+          "path": "ShadowCss, keyframes and animations/should scope keyframes rules",
+          "assertions": []
+        },
+        {
+          "name": "should scope -webkit-keyframes rules",
+          "path": "ShadowCss, keyframes and animations/should scope -webkit-keyframes rules",
+          "assertions": []
+        },
+        {
+          "name": "should scope animations using local keyframes identifiers",
+          "path": "ShadowCss, keyframes and animations/should scope animations using local keyframes identifiers",
+          "assertions": []
+        },
+        {
+          "name": "should not scope animations using non-local keyframes identifiers",
+          "path": "ShadowCss, keyframes and animations/should not scope animations using non-local keyframes identifiers",
+          "assertions": []
+        },
+        {
+          "name": "should scope animation-names using local keyframes identifiers",
+          "path": "ShadowCss, keyframes and animations/should scope animation-names using local keyframes identifiers",
+          "assertions": []
+        },
+        {
+          "name": "should not scope animation-names using non-local keyframes identifiers",
+          "path": "ShadowCss, keyframes and animations/should not scope animation-names using non-local keyframes identifiers",
+          "assertions": []
+        },
+        {
+          "name": "should handle (scope or not) multiple animation-names",
+          "path": "ShadowCss, keyframes and animations/should handle (scope or not) multiple animation-names",
+          "assertions": []
+        },
+        {
+          "name": "should handle (scope or not) multiple animation-names defined over multiple lines",
+          "path": "ShadowCss, keyframes and animations/should handle (scope or not) multiple animation-names defined over multiple lines",
+          "assertions": []
+        },
+        {
+          "name": "should handle (scope or not) animation definition containing some names which do not have a preceding space",
+          "path": "ShadowCss, keyframes and animations/should handle (scope or not) animation definition containing some names which do not have a preceding space",
+          "assertions": []
+        },
+        {
+          "name": "should handle (scope or not) animation definitions preceded by an erroneous comma",
+          "path": "ShadowCss, keyframes and animations/should handle (scope or not) animation definitions preceded by an erroneous comma",
+          "assertions": []
+        },
+        {
+          "name": "should handle (scope or not) multiple animation definitions in a single declaration",
+          "path": "ShadowCss, keyframes and animations/should handle (scope or not) multiple animation definitions in a single declaration",
+          "assertions": []
+        },
+        {
+          "name": "should not modify css variables ending with 'animation' even if they reference a local keyframes identifier",
+          "path": "ShadowCss, keyframes and animations/should not modify css variables ending with 'animation' even if they reference a local keyframes identifier",
+          "assertions": []
+        },
+        {
+          "name": "should not modify css variables ending with 'animation-name' even if they reference a local keyframes identifier",
+          "path": "ShadowCss, keyframes and animations/should not modify css variables ending with 'animation-name' even if they reference a local keyframes identifier",
+          "assertions": []
+        },
+        {
+          "name": "should maintain the spacing when handling (scoping or not) keyframes and animations",
+          "path": "ShadowCss, keyframes and animations/should maintain the spacing when handling (scoping or not) keyframes and animations",
+          "assertions": []
+        },
+        {
+          "name": "should correctly process animations defined without any prefixed space",
+          "path": "ShadowCss, keyframes and animations/should correctly process animations defined without any prefixed space",
+          "assertions": []
+        },
+        {
+          "name": "should correctly process keyframes defined without any prefixed space",
+          "path": "ShadowCss, keyframes and animations/should correctly process keyframes defined without any prefixed space",
+          "assertions": []
+        },
+        {
+          "name": "should ignore keywords values when scoping local animations",
+          "path": "ShadowCss, keyframes and animations/should ignore keywords values when scoping local animations",
+          "assertions": []
+        },
+        {
+          "name": "should handle the usage of quotes",
+          "path": "ShadowCss, keyframes and animations/should handle the usage of quotes",
+          "assertions": []
+        },
+        {
+          "name": "should handle the usage of quotes containing escaped quotes",
+          "path": "ShadowCss, keyframes and animations/should handle the usage of quotes containing escaped quotes",
+          "assertions": []
+        },
+        {
+          "name": "should handle the usage of commas in multiple animation definitions in a single declaration",
+          "path": "ShadowCss, keyframes and animations/should handle the usage of commas in multiple animation definitions in a single declaration",
+          "assertions": []
+        },
+        {
+          "name": "should handle the usage of double quotes escaping in multiple animation definitions in a single declaration",
+          "path": "ShadowCss, keyframes and animations/should handle the usage of double quotes escaping in multiple animation definitions in a single declaration",
+          "assertions": []
+        },
+        {
+          "name": "should handle the usage of single quotes escaping in multiple animation definitions in a single declaration",
+          "path": "ShadowCss, keyframes and animations/should handle the usage of single quotes escaping in multiple animation definitions in a single declaration",
+          "assertions": []
+        },
+        {
+          "name": "should handle the usage of mixed single and double quotes escaping in multiple animation definitions in a single declaration",
+          "path": "ShadowCss, keyframes and animations/should handle the usage of mixed single and double quotes escaping in multiple animation definitions in a single declaration",
+          "assertions": []
+        },
+        {
+          "name": "should handle the usage of commas inside quotes",
+          "path": "ShadowCss, keyframes and animations/should handle the usage of commas inside quotes",
+          "assertions": []
+        },
+        {
+          "name": "should not ignore animation keywords when they are inside quotes",
+          "path": "ShadowCss, keyframes and animations/should not ignore animation keywords when they are inside quotes",
+          "assertions": []
+        },
+        {
+          "name": "should handle css functions correctly",
+          "path": "ShadowCss, keyframes and animations/should handle css functions correctly",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

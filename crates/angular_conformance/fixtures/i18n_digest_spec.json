@@ -1,0 +1,70 @@
+{
+  "name": "digest_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/i18n/digest_spec.ts",
+  "test_groups": [
+    {
+      "name": "digest",
+      "groups": [
+        {
+          "name": "digest",
+          "groups": [],
+          "tests": [
+            {
+              "name": "must return the ID if it's explicit",
+              "path": "digest/digest/must return the ID if it's explicit",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "sha1",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should work on empty strings",
+              "path": "digest/sha1/should work on empty strings",
+              "assertions": []
+            },
+            {
+              "name": "should returns the sha1 of \"hello world\"",
+              "path": "digest/sha1/should returns the sha1 of \"hello world\"",
+              "assertions": []
+            },
+            {
+              "name": "should returns the sha1 of unicode strings",
+              "path": "digest/sha1/should returns the sha1 of unicode strings",
+              "assertions": []
+            },
+            {
+              "name": "should support arbitrary string size",
+              "path": "digest/sha1/should support arbitrary string size",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "decimal fingerprint",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should work on well known inputs w/o meaning",
+              "path": "digest/decimal fingerprint/should work on well known inputs w/o meaning",
+              "assertions": []
+            },
+            {
+              "name": "should work on well known inputs with meaning",
+              "path": "digest/decimal fingerprint/should work on well known inputs with meaning",
+              "assertions": []
+            },
+            {
+              "name": "should support arbitrary string size",
+              "path": "digest/decimal fingerprint/should support arbitrary string size",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

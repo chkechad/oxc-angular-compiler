@@ -1,0 +1,8 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "ignorePatterns": [
+    "/crates/oxc_angular_compiler/angular",
+    "/napi/angular-compiler/benchmarks",
+    "/napi/angular-compiler/e2e/compare/src/compilers/angular.ts"
+  ]
+}

@@ -1,0 +1,28 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+function TestComponent_Defer_0_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0," ");
+    i0.ɵɵelement(1,"heavy-component");
+    i0.ɵɵtext(2," ");
+  }
+}
+function TestComponent_DeferLoading_1_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0," ");
+    i0.ɵɵelementStart(1,"div");
+    i0.ɵɵtext(2,"Loading...");
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(3," ");
+  }
+}
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵdomTemplate(0,TestComponent_Defer_0_Template,3,0)(1,TestComponent_DeferLoading_1_Template,
+        4,0);
+    i0.ɵɵdefer(2,0,null,1);
+    i0.ɵɵdeferOnIdle();
+  }
+}

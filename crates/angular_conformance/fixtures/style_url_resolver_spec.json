@@ -1,0 +1,37 @@
+{
+  "name": "style_url_resolver_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/style_url_resolver_spec.ts",
+  "test_groups": [
+    {
+      "name": "isStyleUrlResolvable",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should resolve relative urls",
+          "path": "isStyleUrlResolvable/should resolve relative urls",
+          "assertions": []
+        },
+        {
+          "name": "should resolve package: urls",
+          "path": "isStyleUrlResolvable/should resolve package: urls",
+          "assertions": []
+        },
+        {
+          "name": "should not resolve empty urls",
+          "path": "isStyleUrlResolvable/should not resolve empty urls",
+          "assertions": []
+        },
+        {
+          "name": "should not resolve urls with other schema",
+          "path": "isStyleUrlResolvable/should not resolve urls with other schema",
+          "assertions": []
+        },
+        {
+          "name": "should not resolve urls with absolute paths",
+          "path": "isStyleUrlResolvable/should not resolve urls with absolute paths",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "name": "i18n_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/render3/view/i18n_spec.ts",
+  "test_groups": [
+    {
+      "name": "Utils",
+      "groups": [
+        {
+          "name": "metadata serialization",
+          "groups": [],
+          "tests": [
+            {
+              "name": "parseI18nMeta()",
+              "path": "Utils/metadata serialization/parseI18nMeta()",
+              "assertions": []
+            },
+            {
+              "name": "serializeI18nHead()",
+              "path": "Utils/metadata serialization/serializeI18nHead()",
+              "assertions": []
+            },
+            {
+              "name": "serializeI18nPlaceholderBlock()",
+              "path": "Utils/metadata serialization/serializeI18nPlaceholderBlock()",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "jsdoc generation",
+          "groups": [],
+          "tests": [
+            {
+              "name": "generates with description",
+              "path": "Utils/jsdoc generation/generates with description",
+              "assertions": []
+            },
+            {
+              "name": "generates with no description suppressed",
+              "path": "Utils/jsdoc generation/generates with no description suppressed",
+              "assertions": []
+            },
+            {
+              "name": "generates with description and meaning",
+              "path": "Utils/jsdoc generation/generates with description and meaning",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "name": "formatI18nPlaceholderName",
+          "path": "Utils/formatI18nPlaceholderName",
+          "assertions": []
+        }
+      ]
+    },
+    {
+      "name": "serializeI18nMessageForGetMsg",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should serialize plain text for `GetMsg()`",
+          "path": "serializeI18nMessageForGetMsg/should serialize plain text for `GetMsg()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize text with interpolation for `GetMsg()`",
+          "path": "serializeI18nMessageForGetMsg/should serialize text with interpolation for `GetMsg()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize interpolation with named placeholder for `GetMsg()`",
+          "path": "serializeI18nMessageForGetMsg/should serialize interpolation with named placeholder for `GetMsg()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize content with HTML tags for `GetMsg()`",
+          "path": "serializeI18nMessageForGetMsg/should serialize content with HTML tags for `GetMsg()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize simple ICU for `GetMsg()`",
+          "path": "serializeI18nMessageForGetMsg/should serialize simple ICU for `GetMsg()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize nested ICUs for `GetMsg()`",
+          "path": "serializeI18nMessageForGetMsg/should serialize nested ICUs for `GetMsg()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize ICU with nested HTML for `GetMsg()`",
+          "path": "serializeI18nMessageForGetMsg/should serialize ICU with nested HTML for `GetMsg()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize ICU with nested HTML containing further ICUs for `GetMsg()`",
+          "path": "serializeI18nMessageForGetMsg/should serialize ICU with nested HTML containing further ICUs for `GetMsg()`",
+          "assertions": []
+        }
+      ]
+    },
+    {
+      "name": "serializeI18nMessageForLocalize",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should serialize plain text for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should serialize plain text for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize text with interpolation for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should serialize text with interpolation for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should compute source-spans when serializing text with interpolation for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should compute source-spans when serializing text with interpolation for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize text with interpolation at start for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should serialize text with interpolation at start for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize text with interpolation at end for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should serialize text with interpolation at end for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize only interpolation for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should serialize only interpolation for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize interpolation with named placeholder for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should serialize interpolation with named placeholder for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize content with HTML tags for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should serialize content with HTML tags for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should compute source-spans when serializing content with HTML tags for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should compute source-spans when serializing content with HTML tags for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should create the correct source-spans when there are two placeholders next to each other",
+          "path": "serializeI18nMessageForLocalize/should create the correct source-spans when there are two placeholders next to each other",
+          "assertions": []
+        },
+        {
+          "name": "should create the correct placeholder source-spans when there is skipped leading whitespace",
+          "path": "serializeI18nMessageForLocalize/should create the correct placeholder source-spans when there is skipped leading whitespace",
+          "assertions": []
+        },
+        {
+          "name": "should serialize simple ICU for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should serialize simple ICU for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize nested ICUs for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should serialize nested ICUs for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize ICU with embedded HTML for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should serialize ICU with embedded HTML for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize ICU with embedded interpolation for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should serialize ICU with embedded interpolation for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize ICU with nested HTML containing further ICUs for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should serialize ICU with nested HTML containing further ICUs for `$localize()`",
+          "assertions": []
+        },
+        {
+          "name": "should serialize nested ICUs with embedded interpolation for `$localize()`",
+          "path": "serializeI18nMessageForLocalize/should serialize nested ICUs with embedded interpolation for `$localize()`",
+          "assertions": []
+        }
+      ]
+    },
+    {
+      "name": "serializeIcuNode",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should serialize a simple ICU",
+          "path": "serializeIcuNode/should serialize a simple ICU",
+          "assertions": []
+        },
+        {
+          "name": "should serialize a nested ICU",
+          "path": "serializeIcuNode/should serialize a nested ICU",
+          "assertions": []
+        },
+        {
+          "name": "should serialize ICU with nested HTML",
+          "path": "serializeIcuNode/should serialize ICU with nested HTML",
+          "assertions": []
+        },
+        {
+          "name": "should serialize an ICU with embedded interpolations",
+          "path": "serializeIcuNode/should serialize an ICU with embedded interpolations",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "name": "selector_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/selector/selector_spec.ts",
+  "test_groups": [
+    {
+      "name": "SelectorMatcher",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should select by element name case sensitive",
+          "path": "SelectorMatcher/should select by element name case sensitive",
+          "assertions": []
+        },
+        {
+          "name": "should select by class name case insensitive",
+          "path": "SelectorMatcher/should select by class name case insensitive",
+          "assertions": []
+        },
+        {
+          "name": "should not throw for class name \"constructor\"",
+          "path": "SelectorMatcher/should not throw for class name \"constructor\"",
+          "assertions": []
+        },
+        {
+          "name": "should select by attr name case sensitive independent of the value",
+          "path": "SelectorMatcher/should select by attr name case sensitive independent of the value",
+          "assertions": []
+        },
+        {
+          "name": "should support \".\" in attribute names",
+          "path": "SelectorMatcher/should support \".\" in attribute names",
+          "assertions": []
+        },
+        {
+          "name": "should support \"$\" in attribute names",
+          "path": "SelectorMatcher/should support \"$\" in attribute names",
+          "assertions": []
+        },
+        {
+          "name": "should select by attr name only once if the value is from the DOM",
+          "path": "SelectorMatcher/should select by attr name only once if the value is from the DOM",
+          "assertions": []
+        },
+        {
+          "name": "should select by attr name case sensitive and value case insensitive",
+          "path": "SelectorMatcher/should select by attr name case sensitive and value case insensitive",
+          "assertions": []
+        },
+        {
+          "name": "should select by element name, class name and attribute name with value",
+          "path": "SelectorMatcher/should select by element name, class name and attribute name with value",
+          "assertions": []
+        },
+        {
+          "name": "should select by many attributes and independent of the value",
+          "path": "SelectorMatcher/should select by many attributes and independent of the value",
+          "assertions": []
+        },
+        {
+          "name": "should select independent of the order in the css selector",
+          "path": "SelectorMatcher/should select independent of the order in the css selector",
+          "assertions": []
+        },
+        {
+          "name": "should not select with a matching :not selector",
+          "path": "SelectorMatcher/should not select with a matching :not selector",
+          "assertions": []
+        },
+        {
+          "name": "should select with a non matching :not selector",
+          "path": "SelectorMatcher/should select with a non matching :not selector",
+          "assertions": []
+        },
+        {
+          "name": "should match * with :not selector",
+          "path": "SelectorMatcher/should match * with :not selector",
+          "assertions": []
+        },
+        {
+          "name": "should match with multiple :not selectors",
+          "path": "SelectorMatcher/should match with multiple :not selectors",
+          "assertions": []
+        },
+        {
+          "name": "should select with one match in a list",
+          "path": "SelectorMatcher/should select with one match in a list",
+          "assertions": []
+        },
+        {
+          "name": "should not select twice with two matches in a list",
+          "path": "SelectorMatcher/should not select twice with two matches in a list",
+          "assertions": []
+        }
+      ]
+    },
+    {
+      "name": "CssSelector.parse",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should detect element names",
+          "path": "CssSelector.parse/should detect element names",
+          "assertions": []
+        },
+        {
+          "name": "should detect attr names with escaped $",
+          "path": "CssSelector.parse/should detect attr names with escaped $",
+          "assertions": []
+        },
+        {
+          "name": "should error on attr names with unescaped $",
+          "path": "CssSelector.parse/should error on attr names with unescaped $",
+          "assertions": []
+        },
+        {
+          "name": "should detect class names",
+          "path": "CssSelector.parse/should detect class names",
+          "assertions": []
+        },
+        {
+          "name": "should detect attr names",
+          "path": "CssSelector.parse/should detect attr names",
+          "assertions": []
+        },
+        {
+          "name": "should detect attr values",
+          "path": "CssSelector.parse/should detect attr values",
+          "assertions": []
+        },
+        {
+          "name": "should detect attr values with double quotes",
+          "path": "CssSelector.parse/should detect attr values with double quotes",
+          "assertions": []
+        },
+        {
+          "name": "should detect #some-value syntax and treat as attribute",
+          "path": "CssSelector.parse/should detect #some-value syntax and treat as attribute",
+          "assertions": []
+        },
+        {
+          "name": "should detect attr values with single quotes",
+          "path": "CssSelector.parse/should detect attr values with single quotes",
+          "assertions": []
+        },
+        {
+          "name": "should detect multiple parts",
+          "path": "CssSelector.parse/should detect multiple parts",
+          "assertions": []
+        },
+        {
+          "name": "should detect multiple attributes",
+          "path": "CssSelector.parse/should detect multiple attributes",
+          "assertions": []
+        },
+        {
+          "name": "should detect :not",
+          "path": "CssSelector.parse/should detect :not",
+          "assertions": []
+        },
+        {
+          "name": "should detect :not without truthy",
+          "path": "CssSelector.parse/should detect :not without truthy",
+          "assertions": []
+        },
+        {
+          "name": "should throw when nested :not",
+          "path": "CssSelector.parse/should throw when nested :not",
+          "assertions": []
+        },
+        {
+          "name": "should throw when multiple selectors in :not",
+          "path": "CssSelector.parse/should throw when multiple selectors in :not",
+          "assertions": []
+        },
+        {
+          "name": "should detect lists of selectors",
+          "path": "CssSelector.parse/should detect lists of selectors",
+          "assertions": []
+        },
+        {
+          "name": "should detect lists of selectors with :not",
+          "path": "CssSelector.parse/should detect lists of selectors with :not",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

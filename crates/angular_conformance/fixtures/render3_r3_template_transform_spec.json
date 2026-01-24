@@ -1,0 +1,2865 @@
+{
+  "name": "r3_template_transform_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/render3/r3_template_transform_spec.ts",
+  "test_groups": [
+    {
+      "name": "R3 template transform",
+      "groups": [
+        {
+          "name": "ParseSpan on nodes toString",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should create valid text span on Element with adjacent start and end tags",
+              "path": "R3 template transform/ParseSpan on nodes toString/should create valid text span on Element with adjacent start and end tags",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "Nodes without binding",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should parse incomplete tags terminated by EOF",
+              "path": "R3 template transform/Nodes without binding/should parse incomplete tags terminated by EOF",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<a",
+                  "expected": [["Element", "a"]],
+                  "ignore_error": true
+                }
+              ]
+            },
+            {
+              "name": "should parse incomplete tags terminated by another tag",
+              "path": "R3 template transform/Nodes without binding/should parse incomplete tags terminated by another tag",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<a <span></span>",
+                  "expected": [
+                    ["Element", "a"],
+                    ["Element", "span"]
+                  ],
+                  "ignore_error": true
+                }
+              ]
+            },
+            {
+              "name": "should parse text nodes",
+              "path": "R3 template transform/Nodes without binding/should parse text nodes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "a",
+                  "expected": [["Text", "a"]],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse elements with attributes",
+              "path": "R3 template transform/Nodes without binding/should parse elements with attributes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div a=b></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["TextAttribute", "a", "b"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse ngContent",
+              "path": "R3 template transform/Nodes without binding/should parse ngContent",
+              "assertions": []
+            },
+            {
+              "name": "should parse ngContent when it contains WS only",
+              "path": "R3 template transform/Nodes without binding/should parse ngContent when it contains WS only",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-content select=\"a\">    \n   </ng-content>",
+                  "expected": [
+                    ["Content", "a"],
+                    ["TextAttribute", "select", "a"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse ngContent regardless the namespace",
+              "path": "R3 template transform/Nodes without binding/should parse ngContent regardless the namespace",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<svg><ng-content select=\"a\"></ng-content></svg>",
+                  "expected": [
+                    ["Element", ":svg:svg"],
+                    ["Content", "a"],
+                    ["TextAttribute", "select", "a"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should indicate whether an element is void",
+              "path": "R3 template transform/Nodes without binding/should indicate whether an element is void",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "Bound text nodes",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should parse bound text nodes",
+              "path": "R3 template transform/Bound text nodes/should parse bound text nodes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "{{a}}",
+                  "expected": [["BoundText", "{{ a }}"]],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Bound attributes",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should parse mixed case bound properties",
+              "path": "R3 template transform/Bound attributes/should parse mixed case bound properties",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [someProp]=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 0, "someProp", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse bound properties via bind- ",
+              "path": "R3 template transform/Bound attributes/should parse bound properties via bind- ",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div bind-prop=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 0, "prop", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should report missing property names in bind- syntax",
+              "path": "R3 template transform/Bound attributes/should report missing property names in bind- syntax",
+              "assertions": []
+            },
+            {
+              "name": "should parse bound properties via {{...}}",
+              "path": "R3 template transform/Bound attributes/should parse bound properties via {{...}}",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div prop=\"{{v}}\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 0, "prop", "{{ v }}"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse dash case bound properties",
+              "path": "R3 template transform/Bound attributes/should parse dash case bound properties",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [some-prop]=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 0, "some-prop", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse dotted name bound properties",
+              "path": "R3 template transform/Bound attributes/should parse dotted name bound properties",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [d.ot]=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 0, "d.ot", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should not normalize property names via the element schema",
+              "path": "R3 template transform/Bound attributes/should not normalize property names via the element schema",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [mappedAttr]=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 0, "mappedAttr", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse mixed case bound attributes",
+              "path": "R3 template transform/Bound attributes/should parse mixed case bound attributes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [attr.someAttr]=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 1, "someAttr", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse and dash case bound classes",
+              "path": "R3 template transform/Bound attributes/should parse and dash case bound classes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [class.some-class]=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 2, "some-class", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse mixed case bound classes",
+              "path": "R3 template transform/Bound attributes/should parse mixed case bound classes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [class.someClass]=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 2, "someClass", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse mixed case bound styles",
+              "path": "R3 template transform/Bound attributes/should parse mixed case bound styles",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [style.someStyle]=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 3, "someStyle", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse class bindings with various characters",
+              "path": "R3 template transform/Bound attributes/should parse class bindings with various characters",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<foo [class.text-primary/80]=\"expr\" [class.data-active:text-green-300/80]=\"expr2\" [class.data-[size='large']:p-8] = \"expr3\" some-attr/>",
+                  "expected": [
+                    ["Element", "foo", "#selfClosing"],
+                    ["TextAttribute", "some-attr", ""],
+                    ["BoundAttribute", 2, "text-primary/80", "expr"],
+                    ["BoundAttribute", 2, "data-active:text-green-300/80", "expr2"],
+                    ["BoundAttribute", 2, "data-[size='large']:p-8", "expr3"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "animation bindings",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should support animate.enter",
+              "path": "R3 template transform/animation bindings/should support animate.enter",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div animate.enter=\"foo\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["TextAttribute", "animate.enter", "foo"]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [animate.enter]=\"['foo', 'bar']\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 6.0, "animate.enter", "[\"foo\", \"bar\"]"]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div (animate.enter)=\"animateFn($event)\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundEvent", 3.0, "animate.enter", null, "animateFn($event)"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should support animate.leave",
+              "path": "R3 template transform/animation bindings/should support animate.leave",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div animate.leave=\"foo\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["TextAttribute", "animate.leave", "foo"]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [animate.leave]=\"['foo', 'bar']\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 6.0, "animate.leave", "[\"foo\", \"bar\"]"]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div (animate.leave)=\"animateFn($event)\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundEvent", 3.0, "animate.leave", null, "animateFn($event)"]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div (animateXYZ)=\"animateFn()\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundEvent", 0.0, "animateXYZ", null, "animateFn()"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "templates",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should support * directives",
+              "path": "R3 template transform/templates/should support * directives",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div *ngIf></div>",
+                  "expected": [["Template"], ["TextAttribute", "ngIf", ""], ["Element", "div"]],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should support <ng-template>",
+              "path": "R3 template transform/templates/should support <ng-template>",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template></ng-template>",
+                  "expected": [["Template"]],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should support <ng-template> regardless the namespace",
+              "path": "R3 template transform/templates/should support <ng-template> regardless the namespace",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<svg><ng-template></ng-template></svg>",
+                  "expected": [["Element", ":svg:svg"], ["Template"]],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should support <ng-template> with structural directive",
+              "path": "R3 template transform/templates/should support <ng-template> with structural directive",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template *ngIf=\"true\"></ng-template>",
+                  "expected": [["Template"], ["BoundAttribute", 0.0, "ngIf", "true"], ["Template"]],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should support reference via #...",
+              "path": "R3 template transform/templates/should support reference via #...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template #a></ng-template>",
+                  "expected": [["Template"], ["Reference", "a", ""]],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should support reference via ref-...",
+              "path": "R3 template transform/templates/should support reference via ref-...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template ref-a></ng-template>",
+                  "expected": [["Template"], ["Reference", "a", ""]],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should report an error if a reference is used multiple times on the same template",
+              "path": "R3 template transform/templates/should report an error if a reference is used multiple times on the same template",
+              "assertions": []
+            },
+            {
+              "name": "should parse variables via let-...",
+              "path": "R3 template transform/templates/should parse variables via let-...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template let-a=\"b\"></ng-template>",
+                  "expected": [["Template"], ["Variable", "a", "b"]],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse attributes",
+              "path": "R3 template transform/templates/should parse attributes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template k1=\"v1\" k2=\"v2\"></ng-template>",
+                  "expected": [
+                    ["Template"],
+                    ["TextAttribute", "k1", "v1"],
+                    ["TextAttribute", "k2", "v2"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse bound attributes",
+              "path": "R3 template transform/templates/should parse bound attributes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template [k1]=\"v1\" [k2]=\"v2\"></ng-template>",
+                  "expected": [
+                    ["Template"],
+                    ["BoundAttribute", 0, "k1", "v1"],
+                    ["BoundAttribute", 0, "k2", "v2"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "inline templates",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should support attribute and bound attributes",
+              "path": "R3 template transform/inline templates/should support attribute and bound attributes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div *ngFor=\"let item of items\"></div>",
+                  "expected": [
+                    ["Template"],
+                    ["TextAttribute", "ngFor", ""],
+                    ["BoundAttribute", 0, "ngForOf", "items"],
+                    ["Variable", "item", "$implicit"],
+                    ["Element", "div"]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div *ngFor=\"item of items\"></div>",
+                  "expected": [
+                    ["Template"],
+                    ["BoundAttribute", 0, "ngFor", "item"],
+                    ["BoundAttribute", 0, "ngForOf", "items"],
+                    ["Element", "div"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse variables via let ...",
+              "path": "R3 template transform/inline templates/should parse variables via let ...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div *ngIf=\"let a=b\"></div>",
+                  "expected": [
+                    ["Template"],
+                    ["TextAttribute", "ngIf", ""],
+                    ["Variable", "a", "b"],
+                    ["Element", "div"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse variables via as ...",
+              "path": "R3 template transform/inline templates/should parse variables via as ...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div *ngIf=\"expr as local\"></div>",
+                  "expected": [
+                    ["Template"],
+                    ["BoundAttribute", 0, "ngIf", "expr"],
+                    ["Variable", "local", "ngIf"],
+                    ["Element", "div"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "events",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should parse bound events with a target",
+              "path": "R3 template transform/events/should parse bound events with a target",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div (window:event)=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundEvent", 0, "event", "window", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse event names case sensitive",
+              "path": "R3 template transform/events/should parse event names case sensitive",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div (some-event)=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundEvent", 0, "some-event", null, "v"]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div (someEvent)=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundEvent", 0, "someEvent", null, "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse bound events via on-",
+              "path": "R3 template transform/events/should parse bound events via on-",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div on-event=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundEvent", 0, "event", null, "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should report missing event names in on- syntax",
+              "path": "R3 template transform/events/should report missing event names in on- syntax",
+              "assertions": []
+            },
+            {
+              "name": "should parse bound events and properties via [(...)]",
+              "path": "R3 template transform/events/should parse bound events and properties via [(...)]",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [(prop)]=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 5, "prop", "v"],
+                    ["BoundEvent", 2, "propChange", null, "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse $any in a two-way binding",
+              "path": "R3 template transform/events/should parse $any in a two-way binding",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [(prop)]=\"$any(v)\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 5, "prop", "$any(v)"],
+                    ["BoundEvent", 2, "propChange", null, "$any(v)"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse bound events and properties via bindon-",
+              "path": "R3 template transform/events/should parse bound events and properties via bindon-",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div bindon-prop=\"v\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 5, "prop", "v"],
+                    ["BoundEvent", 2, "propChange", null, "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse bound events and properties via [(...)] with non-null operator",
+              "path": "R3 template transform/events/should parse bound events and properties via [(...)] with non-null operator",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [(prop)]=\"v!\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 5, "prop", "v!"],
+                    ["BoundEvent", 2, "propChange", null, "v!"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse property reads bound via [(...)]",
+              "path": "R3 template transform/events/should parse property reads bound via [(...)]",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [(prop)]=\"a.b.c\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 5, "prop", "a.b.c"],
+                    ["BoundEvent", 2, "propChange", null, "a.b.c"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse keyed reads bound via [(...)]",
+              "path": "R3 template transform/events/should parse keyed reads bound via [(...)]",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [(prop)]=\"a['b']['c']\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundAttribute", 5, "prop", "a[\"b\"][\"c\"]"],
+                    ["BoundEvent", 2, "propChange", null, "a[\"b\"][\"c\"]"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should report assignments in two-way bindings",
+              "path": "R3 template transform/events/should report assignments in two-way bindings",
+              "assertions": []
+            },
+            {
+              "name": "should report pipes in two-way bindings",
+              "path": "R3 template transform/events/should report pipes in two-way bindings",
+              "assertions": []
+            },
+            {
+              "name": "should report unsupported expressions in two-way bindings",
+              "path": "R3 template transform/events/should report unsupported expressions in two-way bindings",
+              "assertions": []
+            },
+            {
+              "name": "should report an error for assignments into non-null asserted expressions",
+              "path": "R3 template transform/events/should report an error for assignments into non-null asserted expressions",
+              "assertions": []
+            },
+            {
+              "name": "should report missing property names in bindon- syntax",
+              "path": "R3 template transform/events/should report missing property names in bindon- syntax",
+              "assertions": []
+            },
+            {
+              "name": "should report an error on empty expression",
+              "path": "R3 template transform/events/should report an error on empty expression",
+              "assertions": []
+            },
+            {
+              "name": "should parse bound animation events when event name is empty",
+              "path": "R3 template transform/events/should parse bound animation events when event name is empty",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div (@)=\"onAnimationEvent($event)\"></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["BoundEvent", 1, "", null, "onAnimationEvent($event)"]
+                  ],
+                  "ignore_error": true
+                }
+              ]
+            },
+            {
+              "name": "should report invalid phase value of animation event",
+              "path": "R3 template transform/events/should report invalid phase value of animation event",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "variables",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should report variables not on template elements",
+              "path": "R3 template transform/variables/should report variables not on template elements",
+              "assertions": []
+            },
+            {
+              "name": "should report missing variable names",
+              "path": "R3 template transform/variables/should report missing variable names",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "references",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should parse references via #...",
+              "path": "R3 template transform/references/should parse references via #...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div #a></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["Reference", "a", ""]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse references via ref-",
+              "path": "R3 template transform/references/should parse references via ref-",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div ref-a></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["Reference", "a", ""]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse camel case references",
+              "path": "R3 template transform/references/should parse camel case references",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div #someA></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["Reference", "someA", ""]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should report invalid reference names",
+              "path": "R3 template transform/references/should report invalid reference names",
+              "assertions": []
+            },
+            {
+              "name": "should report missing reference names",
+              "path": "R3 template transform/references/should report missing reference names",
+              "assertions": []
+            },
+            {
+              "name": "should report an error if a reference is used multiple times on the same element",
+              "path": "R3 template transform/references/should report an error if a reference is used multiple times on the same element",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "literal attribute",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should report missing animation trigger in @ syntax",
+              "path": "R3 template transform/literal attribute/should report missing animation trigger in @ syntax",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "ng-content",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should parse ngContent without selector",
+              "path": "R3 template transform/ng-content/should parse ngContent without selector",
+              "assertions": []
+            },
+            {
+              "name": "should parse ngContent with a specific selector",
+              "path": "R3 template transform/ng-content/should parse ngContent with a specific selector",
+              "assertions": []
+            },
+            {
+              "name": "should parse ngContent with a selector",
+              "path": "R3 template transform/ng-content/should parse ngContent with a selector",
+              "assertions": []
+            },
+            {
+              "name": "should parse ngProjectAs as an attribute",
+              "path": "R3 template transform/ng-content/should parse ngProjectAs as an attribute",
+              "assertions": []
+            },
+            {
+              "name": "should parse ngContent with children",
+              "path": "R3 template transform/ng-content/should parse ngContent with children",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "parser errors",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should only report errors on the node on which the error occurred",
+              "path": "R3 template transform/parser errors/should only report errors on the node on which the error occurred",
+              "assertions": []
+            },
+            {
+              "name": "should report parsing errors on the specific interpolated expressions",
+              "path": "R3 template transform/parser errors/should report parsing errors on the specific interpolated expressions",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "Ignored elements",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should ignore <script> elements",
+              "path": "R3 template transform/Ignored elements/should ignore <script> elements",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<script></script>a",
+                  "expected": [["Text", "a"]],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should ignore <style> elements",
+              "path": "R3 template transform/Ignored elements/should ignore <style> elements",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<style></style>a",
+                  "expected": [["Text", "a"]],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "<link rel=\"stylesheet\">",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should keep <link rel=\"stylesheet\"> elements if they have an absolute url",
+              "path": "R3 template transform/<link rel=\"stylesheet\">/should keep <link rel=\"stylesheet\"> elements if they have an absolute url",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<link rel=\"stylesheet\" href=\"http://someurl\">",
+                  "expected": [
+                    ["Element", "link"],
+                    ["TextAttribute", "rel", "stylesheet"],
+                    ["TextAttribute", "href", "http://someurl"]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<link REL=\"stylesheet\" href=\"http://someurl\">",
+                  "expected": [
+                    ["Element", "link"],
+                    ["TextAttribute", "REL", "stylesheet"],
+                    ["TextAttribute", "href", "http://someurl"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should keep <link rel=\"stylesheet\"> elements if they have no uri",
+              "path": "R3 template transform/<link rel=\"stylesheet\">/should keep <link rel=\"stylesheet\"> elements if they have no uri",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<link rel=\"stylesheet\">",
+                  "expected": [
+                    ["Element", "link"],
+                    ["TextAttribute", "rel", "stylesheet"]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<link REL=\"stylesheet\">",
+                  "expected": [
+                    ["Element", "link"],
+                    ["TextAttribute", "REL", "stylesheet"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should ignore <link rel=\"stylesheet\"> elements if they have a relative uri",
+              "path": "R3 template transform/<link rel=\"stylesheet\">/should ignore <link rel=\"stylesheet\"> elements if they have a relative uri",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<link rel=\"stylesheet\" href=\"./other.css\">",
+                  "expected": [],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<link REL=\"stylesheet\" HREF=\"./other.css\">",
+                  "expected": [],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ngNonBindable",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should ignore bindings on children of elements with ngNonBindable",
+              "path": "R3 template transform/ngNonBindable/should ignore bindings on children of elements with ngNonBindable",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div ngNonBindable>{{b}}</div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["TextAttribute", "ngNonBindable", ""],
+                    ["Text", "{{b}}"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should keep nested children of elements with ngNonBindable",
+              "path": "R3 template transform/ngNonBindable/should keep nested children of elements with ngNonBindable",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div ngNonBindable><span>{{b}}</span></div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["TextAttribute", "ngNonBindable", ""],
+                    ["Element", "span"],
+                    ["Text", "{{b}}"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should ignore <script> elements inside of elements with ngNonBindable",
+              "path": "R3 template transform/ngNonBindable/should ignore <script> elements inside of elements with ngNonBindable",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div ngNonBindable><script></script>a</div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["TextAttribute", "ngNonBindable", ""],
+                    ["Text", "a"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should ignore <style> elements inside of elements with ngNonBindable",
+              "path": "R3 template transform/ngNonBindable/should ignore <style> elements inside of elements with ngNonBindable",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div ngNonBindable><style></style>a</div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["TextAttribute", "ngNonBindable", ""],
+                    ["Text", "a"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should ignore <link rel=\"stylesheet\"> elements inside of elements with ngNonBindable",
+              "path": "R3 template transform/ngNonBindable/should ignore <link rel=\"stylesheet\"> elements inside of elements with ngNonBindable",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div ngNonBindable><link rel=\"stylesheet\">a</div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["TextAttribute", "ngNonBindable", ""],
+                    ["Text", "a"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "deferred blocks",
+          "groups": [
+            {
+              "name": "block validations",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should report syntax error in `when` trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should report syntax error in `when` trigger",
+                  "assertions": []
+                },
+                {
+                  "name": "should report unrecognized trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should report unrecognized trigger",
+                  "assertions": []
+                },
+                {
+                  "name": "should report content before a connected block",
+                  "path": "R3 template transform/deferred blocks/block validations/should report content before a connected block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report connected defer blocks used without a defer block",
+                  "path": "R3 template transform/deferred blocks/block validations/should report connected defer blocks used without a defer block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report multiple placeholder blocks",
+                  "path": "R3 template transform/deferred blocks/block validations/should report multiple placeholder blocks",
+                  "assertions": []
+                },
+                {
+                  "name": "should report multiple loading blocks",
+                  "path": "R3 template transform/deferred blocks/block validations/should report multiple loading blocks",
+                  "assertions": []
+                },
+                {
+                  "name": "should report multiple error blocks",
+                  "path": "R3 template transform/deferred blocks/block validations/should report multiple error blocks",
+                  "assertions": []
+                },
+                {
+                  "name": "should report unrecognized parameter in placeholder block",
+                  "path": "R3 template transform/deferred blocks/block validations/should report unrecognized parameter in placeholder block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report unrecognized parameter in loading block",
+                  "path": "R3 template transform/deferred blocks/block validations/should report unrecognized parameter in loading block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report any parameter usage in error block",
+                  "path": "R3 template transform/deferred blocks/block validations/should report any parameter usage in error block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if minimum placeholder time cannot be parsed",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if minimum placeholder time cannot be parsed",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if minimum loading time cannot be parsed",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if minimum loading time cannot be parsed",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if after loading time cannot be parsed",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if after loading time cannot be parsed",
+                  "assertions": []
+                },
+                {
+                  "name": "should report unrecognized `on` trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should report unrecognized `on` trigger",
+                  "assertions": []
+                },
+                {
+                  "name": "should report missing comma after unparametarized `on` trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should report missing comma after unparametarized `on` trigger",
+                  "assertions": []
+                },
+                {
+                  "name": "should report missing comma after parametarized `on` trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should report missing comma after parametarized `on` trigger",
+                  "assertions": []
+                },
+                {
+                  "name": "should report mutliple commas after between `on` triggers",
+                  "path": "R3 template transform/deferred blocks/block validations/should report mutliple commas after between `on` triggers",
+                  "assertions": []
+                },
+                {
+                  "name": "should report unclosed parenthesis in `on` trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should report unclosed parenthesis in `on` trigger",
+                  "assertions": []
+                },
+                {
+                  "name": "should report incorrect closing parenthesis in `on` trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should report incorrect closing parenthesis in `on` trigger",
+                  "assertions": []
+                },
+                {
+                  "name": "should report stray closing parenthesis in `on` trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should report stray closing parenthesis in `on` trigger",
+                  "assertions": []
+                },
+                {
+                  "name": "should report non-identifier token usage in `on` trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should report non-identifier token usage in `on` trigger",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if identifier is not followed by an opening parenthesis",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if identifier is not followed by an opening parenthesis",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if parameters are passed to `idle` trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if parameters are passed to `idle` trigger",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if no parameters are passed into `timer` trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if no parameters are passed into `timer` trigger",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if `timer` trigger value cannot be parsed",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if `timer` trigger value cannot be parsed",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if `interaction` trigger has more than one parameter",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if `interaction` trigger has more than one parameter",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if parameters are passed to `immediate` trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if parameters are passed to `immediate` trigger",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if `hover` trigger has more than one parameter",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if `hover` trigger has more than one parameter",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if `viewport` trigger has more than one parameter",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if `viewport` trigger has more than one parameter",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if `viewport` trigger with an object literal parameter has a \"trigger\" that is not an identifier",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if `viewport` trigger with an object literal parameter has a \"trigger\" that is not an identifier",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if `viewport` trigger has a variable options parameter",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if `viewport` trigger has a variable options parameter",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if `viewport` trigger options parameter contains the `root` property",
+                  "path": "R3 template transform/deferred blocks/block validations/should report if `viewport` trigger options parameter contains the `root` property",
+                  "assertions": []
+                },
+                {
+                  "name": "should report duplicate when triggers",
+                  "path": "R3 template transform/deferred blocks/block validations/should report duplicate when triggers",
+                  "assertions": []
+                },
+                {
+                  "name": "should report duplicate on triggers",
+                  "path": "R3 template transform/deferred blocks/block validations/should report duplicate on triggers",
+                  "assertions": []
+                },
+                {
+                  "name": "should report duplicate prefetch when triggers",
+                  "path": "R3 template transform/deferred blocks/block validations/should report duplicate prefetch when triggers",
+                  "assertions": []
+                },
+                {
+                  "name": "should report duplicate prefetch on triggers",
+                  "path": "R3 template transform/deferred blocks/block validations/should report duplicate prefetch on triggers",
+                  "assertions": []
+                },
+                {
+                  "name": "should report multiple minimum parameters on a placeholder block",
+                  "path": "R3 template transform/deferred blocks/block validations/should report multiple minimum parameters on a placeholder block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report multiple minimum parameters on a loading block",
+                  "path": "R3 template transform/deferred blocks/block validations/should report multiple minimum parameters on a loading block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report multiple after parameters on a loading block",
+                  "path": "R3 template transform/deferred blocks/block validations/should report multiple after parameters on a loading block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report parameter passed to hydrate trigger with reference-based equivalent",
+                  "path": "R3 template transform/deferred blocks/block validations/should report parameter passed to hydrate trigger with reference-based equivalent",
+                  "assertions": []
+                },
+                {
+                  "name": "should not report missing reference on hydrate trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should not report missing reference on hydrate trigger",
+                  "assertions": []
+                },
+                {
+                  "name": "should report never trigger used without `hydrate`",
+                  "path": "R3 template transform/deferred blocks/block validations/should report never trigger used without `hydrate`",
+                  "assertions": []
+                },
+                {
+                  "name": "should report `hydrate never` used with additonal characters",
+                  "path": "R3 template transform/deferred blocks/block validations/should report `hydrate never` used with additonal characters",
+                  "assertions": []
+                },
+                {
+                  "name": "should not report an error when `hydrate never` is used with additonal blocks",
+                  "path": "R3 template transform/deferred blocks/block validations/should not report an error when `hydrate never` is used with additonal blocks",
+                  "assertions": []
+                },
+                {
+                  "name": "should not report an error when `hydrate never` is used with spaces",
+                  "path": "R3 template transform/deferred blocks/block validations/should not report an error when `hydrate never` is used with spaces",
+                  "assertions": []
+                },
+                {
+                  "name": "should not report an error when `hydrate never` is used after another block",
+                  "path": "R3 template transform/deferred blocks/block validations/should not report an error when `hydrate never` is used after another block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report when `hydrate never` is used together with another `hydrate` trigger",
+                  "path": "R3 template transform/deferred blocks/block validations/should report when `hydrate never` is used together with another `hydrate` trigger",
+                  "assertions": []
+                }
+              ]
+            }
+          ],
+          "tests": [
+            {
+              "name": "should parse a simple deferred block",
+              "path": "R3 template transform/deferred blocks/should parse a simple deferred block",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer{hello}",
+                  "expected": [["DeferredBlock"], ["Text", "hello"]],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with a `when` trigger",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with a `when` trigger",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (when isVisible() && loaded){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["BoundDeferredTrigger", "isVisible() && loaded"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with a single `on` trigger",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with a single `on` trigger",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on idle){hello}",
+                  "expected": [["DeferredBlock"], ["IdleDeferredTrigger"], ["Text", "hello"]],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with multiple `on` triggers",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with multiple `on` triggers",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on idle, viewport(button)){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["IdleDeferredTrigger"],
+                    ["ViewportDeferredTrigger", "button"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with a non-parenthesized trigger at the end",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with a non-parenthesized trigger at the end",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on idle, viewport(button), immediate){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["IdleDeferredTrigger"],
+                    ["ViewportDeferredTrigger", "button"],
+                    ["ImmediateDeferredTrigger"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with `when` and `on` triggers",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with `when` and `on` triggers",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (when isVisible(); on timer(100ms), idle, viewport(button)){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["BoundDeferredTrigger", "isVisible()"],
+                    ["TimerDeferredTrigger", 100.0],
+                    ["IdleDeferredTrigger"],
+                    ["ViewportDeferredTrigger", "button"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should allow new line after trigger name",
+              "path": "R3 template transform/deferred blocks/should allow new line after trigger name",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer(\nwhen\nisVisible(); on\ntimer(100ms),\nidle, viewport(button)){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["BoundDeferredTrigger", "isVisible()"],
+                    ["TimerDeferredTrigger", 100.0],
+                    ["IdleDeferredTrigger"],
+                    ["ViewportDeferredTrigger", "button"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with a timer set in seconds",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with a timer set in seconds",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on timer(10s)){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["TimerDeferredTrigger", 10000.0],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with a timer with a decimal point",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with a timer with a decimal point",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on timer(1.5s)){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["TimerDeferredTrigger", 1500.0],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with a timer that has no units",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with a timer that has no units",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on timer(100)){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["TimerDeferredTrigger", 100.0],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with a hover trigger",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with a hover trigger",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on hover(button)){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["HoverDeferredTrigger", "button"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with an interaction trigger",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with an interaction trigger",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on interaction(button)){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["InteractionDeferredTrigger", "button"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with connected blocks",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with connected blocks",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer {<calendar-cmp [date]=\"current\"/>}@loading {Loading...}@placeholder {Placeholder content!}@error {Loading failed :(}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["Element", "calendar-cmp", "#selfClosing"],
+                    ["BoundAttribute", 0.0, "date", "current"],
+                    ["DeferredBlockPlaceholder"],
+                    ["Text", "Placeholder content!"],
+                    ["DeferredBlockLoading"],
+                    ["Text", "Loading..."],
+                    ["DeferredBlockError"],
+                    ["Text", "Loading failed :("]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with comments between the connected blocks",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with comments between the connected blocks",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer {<calendar-cmp [date]=\"current\"/>}<!-- Show this while loading --> @loading {Loading...}<!-- Show this on the server --> @placeholder {Placeholder content!}<!-- Show this on error --> @error {Loading failed :(}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["Element", "calendar-cmp", "#selfClosing"],
+                    ["BoundAttribute", 0.0, "date", "current"],
+                    ["DeferredBlockPlaceholder"],
+                    ["Text", "Placeholder content!"],
+                    ["DeferredBlockLoading"],
+                    ["Text", "Loading..."],
+                    ["DeferredBlockError"],
+                    ["Text", "Loading failed :("]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "unnamed",
+              "path": "R3 template transform/deferred blocks/unnamed",
+              "assertions": []
+            },
+            {
+              "name": "should parse a loading block with parameters",
+              "path": "R3 template transform/deferred blocks/should parse a loading block with parameters",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer{<calendar-cmp [date]=\"current\"/>}@loading (after 100ms; minimum 1.5s){Loading...}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["Element", "calendar-cmp", "#selfClosing"],
+                    ["BoundAttribute", 0.0, "date", "current"],
+                    ["DeferredBlockLoading", "after 100ms", "minimum 1500ms"],
+                    ["Text", "Loading..."]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a placeholder block with parameters",
+              "path": "R3 template transform/deferred blocks/should parse a placeholder block with parameters",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer {<calendar-cmp [date]=\"current\"/>}@placeholder (minimum 1.5s){Placeholder...}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["Element", "calendar-cmp", "#selfClosing"],
+                    ["BoundAttribute", 0.0, "date", "current"],
+                    ["DeferredBlockPlaceholder", "minimum 1500ms"],
+                    ["Text", "Placeholder..."]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with prefetch triggers",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with prefetch triggers",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on idle; prefetch on viewport(button), hover(button); prefetch when shouldPrefetch()){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["IdleDeferredTrigger"],
+                    ["ViewportDeferredTrigger", "button"],
+                    ["HoverDeferredTrigger", "button"],
+                    ["BoundDeferredTrigger", "shouldPrefetch()"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should allow arbitrary number of spaces after the `prefetch` keyword",
+              "path": "R3 template transform/deferred blocks/should allow arbitrary number of spaces after the `prefetch` keyword",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on idle; prefetch         on viewport(button), hover(button); prefetch    when shouldPrefetch()){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["IdleDeferredTrigger"],
+                    ["ViewportDeferredTrigger", "button"],
+                    ["HoverDeferredTrigger", "button"],
+                    ["BoundDeferredTrigger", "shouldPrefetch()"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse the hydrate-specific `never` trigger",
+              "path": "R3 template transform/deferred blocks/should parse the hydrate-specific `never` trigger",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on idle; hydrate never){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["NeverDeferredTrigger"],
+                    ["IdleDeferredTrigger"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a deferred block with hydrate triggers",
+              "path": "R3 template transform/deferred blocks/should parse a deferred block with hydrate triggers",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on idle; hydrate on viewport, hover, timer(500); hydrate when shouldHydrate()){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["ViewportDeferredTrigger", null],
+                    ["HoverDeferredTrigger", null],
+                    ["TimerDeferredTrigger", 500.0],
+                    ["BoundDeferredTrigger", "shouldHydrate()"],
+                    ["IdleDeferredTrigger"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should allow arbitrary number of spaces after the `hydrate` keyword",
+              "path": "R3 template transform/deferred blocks/should allow arbitrary number of spaces after the `hydrate` keyword",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on idle; hydrate         on viewport, hover; hydrate    when shouldHydrate()){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["ViewportDeferredTrigger", null],
+                    ["HoverDeferredTrigger", null],
+                    ["BoundDeferredTrigger", "shouldHydrate()"],
+                    ["IdleDeferredTrigger"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a complete example",
+              "path": "R3 template transform/deferred blocks/should parse a complete example",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (when isVisible() && foo; on hover(button), timer(10s), idle, immediate, interaction(button), viewport(container); prefetch on immediate; prefetch when isDataLoaded(); hydrate when shouldHydrate(); hydrate on viewport){<calendar-cmp [date]=\"current\"/>}@loading (minimum 1s; after 100ms){Loading...}@placeholder (minimum 500){Placeholder content!}@error {Loading failed :(}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["BoundDeferredTrigger", "shouldHydrate()"],
+                    ["ViewportDeferredTrigger", null],
+                    ["BoundDeferredTrigger", "isVisible() && foo"],
+                    ["HoverDeferredTrigger", "button"],
+                    ["TimerDeferredTrigger", 10000.0],
+                    ["IdleDeferredTrigger"],
+                    ["ImmediateDeferredTrigger"],
+                    ["InteractionDeferredTrigger", "button"],
+                    ["ViewportDeferredTrigger", "container"],
+                    ["ImmediateDeferredTrigger"],
+                    ["BoundDeferredTrigger", "isDataLoaded()"],
+                    ["Element", "calendar-cmp", "#selfClosing"],
+                    ["BoundAttribute", 0.0, "date", "current"],
+                    ["DeferredBlockPlaceholder", "minimum 500ms"],
+                    ["Text", "Placeholder content!"],
+                    ["DeferredBlockLoading", "after 100ms", "minimum 1000ms"],
+                    ["Text", "Loading..."],
+                    ["DeferredBlockError"],
+                    ["Text", "Loading failed :("]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should treat blocks as plain text inside ngNonBindable",
+              "path": "R3 template transform/deferred blocks/should treat blocks as plain text inside ngNonBindable",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div ngNonBindable>@defer (when isVisible() && foo; on hover(button), timer(10s), idle, immediate, interaction(button), viewport(container); prefetch on immediate; prefetch when isDataLoaded(); hydrate when shouldHydrate(); hydrate on viewport){<calendar-cmp [date]=\"current\"/>}@loading (minimum 1s; after 100ms){Loading...}@placeholder (minimum 500){Placeholder content!}@error {Loading failed :(}</div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["TextAttribute", "ngNonBindable", ""],
+                    [
+                      "Text",
+                      "@defer (when isVisible() && foo; on hover(button), timer(10s), idle, immediate, interaction(button), viewport(container); prefetch on immediate; prefetch when isDataLoaded(); hydrate when shouldHydrate(); hydrate on viewport){"
+                    ],
+                    ["Element", "calendar-cmp", "#selfClosing"],
+                    ["TextAttribute", "[date]", "current"],
+                    ["Text", "}"],
+                    ["Text", "@loading (minimum 1s; after 100ms){"],
+                    ["Text", "Loading..."],
+                    ["Text", "}"],
+                    ["Text", "@placeholder (minimum 500){"],
+                    ["Text", "Placeholder content!"],
+                    ["Text", "}"],
+                    ["Text", "@error {"],
+                    ["Text", "Loading failed :("],
+                    ["Text", "}"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse triggers with implied target elements",
+              "path": "R3 template transform/deferred blocks/should parse triggers with implied target elements",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on hover, interaction, viewport; prefetch on hover, interaction, viewport) {hello}@placeholder {<implied-trigger/>}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["HoverDeferredTrigger", null],
+                    ["InteractionDeferredTrigger", null],
+                    ["ViewportDeferredTrigger", null],
+                    ["HoverDeferredTrigger", null],
+                    ["InteractionDeferredTrigger", null],
+                    ["ViewportDeferredTrigger", null],
+                    ["Text", "hello"],
+                    ["DeferredBlockPlaceholder"],
+                    ["Element", "implied-trigger", "#selfClosing"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a viewport trigger with an options parameter",
+              "path": "R3 template transform/deferred blocks/should parse a viewport trigger with an options parameter",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on viewport({trigger: foo, rootMargin: \"123px\", threshold: [1, 2, 3]})){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    [
+                      "ViewportDeferredTrigger",
+                      "foo",
+                      "{rootMargin: \"123px\", threshold: [1, 2, 3]}"
+                    ],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a viewport trigger with an options parameter, but without a trigger",
+              "path": "R3 template transform/deferred blocks/should parse a viewport trigger with an options parameter, but without a trigger",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on viewport({rootMargin: \"123px\"})){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["ViewportDeferredTrigger", null, "{rootMargin: \"123px\"}"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (on viewport({rootMargin: \"123px\"})){hello}",
+                  "expected": [
+                    ["DeferredBlock"],
+                    ["ViewportDeferredTrigger", null, "{rootMargin: \"123px\"}"],
+                    ["Text", "hello"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "switch blocks",
+          "groups": [
+            {
+              "name": "validations",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should report syntax error in switch expression",
+                  "path": "R3 template transform/switch blocks/validations/should report syntax error in switch expression",
+                  "assertions": []
+                },
+                {
+                  "name": "should report syntax error in case expression",
+                  "path": "R3 template transform/switch blocks/validations/should report syntax error in case expression",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if a block different from \"case\" and \"default\" is used in a switch",
+                  "path": "R3 template transform/switch blocks/validations/should report if a block different from \"case\" and \"default\" is used in a switch",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if @case or @default is used outside of a switch block",
+                  "path": "R3 template transform/switch blocks/validations/should report if @case or @default is used outside of a switch block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if a switch has no parameters",
+                  "path": "R3 template transform/switch blocks/validations/should report if a switch has no parameters",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if a switch has more than one parameter",
+                  "path": "R3 template transform/switch blocks/validations/should report if a switch has more than one parameter",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if a case has no parameters",
+                  "path": "R3 template transform/switch blocks/validations/should report if a case has no parameters",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if a case has more than one parameter",
+                  "path": "R3 template transform/switch blocks/validations/should report if a case has more than one parameter",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if a switch has multiple default blocks",
+                  "path": "R3 template transform/switch blocks/validations/should report if a switch has multiple default blocks",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if a default block has parameters",
+                  "path": "R3 template transform/switch blocks/validations/should report if a default block has parameters",
+                  "assertions": []
+                }
+              ]
+            }
+          ],
+          "tests": [
+            {
+              "name": "should parse a switch block",
+              "path": "R3 template transform/switch blocks/should parse a switch block",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n          @switch (cond.kind) {\n            @case (x()) { X case }\n            @case ('hello') {<button>Y case</button>}\n            @case (42) { Z case }\n            @default { No case matched }\n          }\n        ",
+                  "expected": [
+                    ["SwitchBlock", "cond.kind"],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "x()"],
+                    ["Text", " X case "],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "\"hello\""],
+                    ["Element", "button"],
+                    ["Text", "Y case"],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "42"],
+                    ["Text", " Z case "],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", null],
+                    ["Text", " No case matched "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a switch block when preserveWhitespaces is enabled",
+              "path": "R3 template transform/switch blocks/should parse a switch block when preserveWhitespaces is enabled",
+              "assertions": []
+            },
+            {
+              "name": "should parse a switch block with optional parentheses",
+              "path": "R3 template transform/switch blocks/should parse a switch block with optional parentheses",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n          @switch ((cond.kind)) {\n            @case ((x())) { X case }\n            @case (('hello')) {<button>Y case</button>}\n            @case ((42)) { Z case }\n            @default { No case matched }\n          }\n        ",
+                  "expected": [
+                    ["SwitchBlock", "(cond.kind)"],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "(x())"],
+                    ["Text", " X case "],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "(\"hello\")"],
+                    ["Element", "button"],
+                    ["Text", "Y case"],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "(42)"],
+                    ["Text", " Z case "],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", null],
+                    ["Text", " No case matched "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a nested switch block",
+              "path": "R3 template transform/switch blocks/should parse a nested switch block",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n          @switch (cond) {\n            @case ('a') {\n              @switch (innerCond) {\n                @case ('innerA') { Inner A }\n                @case ('innerB') { Inner B }\n              }\n            }\n            @case ('b') {<button>Y case</button>}\n            @case ('c') { Z case }\n            @default {\n              @switch (innerCond) {\n                @case ('innerC') { Inner C }\n                @case ('innerD') { Inner D }\n                @default {\n                  @switch (innerInnerCond) {\n                    @case ('innerInnerA') { Inner inner A }\n                    @case ('innerInnerA') { Inner inner B }\n                  }\n                }\n              }\n            }\n          }\n        ",
+                  "expected": [
+                    ["SwitchBlock", "cond"],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "\"a\""],
+                    ["SwitchBlock", "innerCond"],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "\"innerA\""],
+                    ["Text", " Inner A "],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "\"innerB\""],
+                    ["Text", " Inner B "],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "\"b\""],
+                    ["Element", "button"],
+                    ["Text", "Y case"],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "\"c\""],
+                    ["Text", " Z case "],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", null],
+                    ["SwitchBlock", "innerCond"],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "\"innerC\""],
+                    ["Text", " Inner C "],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "\"innerD\""],
+                    ["Text", " Inner D "],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", null],
+                    ["SwitchBlock", "innerInnerCond"],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "\"innerInnerA\""],
+                    ["Text", " Inner inner A "],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "\"innerInnerA\""],
+                    ["Text", " Inner inner B "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a switch block containing comments",
+              "path": "R3 template transform/switch blocks/should parse a switch block containing comments",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n          @switch (cond.kind) {\n            <!-- X case -->\n            @case (x) { X case }\n\n            <!-- default case -->\n            @default { No case matched }\n          }\n        ",
+                  "expected": [
+                    ["SwitchBlock", "cond.kind"],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "x"],
+                    ["Text", " X case "],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", null],
+                    ["Text", " No case matched "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse multiple case blocks in a switch block",
+              "path": "R3 template transform/switch blocks/should parse multiple case blocks in a switch block",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n          @switch (cond) {\n            @case ('a') @case('b') @case('c') @case('d') { ABCD case }\n            @case ('z') { Z case }\n            @default { No case matched }\n          }\n        ",
+                  "expected": [
+                    ["SwitchBlock", "cond"],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "\"a\""],
+                    ["SwitchBlockCase", "\"b\""],
+                    ["SwitchBlockCase", "\"c\""],
+                    ["SwitchBlockCase", "\"d\""],
+                    ["Text", " ABCD case "],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", "\"z\""],
+                    ["Text", " Z case "],
+                    ["SwitchBlockCaseGroup"],
+                    ["SwitchBlockCase", null],
+                    ["Text", " No case matched "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "for loop blocks",
+          "groups": [
+            {
+              "name": "validations",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should report if for loop does not have an expression",
+                  "path": "R3 template transform/for loop blocks/validations/should report if for loop does not have an expression",
+                  "assertions": []
+                },
+                {
+                  "name": "should report if for loop does not have a tracking expression",
+                  "path": "R3 template transform/for loop blocks/validations/should report if for loop does not have a tracking expression",
+                  "assertions": []
+                },
+                {
+                  "name": "should report mismatching optional parentheses around for loop expression",
+                  "path": "R3 template transform/for loop blocks/validations/should report mismatching optional parentheses around for loop expression",
+                  "assertions": []
+                },
+                {
+                  "name": "should report unrecognized for loop parameters",
+                  "path": "R3 template transform/for loop blocks/validations/should report unrecognized for loop parameters",
+                  "assertions": []
+                },
+                {
+                  "name": "should report multiple `track` parameters",
+                  "path": "R3 template transform/for loop blocks/validations/should report multiple `track` parameters",
+                  "assertions": []
+                },
+                {
+                  "name": "should report invalid for loop expression",
+                  "path": "R3 template transform/for loop blocks/validations/should report invalid for loop expression",
+                  "assertions": []
+                },
+                {
+                  "name": "should report syntax error in for loop expression",
+                  "path": "R3 template transform/for loop blocks/validations/should report syntax error in for loop expression",
+                  "assertions": []
+                },
+                {
+                  "name": "should report for loop with multiple `empty` blocks",
+                  "path": "R3 template transform/for loop blocks/validations/should report for loop with multiple `empty` blocks",
+                  "assertions": []
+                },
+                {
+                  "name": "should report empty block with parameters",
+                  "path": "R3 template transform/for loop blocks/validations/should report empty block with parameters",
+                  "assertions": []
+                },
+                {
+                  "name": "should content between @for and @empty blocks",
+                  "path": "R3 template transform/for loop blocks/validations/should content between @for and @empty blocks",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an empty block used without a @for loop block",
+                  "path": "R3 template transform/for loop blocks/validations/should report an empty block used without a @for loop block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report a pipe in a track expression",
+                  "path": "R3 template transform/for loop blocks/validations/should report a pipe in a track expression",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an empty `let` parameter",
+                  "path": "R3 template transform/for loop blocks/validations/should report an empty `let` parameter",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an invalid `let` parameter",
+                  "path": "R3 template transform/for loop blocks/validations/should report an invalid `let` parameter",
+                  "assertions": []
+                },
+                {
+                  "name": "should an unknown variable in a `let` parameter",
+                  "path": "R3 template transform/for loop blocks/validations/should an unknown variable in a `let` parameter",
+                  "assertions": []
+                },
+                {
+                  "name": "should report duplicate `let` parameter variables",
+                  "path": "R3 template transform/for loop blocks/validations/should report duplicate `let` parameter variables",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an item name that conflicts with the implicit context variables",
+                  "path": "R3 template transform/for loop blocks/validations/should report an item name that conflicts with the implicit context variables",
+                  "assertions": []
+                },
+                {
+                  "name": "should report a context variable alias that is the same as the variable name",
+                  "path": "R3 template transform/for loop blocks/validations/should report a context variable alias that is the same as the variable name",
+                  "assertions": []
+                }
+              ]
+            }
+          ],
+          "tests": [
+            {
+              "name": "should parse a for loop block",
+              "path": "R3 template transform/for loop blocks/should parse a for loop block",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @for (item of items.foo.bar; track item.id) {\n          {{ item }}\n        } @empty {\n          There were no items in the list.\n        }\n      ",
+                  "expected": [
+                    ["ForLoopBlock", "items.foo.bar", "item.id"],
+                    ["Variable", "item", "$implicit"],
+                    ["Variable", "$index", "$index"],
+                    ["Variable", "$first", "$first"],
+                    ["Variable", "$last", "$last"],
+                    ["Variable", "$even", "$even"],
+                    ["Variable", "$odd", "$odd"],
+                    ["Variable", "$count", "$count"],
+                    ["BoundText", " {{ item }} "],
+                    ["ForLoopBlockEmpty"],
+                    ["Text", " There were no items in the list. "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a for loop block with optional parentheses",
+              "path": "R3 template transform/for loop blocks/should parse a for loop block with optional parentheses",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @for ((item of items.foo.bar); track item.id){\n          {{ item }}\n        }\n      ",
+                  "expected": [
+                    ["ForLoopBlock", "items.foo.bar", "item.id"],
+                    ["Variable", "item", "$implicit"],
+                    ["Variable", "$index", "$index"],
+                    ["Variable", "$first", "$first"],
+                    ["Variable", "$last", "$last"],
+                    ["Variable", "$even", "$even"],
+                    ["Variable", "$odd", "$odd"],
+                    ["Variable", "$count", "$count"],
+                    ["BoundText", " {{ item }} "]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @for ((item of items.foo.bar()); track item.id) {\n          {{ item }}\n        }\n      ",
+                  "expected": [
+                    ["ForLoopBlock", "items.foo.bar()", "item.id"],
+                    ["Variable", "item", "$implicit"],
+                    ["Variable", "$index", "$index"],
+                    ["Variable", "$first", "$first"],
+                    ["Variable", "$last", "$last"],
+                    ["Variable", "$even", "$even"],
+                    ["Variable", "$odd", "$odd"],
+                    ["Variable", "$count", "$count"],
+                    ["BoundText", " {{ item }} "]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @for ((   ( (item of items.foo.bar()) )   ); track item.id) {\n          {{ item }}\n        }\n      ",
+                  "expected": [
+                    ["ForLoopBlock", "items.foo.bar()", "item.id"],
+                    ["Variable", "item", "$implicit"],
+                    ["Variable", "$index", "$index"],
+                    ["Variable", "$first", "$first"],
+                    ["Variable", "$last", "$last"],
+                    ["Variable", "$even", "$even"],
+                    ["Variable", "$odd", "$odd"],
+                    ["Variable", "$count", "$count"],
+                    ["BoundText", " {{ item }} "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a for loop block with let parameters",
+              "path": "R3 template transform/for loop blocks/should parse a for loop block with let parameters",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @for (item of items.foo.bar; track item.id; let idx = $index, f = $first, c = $count; let l = $last, ev = $even, od = $odd) {\n          {{ item }}\n        }\n      ",
+                  "expected": [
+                    ["ForLoopBlock", "items.foo.bar", "item.id"],
+                    ["Variable", "item", "$implicit"],
+                    ["Variable", "$index", "$index"],
+                    ["Variable", "$first", "$first"],
+                    ["Variable", "$last", "$last"],
+                    ["Variable", "$even", "$even"],
+                    ["Variable", "$odd", "$odd"],
+                    ["Variable", "$count", "$count"],
+                    ["Variable", "idx", "$index"],
+                    ["Variable", "f", "$first"],
+                    ["Variable", "c", "$count"],
+                    ["Variable", "l", "$last"],
+                    ["Variable", "ev", "$even"],
+                    ["Variable", "od", "$odd"],
+                    ["BoundText", " {{ item }} "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a for loop block with newlines in its let parameters",
+              "path": "R3 template transform/for loop blocks/should parse a for loop block with newlines in its let parameters",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @for (item of items.foo.bar; track item.id; let\nidx = $index,\nf = $first,\nc = $count,\nl = $last,\nev = $even,\nod = $odd) {\n          {{ item }}\n        }\n      ",
+                  "expected": [
+                    ["ForLoopBlock", "items.foo.bar", "item.id"],
+                    ["Variable", "item", "$implicit"],
+                    ["Variable", "$index", "$index"],
+                    ["Variable", "$first", "$first"],
+                    ["Variable", "$last", "$last"],
+                    ["Variable", "$even", "$even"],
+                    ["Variable", "$odd", "$odd"],
+                    ["Variable", "$count", "$count"],
+                    ["Variable", "idx", "$index"],
+                    ["Variable", "f", "$first"],
+                    ["Variable", "c", "$count"],
+                    ["Variable", "l", "$last"],
+                    ["Variable", "ev", "$even"],
+                    ["Variable", "od", "$odd"],
+                    ["BoundText", " {{ item }} "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse nested for loop blocks",
+              "path": "R3 template transform/for loop blocks/should parse nested for loop blocks",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @for (item of items.foo.bar; track item.id) {\n          {{ item }}\n\n          <div>\n            @for (subitem of item.items; track subitem.id) {<h1>{{subitem}}</h1>}\n          </div>\n        } @empty {\n          There were no items in the list.\n        }\n      ",
+                  "expected": [
+                    ["ForLoopBlock", "items.foo.bar", "item.id"],
+                    ["Variable", "item", "$implicit"],
+                    ["Variable", "$index", "$index"],
+                    ["Variable", "$first", "$first"],
+                    ["Variable", "$last", "$last"],
+                    ["Variable", "$even", "$even"],
+                    ["Variable", "$odd", "$odd"],
+                    ["Variable", "$count", "$count"],
+                    ["BoundText", " {{ item }} "],
+                    ["Element", "div"],
+                    ["ForLoopBlock", "item.items", "subitem.id"],
+                    ["Variable", "subitem", "$implicit"],
+                    ["Variable", "$index", "$index"],
+                    ["Variable", "$first", "$first"],
+                    ["Variable", "$last", "$last"],
+                    ["Variable", "$even", "$even"],
+                    ["Variable", "$odd", "$odd"],
+                    ["Variable", "$count", "$count"],
+                    ["Element", "h1"],
+                    ["BoundText", "{{ subitem }}"],
+                    ["ForLoopBlockEmpty"],
+                    ["Text", " There were no items in the list. "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a for loop block with a function call in the `track` expression",
+              "path": "R3 template transform/for loop blocks/should parse a for loop block with a function call in the `track` expression",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @for (item of items.foo.bar; track trackBy(item.id, 123)) {\n          {{ item }}\n        }\n      ",
+                  "expected": [
+                    ["ForLoopBlock", "items.foo.bar", "trackBy(item.id, 123)"],
+                    ["Variable", "item", "$implicit"],
+                    ["Variable", "$index", "$index"],
+                    ["Variable", "$first", "$first"],
+                    ["Variable", "$last", "$last"],
+                    ["Variable", "$even", "$even"],
+                    ["Variable", "$odd", "$odd"],
+                    ["Variable", "$count", "$count"],
+                    ["BoundText", " {{ item }} "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse a for loop block with newlines in its expression",
+              "path": "R3 template transform/for loop blocks/should parse a for loop block with newlines in its expression",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @for (item\nof\nitems.foo.bar; track item.id +\nfoo) {{{ item }}}\n      ",
+                  "expected": [],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @for ((item\nof\nitems.foo.bar); track (item.id +\nfoo)) {{{ item }}}\n      ",
+                  "expected": [],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse for loop block expression containing new lines",
+              "path": "R3 template transform/for loop blocks/should parse for loop block expression containing new lines",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @for (item of [\n          { id: 1 },\n          { id: 2 }\n        ]; track item.id) {\n          {{ item }}\n        }\n      ",
+                  "expected": [
+                    ["ForLoopBlock", "[{id: 1}, {id: 2}]", "item.id"],
+                    ["Variable", "item", "$implicit"],
+                    ["Variable", "$index", "$index"],
+                    ["Variable", "$first", "$first"],
+                    ["Variable", "$last", "$last"],
+                    ["Variable", "$even", "$even"],
+                    ["Variable", "$odd", "$odd"],
+                    ["Variable", "$count", "$count"],
+                    ["BoundText", " {{ item }} "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "if blocks",
+          "groups": [
+            {
+              "name": "validations",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should report an if block without a condition",
+                  "path": "R3 template transform/if blocks/validations/should report an if block without a condition",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an unknown parameter in an if block",
+                  "path": "R3 template transform/if blocks/validations/should report an unknown parameter in an if block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an unknown parameter in an else if block",
+                  "path": "R3 template transform/if blocks/validations/should report an unknown parameter in an else if block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an if block that has multiple `as` expressions",
+                  "path": "R3 template transform/if blocks/validations/should report an if block that has multiple `as` expressions",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an else if block with a newline in the name",
+                  "path": "R3 template transform/if blocks/validations/should report an else if block with a newline in the name",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an @else if block used without an @if block",
+                  "path": "R3 template transform/if blocks/validations/should report an @else if block used without an @if block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an @else block used without an @if block",
+                  "path": "R3 template transform/if blocks/validations/should report an @else block used without an @if block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report content between an @if and @else if block",
+                  "path": "R3 template transform/if blocks/validations/should report content between an @if and @else if block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report content between an @if and @else block",
+                  "path": "R3 template transform/if blocks/validations/should report content between an @if and @else block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an else block with parameters",
+                  "path": "R3 template transform/if blocks/validations/should report an else block with parameters",
+                  "assertions": []
+                },
+                {
+                  "name": "should report a conditional with multiple else blocks",
+                  "path": "R3 template transform/if blocks/validations/should report a conditional with multiple else blocks",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an else if block after an else block",
+                  "path": "R3 template transform/if blocks/validations/should report an else if block after an else block",
+                  "assertions": []
+                },
+                {
+                  "name": "should throw if \"as\" expression is not a valid identifier",
+                  "path": "R3 template transform/if blocks/validations/should throw if \"as\" expression is not a valid identifier",
+                  "assertions": []
+                },
+                {
+                  "name": "should report consecutive @if statements without a block in between",
+                  "path": "R3 template transform/if blocks/validations/should report consecutive @if statements without a block in between",
+                  "assertions": []
+                }
+              ]
+            }
+          ],
+          "tests": [
+            {
+              "name": "should parse an if block",
+              "path": "R3 template transform/if blocks/should parse an if block",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @if (cond.expr; as foo) {\n          Main case was true!\n        } @else if (other.expr) {\n          Extra case was true!\n        } @else {\n          False case!\n        }\n        ",
+                  "expected": [
+                    ["IfBlock"],
+                    ["IfBlockBranch", "cond.expr"],
+                    ["Variable", "foo", "foo"],
+                    ["Text", " Main case was true! "],
+                    ["IfBlockBranch", "other.expr"],
+                    ["Text", " Extra case was true! "],
+                    ["IfBlockBranch", null],
+                    ["Text", " False case! "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse an if block with optional parentheses",
+              "path": "R3 template transform/if blocks/should parse an if block with optional parentheses",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @if ((cond.expr)) {\n          Main case was true!\n        } @else if ((other.expr)) {\n          Extra case was true!\n        } @else {\n          False case!\n        }\n        ",
+                  "expected": [
+                    ["IfBlock"],
+                    ["IfBlockBranch", "(cond.expr)"],
+                    ["Text", " Main case was true! "],
+                    ["IfBlockBranch", "(other.expr)"],
+                    ["Text", " Extra case was true! "],
+                    ["IfBlockBranch", null],
+                    ["Text", " False case! "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse nested if blocks",
+              "path": "R3 template transform/if blocks/should parse nested if blocks",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @if (a) {\n          @if (a1) {\n            a1\n          } @else {\n            b1\n          }\n        }\n        @else if (b) {\n          b\n        } @else {\n          @if (c1) {\n            c1\n          } @else if (c2) {\n            c2\n          } @else {\n            c3\n          }\n        }\n        ",
+                  "expected": [
+                    ["IfBlock"],
+                    ["IfBlockBranch", "a"],
+                    ["IfBlock"],
+                    ["IfBlockBranch", "a1"],
+                    ["Text", " a1 "],
+                    ["IfBlockBranch", null],
+                    ["Text", " b1 "],
+                    ["IfBlockBranch", "b"],
+                    ["Text", " b "],
+                    ["IfBlockBranch", null],
+                    ["IfBlock"],
+                    ["IfBlockBranch", "c1"],
+                    ["Text", " c1 "],
+                    ["IfBlockBranch", "c2"],
+                    ["Text", " c2 "],
+                    ["IfBlockBranch", null],
+                    ["Text", " c3 "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse an else if block with multiple spaces",
+              "path": "R3 template transform/if blocks/should parse an else if block with multiple spaces",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @if (cond.expr; as foo) {\n          Main case was true!\n        } @else        if (other.expr) {\n          Other case was true!\n        }\n        ",
+                  "expected": [
+                    ["IfBlock"],
+                    ["IfBlockBranch", "cond.expr"],
+                    ["Variable", "foo", "foo"],
+                    ["Text", " Main case was true! "],
+                    ["IfBlockBranch", "other.expr"],
+                    ["Text", " Other case was true! "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse an else if block with a tab between `else` and `if`",
+              "path": "R3 template transform/if blocks/should parse an else if block with a tab between `else` and `if`",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @if (cond.expr; as foo) {\n          Main case was true!\n        } @else\tif (other.expr) {\n          Other case was true!\n        }\n        ",
+                  "expected": [
+                    ["IfBlock"],
+                    ["IfBlockBranch", "cond.expr"],
+                    ["Variable", "foo", "foo"],
+                    ["Text", " Main case was true! "],
+                    ["IfBlockBranch", "other.expr"],
+                    ["Text", " Other case was true! "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse an if block containing comments between the branches",
+              "path": "R3 template transform/if blocks/should parse an if block containing comments between the branches",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @if (cond.expr; as foo) {\n          Main case was true!\n        }\n        <!-- Extra case -->\n        @else if (other.expr) {\n          Extra case was true!\n        }\n        <!-- False case -->\n        @else {\n          False case!\n        }\n        ",
+                  "expected": [
+                    ["IfBlock"],
+                    ["IfBlockBranch", "cond.expr"],
+                    ["Variable", "foo", "foo"],
+                    ["Text", " Main case was true! "],
+                    ["IfBlockBranch", "other.expr"],
+                    ["Text", " Extra case was true! "],
+                    ["IfBlockBranch", null],
+                    ["Text", " False case! "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should parse an else if block with an aliased expression",
+              "path": "R3 template transform/if blocks/should parse an else if block with an aliased expression",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "\n        @if (cond.expr; as foo) {\n          Main case was true!\n        } @else if (other.expr; as bar) {\n          Other case was true!\n        }\n        ",
+                  "expected": [
+                    ["IfBlock"],
+                    ["IfBlockBranch", "cond.expr"],
+                    ["Variable", "foo", "foo"],
+                    ["Text", " Main case was true! "],
+                    ["IfBlockBranch", "other.expr"],
+                    ["Variable", "bar", "bar"],
+                    ["Text", " Other case was true! "]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "@let declarations",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should parse a let declaration",
+              "path": "R3 template transform/@let declarations/should parse a let declaration",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@let foo = 123 + 456;",
+                  "expected": [["LetDeclaration", "foo", "123 + 456"]],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should report syntax errors in the let declaration value",
+              "path": "R3 template transform/@let declarations/should report syntax errors in the let declaration value",
+              "assertions": []
+            },
+            {
+              "name": "should report a let declaration with no value",
+              "path": "R3 template transform/@let declarations/should report a let declaration with no value",
+              "assertions": []
+            },
+            {
+              "name": "should produce a text node when @let is used inside ngNonBindable",
+              "path": "R3 template transform/@let declarations/should produce a text node when @let is used inside ngNonBindable",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div ngNonBindable>@let foo = 123;</div>",
+                  "expected": [
+                    ["Element", "div"],
+                    ["TextAttribute", "ngNonBindable", ""],
+                    ["Text", "@let foo = 123;"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "component nodes",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should parse a simple component node",
+              "path": "R3 template transform/component nodes/should parse a simple component node",
+              "assertions": []
+            },
+            {
+              "name": "should parse a component node with a tag name",
+              "path": "R3 template transform/component nodes/should parse a component node with a tag name",
+              "assertions": []
+            },
+            {
+              "name": "should parse a component tag nested within other markup",
+              "path": "R3 template transform/component nodes/should parse a component tag nested within other markup",
+              "assertions": []
+            },
+            {
+              "name": "should parse a component node with attributes and directives",
+              "path": "R3 template transform/component nodes/should parse a component node with attributes and directives",
+              "assertions": []
+            },
+            {
+              "name": "should parse a component node with * directives",
+              "path": "R3 template transform/component nodes/should parse a component node with * directives",
+              "assertions": []
+            },
+            {
+              "name": "should not pick up attributes from directives when using * syntax",
+              "path": "R3 template transform/component nodes/should not pick up attributes from directives when using * syntax",
+              "assertions": []
+            },
+            {
+              "name": "should treat components as elements inside ngNonBindable",
+              "path": "R3 template transform/component nodes/should treat components as elements inside ngNonBindable",
+              "assertions": []
+            },
+            {
+              "name": "should not allow a selectorless component with an unsupported tag name",
+              "path": "R3 template transform/component nodes/should not allow a selectorless component with an unsupported tag name",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "directives",
+          "groups": [
+            {
+              "name": "validations",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should not allow * syntax inside directives",
+                  "path": "R3 template transform/directives/validations/should not allow * syntax inside directives",
+                  "assertions": []
+                },
+                {
+                  "name": "should not allow ngProjectAs inside directive syntax",
+                  "path": "R3 template transform/directives/validations/should not allow ngProjectAs inside directive syntax",
+                  "assertions": []
+                },
+                {
+                  "name": "should not allow ngNonBindable inside directive syntax",
+                  "path": "R3 template transform/directives/validations/should not allow ngNonBindable inside directive syntax",
+                  "assertions": []
+                },
+                {
+                  "name": "should not allow the same directive to be applied multiple times",
+                  "path": "R3 template transform/directives/validations/should not allow the same directive to be applied multiple times",
+                  "assertions": []
+                },
+                {
+                  "name": "should not allow class bindings inside directives",
+                  "path": "R3 template transform/directives/validations/should not allow class bindings inside directives",
+                  "assertions": []
+                },
+                {
+                  "name": "should not allow style bindings inside directives",
+                  "path": "R3 template transform/directives/validations/should not allow style bindings inside directives",
+                  "assertions": []
+                },
+                {
+                  "name": "should not allow attribute bindings inside directives",
+                  "path": "R3 template transform/directives/validations/should not allow attribute bindings inside directives",
+                  "assertions": []
+                },
+                {
+                  "name": "should not allow animation bindings inside directives",
+                  "path": "R3 template transform/directives/validations/should not allow animation bindings inside directives",
+                  "assertions": []
+                },
+                {
+                  "name": "should not allow named references",
+                  "path": "R3 template transform/directives/validations/should not allow named references",
+                  "assertions": []
+                },
+                {
+                  "name": "should not allow duplicate references",
+                  "path": "R3 template transform/directives/validations/should not allow duplicate references",
+                  "assertions": []
+                }
+              ]
+            }
+          ],
+          "tests": [
+            {
+              "name": "should parse a directive with no attributes",
+              "path": "R3 template transform/directives/should parse a directive with no attributes",
+              "assertions": []
+            },
+            {
+              "name": "should parse a directive with attributes",
+              "path": "R3 template transform/directives/should parse a directive with attributes",
+              "assertions": []
+            },
+            {
+              "name": "should parse a directive mixed with other attributes",
+              "path": "R3 template transform/directives/should parse a directive mixed with other attributes",
+              "assertions": []
+            },
+            {
+              "name": "should remove directives inside ngNonBindable",
+              "path": "R3 template transform/directives/should remove directives inside ngNonBindable",
+              "assertions": []
+            },
+            {
+              "name": "should pick up attributes from selectorless directives when using * syntax",
+              "path": "R3 template transform/directives/should pick up attributes from selectorless directives when using * syntax",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "name": "should report an error for attribute bindings on ng-container",
+          "path": "R3 template transform/should report an error for attribute bindings on ng-container",
+          "assertions": []
+        },
+        {
+          "name": "should not report an error on non-attr bindings on ng-container",
+          "path": "R3 template transform/should not report an error on non-attr bindings on ng-container",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

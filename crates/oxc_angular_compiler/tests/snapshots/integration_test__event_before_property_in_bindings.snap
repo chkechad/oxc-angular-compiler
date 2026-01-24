@@ -1,0 +1,33 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: result.code
+---
+
+import { Component } from '@angular/core';
+import * as i0 from '@angular/core';
+
+export class TestComponent {
+    isDisabled = false;
+    onClick() {}
+
+static ɵfac = function TestComponent_Factory(__ngFactoryType__) {
+  return new (__ngFactoryType__ || TestComponent)();
+};
+static ɵcmp = /*@__PURE__*/ i0.ɵɵdefineComponent({type:TestComponent,selectors:[["test-comp"]],decls:2,
+    vars:1,consts:[[3,"click","disabled"]],template:function TestComponent_Template(rf,
+        ctx) {
+      if ((rf & 1)) {
+        i0.ɵɵelementStart(0,"button",0);
+        i0.ɵɵlistener("click",function TestComponent_Template_button_click_0_listener() {
+          return ctx.onClick();
+        });
+        i0.ɵɵtext(1,"Click");
+        i0.ɵɵelementEnd();
+      }
+      if ((rf & 2)) { i0.ɵɵproperty("disabled",ctx.isDisabled); }
+    },encapsulation:2});
+}
+(() =>{
+  (((typeof ngDevMode === "undefined") || ngDevMode) && i0.ɵsetClassDebugInfo(TestComponent,
+      {className:"TestComponent",filePath:"test.component.ts",lineNumber:1}));
+})();

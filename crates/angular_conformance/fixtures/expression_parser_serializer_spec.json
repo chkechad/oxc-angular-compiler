@@ -1,0 +1,358 @@
+{
+  "name": "serializer_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/expression_parser/serializer_spec.ts",
+  "test_groups": [
+    {
+      "name": "serializer",
+      "groups": [
+        {
+          "name": "serialize",
+          "groups": [],
+          "tests": [
+            {
+              "name": "serializes unary plus",
+              "path": "serializer/serialize/serializes unary plus",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " + 1234 ",
+                  "expected": "+1234"
+                }
+              ]
+            },
+            {
+              "name": "serializes unary negative",
+              "path": "serializer/serialize/serializes unary negative",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " - 1234 ",
+                  "expected": "-1234"
+                }
+              ]
+            },
+            {
+              "name": "serializes binary operations",
+              "path": "serializer/serialize/serializes binary operations",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " 1234   +   4321 ",
+                  "expected": "1234 + 4321"
+                }
+              ]
+            },
+            {
+              "name": "serializes exponentiation",
+              "path": "serializer/serialize/serializes exponentiation",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " 1  *  2  **  3 ",
+                  "expected": "1 * 2 ** 3"
+                }
+              ]
+            },
+            {
+              "name": "serializes chains",
+              "path": "serializer/serialize/serializes chains",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " 1234;   4321 ",
+                  "expected": "1234; 4321"
+                }
+              ]
+            },
+            {
+              "name": "serializes conditionals",
+              "path": "serializer/serialize/serializes conditionals",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " cond   ?   1234   :   4321 ",
+                  "expected": "cond ? 1234 : 4321"
+                }
+              ]
+            },
+            {
+              "name": "serializes `this`",
+              "path": "serializer/serialize/serializes `this`",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " this ",
+                  "expected": "this"
+                }
+              ]
+            },
+            {
+              "name": "serializes keyed reads",
+              "path": "serializer/serialize/serializes keyed reads",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   [bar] ",
+                  "expected": "foo[bar]"
+                }
+              ]
+            },
+            {
+              "name": "serializes keyed write",
+              "path": "serializer/serialize/serializes keyed write",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   [bar]   =   baz ",
+                  "expected": "foo[bar] = baz"
+                }
+              ]
+            },
+            {
+              "name": "serializes array literals",
+              "path": "serializer/serialize/serializes array literals",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " [   foo,   bar,   baz   ] ",
+                  "expected": "[foo, bar, baz]"
+                }
+              ]
+            },
+            {
+              "name": "serializes object literals",
+              "path": "serializer/serialize/serializes object literals",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " {   foo:   bar,   baz:   test   } ",
+                  "expected": "{foo: bar, baz: test}"
+                }
+              ]
+            },
+            {
+              "name": "serializes primitives",
+              "path": "serializer/serialize/serializes primitives",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " 'test' ",
+                  "expected": "'test'"
+                },
+                {
+                  "type": "SerializeExpression",
+                  "input": " \"test\" ",
+                  "expected": "'test'"
+                },
+                {
+                  "type": "SerializeExpression",
+                  "input": " true ",
+                  "expected": "true"
+                },
+                {
+                  "type": "SerializeExpression",
+                  "input": " false ",
+                  "expected": "false"
+                },
+                {
+                  "type": "SerializeExpression",
+                  "input": " 1234 ",
+                  "expected": "1234"
+                },
+                {
+                  "type": "SerializeExpression",
+                  "input": " null ",
+                  "expected": "null"
+                },
+                {
+                  "type": "SerializeExpression",
+                  "input": " undefined ",
+                  "expected": "undefined"
+                }
+              ]
+            },
+            {
+              "name": "escapes string literals",
+              "path": "serializer/serialize/escapes string literals",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " 'Hello, \\'World\\'...' ",
+                  "expected": "'Hello, \\'World\\'...'"
+                },
+                {
+                  "type": "SerializeExpression",
+                  "input": " 'Hello, \\\"World\\\"...' ",
+                  "expected": "'Hello, \"World\"...'"
+                }
+              ]
+            },
+            {
+              "name": "serializes pipes",
+              "path": "serializer/serialize/serializes pipes",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   |   pipe ",
+                  "expected": "foo | pipe"
+                }
+              ]
+            },
+            {
+              "name": "serializes not prefixes",
+              "path": "serializer/serialize/serializes not prefixes",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " !   foo ",
+                  "expected": "!foo"
+                }
+              ]
+            },
+            {
+              "name": "serializes non-null assertions",
+              "path": "serializer/serialize/serializes non-null assertions",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   ! ",
+                  "expected": "foo!"
+                }
+              ]
+            },
+            {
+              "name": "serializes property reads",
+              "path": "serializer/serialize/serializes property reads",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   .   bar ",
+                  "expected": "foo.bar"
+                }
+              ]
+            },
+            {
+              "name": "serializes property writes",
+              "path": "serializer/serialize/serializes property writes",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   .   bar   =   baz ",
+                  "expected": "foo.bar = baz"
+                }
+              ]
+            },
+            {
+              "name": "serializes safe property reads",
+              "path": "serializer/serialize/serializes safe property reads",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   ?.   bar ",
+                  "expected": "foo?.bar"
+                }
+              ]
+            },
+            {
+              "name": "serializes safe keyed reads",
+              "path": "serializer/serialize/serializes safe keyed reads",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   ?.   [   bar   ] ",
+                  "expected": "foo?.[bar]"
+                }
+              ]
+            },
+            {
+              "name": "serializes calls",
+              "path": "serializer/serialize/serializes calls",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   (   ) ",
+                  "expected": "foo()"
+                },
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   (   bar   ) ",
+                  "expected": "foo(bar)"
+                },
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   (   bar   ,   ) ",
+                  "expected": "foo(bar, )"
+                },
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   (   bar   ,   baz   ) ",
+                  "expected": "foo(bar, baz)"
+                }
+              ]
+            },
+            {
+              "name": "serializes safe calls",
+              "path": "serializer/serialize/serializes safe calls",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   ?.   (   ) ",
+                  "expected": "foo?.()"
+                },
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   ?.   (   bar   ) ",
+                  "expected": "foo?.(bar)"
+                },
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   ?.   (   bar   ,   ) ",
+                  "expected": "foo?.(bar, )"
+                },
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   ?.   (   bar   ,   baz   ) ",
+                  "expected": "foo?.(bar, baz)"
+                }
+              ]
+            },
+            {
+              "name": "serializes void expressions",
+              "path": "serializer/serialize/serializes void expressions",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " void   0 ",
+                  "expected": "void 0"
+                }
+              ]
+            },
+            {
+              "name": "serializes in expressions",
+              "path": "serializer/serialize/serializes in expressions",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   in   bar ",
+                  "expected": "foo in bar"
+                }
+              ]
+            },
+            {
+              "name": "serializes instanceof expressions",
+              "path": "serializer/serialize/serializes instanceof expressions",
+              "assertions": [
+                {
+                  "type": "SerializeExpression",
+                  "input": " foo   instanceof   Bar ",
+                  "expected": "foo instanceof Bar"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

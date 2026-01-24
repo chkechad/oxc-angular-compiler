@@ -1,0 +1,94 @@
+{
+  "name": "xtb_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/i18n/serializers/xtb_spec.ts",
+  "test_groups": [
+    {
+      "name": "XTB serializer",
+      "groups": [
+        {
+          "name": "load",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should load XTB files with a doctype",
+              "path": "XTB serializer/load/should load XTB files with a doctype",
+              "assertions": []
+            },
+            {
+              "name": "should load XTB files without placeholders",
+              "path": "XTB serializer/load/should load XTB files without placeholders",
+              "assertions": []
+            },
+            {
+              "name": "should return the target locale",
+              "path": "XTB serializer/load/should return the target locale",
+              "assertions": []
+            },
+            {
+              "name": "should load XTB files with placeholders",
+              "path": "XTB serializer/load/should load XTB files with placeholders",
+              "assertions": []
+            },
+            {
+              "name": "should replace ICU placeholders with their translations",
+              "path": "XTB serializer/load/should replace ICU placeholders with their translations",
+              "assertions": []
+            },
+            {
+              "name": "should load complex XTB files",
+              "path": "XTB serializer/load/should load complex XTB files",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "errors",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should be able to parse non-angular xtb files without error",
+              "path": "XTB serializer/errors/should be able to parse non-angular xtb files without error",
+              "assertions": []
+            },
+            {
+              "name": "should throw on nested <translationbundle>",
+              "path": "XTB serializer/errors/should throw on nested <translationbundle>",
+              "assertions": []
+            },
+            {
+              "name": "should throw when a <translation> has no id attribute",
+              "path": "XTB serializer/errors/should throw when a <translation> has no id attribute",
+              "assertions": []
+            },
+            {
+              "name": "should throw when a placeholder has no name attribute",
+              "path": "XTB serializer/errors/should throw when a placeholder has no name attribute",
+              "assertions": []
+            },
+            {
+              "name": "should throw on unknown xtb tags",
+              "path": "XTB serializer/errors/should throw on unknown xtb tags",
+              "assertions": []
+            },
+            {
+              "name": "should throw on unknown message tags",
+              "path": "XTB serializer/errors/should throw on unknown message tags",
+              "assertions": []
+            },
+            {
+              "name": "should throw on duplicate message id",
+              "path": "XTB serializer/errors/should throw on duplicate message id",
+              "assertions": []
+            },
+            {
+              "name": "should throw when trying to save an xtb file",
+              "path": "XTB serializer/errors/should throw when trying to save an xtb file",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

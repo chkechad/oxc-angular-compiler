@@ -1,0 +1,27 @@
+{
+  "name": "ng_deep_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/shadow_css/ng_deep_spec.ts",
+  "test_groups": [
+    {
+      "name": "ShadowCss, ng-deep",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should handle /deep/",
+          "path": "ShadowCss, ng-deep/should handle /deep/",
+          "assertions": []
+        },
+        {
+          "name": "should handle >>>",
+          "path": "ShadowCss, ng-deep/should handle >>>",
+          "assertions": []
+        },
+        {
+          "name": "should handle ::ng-deep",
+          "path": "ShadowCss, ng-deep/should handle ::ng-deep",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

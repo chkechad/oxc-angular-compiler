@@ -1,0 +1,215 @@
+{
+  "name": "i18n_parser_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/i18n/i18n_parser_spec.ts",
+  "test_groups": [
+    {
+      "name": "I18nParser",
+      "groups": [
+        {
+          "name": "elements",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract from elements",
+              "path": "I18nParser/elements/should extract from elements",
+              "assertions": []
+            },
+            {
+              "name": "should extract from nested elements",
+              "path": "I18nParser/elements/should extract from nested elements",
+              "assertions": []
+            },
+            {
+              "name": "should not create a message for empty elements",
+              "path": "I18nParser/elements/should not create a message for empty elements",
+              "assertions": []
+            },
+            {
+              "name": "should not create a message for plain elements",
+              "path": "I18nParser/elements/should not create a message for plain elements",
+              "assertions": []
+            },
+            {
+              "name": "should support void elements",
+              "path": "I18nParser/elements/should support void elements",
+              "assertions": []
+            },
+            {
+              "name": "should trim whitespace from custom ids (but not meanings)",
+              "path": "I18nParser/elements/should trim whitespace from custom ids (but not meanings)",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "attributes",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract from attributes outside of translatable section",
+              "path": "I18nParser/attributes/should extract from attributes outside of translatable section",
+              "assertions": []
+            },
+            {
+              "name": "should extract from attributes in translatable element",
+              "path": "I18nParser/attributes/should extract from attributes in translatable element",
+              "assertions": []
+            },
+            {
+              "name": "should extract from attributes in translatable block",
+              "path": "I18nParser/attributes/should extract from attributes in translatable block",
+              "assertions": []
+            },
+            {
+              "name": "should extract from attributes in translatable ICU",
+              "path": "I18nParser/attributes/should extract from attributes in translatable ICU",
+              "assertions": []
+            },
+            {
+              "name": "should extract from attributes in non translatable ICU",
+              "path": "I18nParser/attributes/should extract from attributes in non translatable ICU",
+              "assertions": []
+            },
+            {
+              "name": "should not create a message for empty attributes",
+              "path": "I18nParser/attributes/should not create a message for empty attributes",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "interpolation",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should replace interpolation with placeholder",
+              "path": "I18nParser/interpolation/should replace interpolation with placeholder",
+              "assertions": []
+            },
+            {
+              "name": "should support named interpolation",
+              "path": "I18nParser/interpolation/should support named interpolation",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "blocks",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract from blocks",
+              "path": "I18nParser/blocks/should extract from blocks",
+              "assertions": []
+            },
+            {
+              "name": "should extract all siblings",
+              "path": "I18nParser/blocks/should extract all siblings",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "ICU messages",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract as ICU when single child of an element",
+              "path": "I18nParser/ICU messages/should extract as ICU when single child of an element",
+              "assertions": []
+            },
+            {
+              "name": "should extract as ICU + ph when not single child of an element",
+              "path": "I18nParser/ICU messages/should extract as ICU + ph when not single child of an element",
+              "assertions": []
+            },
+            {
+              "name": "should extract as ICU + ph when wrapped in whitespace in an element",
+              "path": "I18nParser/ICU messages/should extract as ICU + ph when wrapped in whitespace in an element",
+              "assertions": []
+            },
+            {
+              "name": "should extract as ICU when single child of a block",
+              "path": "I18nParser/ICU messages/should extract as ICU when single child of a block",
+              "assertions": []
+            },
+            {
+              "name": "should extract as ICU + ph when not single child of a block",
+              "path": "I18nParser/ICU messages/should extract as ICU + ph when not single child of a block",
+              "assertions": []
+            },
+            {
+              "name": "should not extract nested ICU messages",
+              "path": "I18nParser/ICU messages/should not extract nested ICU messages",
+              "assertions": []
+            },
+            {
+              "name": "should preserve whitespace when preserving significant whitespace",
+              "path": "I18nParser/ICU messages/should preserve whitespace when preserving significant whitespace",
+              "assertions": []
+            },
+            {
+              "name": "should normalize whitespace when not preserving significant whitespace",
+              "path": "I18nParser/ICU messages/should normalize whitespace when not preserving significant whitespace",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "implicit elements",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract from implicit elements",
+              "path": "I18nParser/implicit elements/should extract from implicit elements",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "implicit attributes",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract implicit attributes",
+              "path": "I18nParser/implicit attributes/should extract implicit attributes",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "placeholders",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should reuse the same placeholder name for tags",
+              "path": "I18nParser/placeholders/should reuse the same placeholder name for tags",
+              "assertions": []
+            },
+            {
+              "name": "should reuse the same placeholder name for interpolations",
+              "path": "I18nParser/placeholders/should reuse the same placeholder name for interpolations",
+              "assertions": []
+            },
+            {
+              "name": "should reuse the same placeholder name for icu messages",
+              "path": "I18nParser/placeholders/should reuse the same placeholder name for icu messages",
+              "assertions": []
+            },
+            {
+              "name": "should preserve whitespace when preserving significant whitespace",
+              "path": "I18nParser/placeholders/should preserve whitespace when preserving significant whitespace",
+              "assertions": []
+            },
+            {
+              "name": "should normalize whitespace when not preserving significant whitespace",
+              "path": "I18nParser/placeholders/should normalize whitespace when not preserving significant whitespace",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

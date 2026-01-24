@@ -1,0 +1,562 @@
+//! Track function optimization phase.
+//!
+//! `track` functions in `for` repeaters can sometimes be "optimized,"
+//! i.e. transformed into inline expressions, in lieu of an external function call.
+//! For example, tracking by `$index` can be optimized into an inline `trackByIndex`
+//! reference.
+//!
+//! This phase checks track expressions for optimizable cases.
+//!
+//! Ported from Angular's `template/pipeline/src/phases/track_fn_optimization.ts`.
+
+use oxc_span::Atom;
+
+use crate::ir::expression::{
+    IrExpression, TrackContextExpr, VisitorContextFlag, transform_expressions_in_expression,
+};
+use crate::ir::ops::{CreateOp, StatementOp, UpdateOp, UpdateOpBase, XrefId};
+use crate::output::ast::{OutputExpression, OutputStatement, ReturnStatement, WrappedIrExpr};
+use crate::pipeline::compilation::ComponentCompilationJob;
+use crate::r3::Identifiers;
+
+/// Optimizes @for track functions.
+///
+/// This phase:
+/// 1. Identifies track expressions that can be optimized
+/// 2. Replaces `$index` tracking with built-in `repeaterTrackByIndex`
+/// 3. Replaces `$item` tracking with built-in `repeaterTrackByIdentity`
+/// 4. For other expressions, transforms ContextExpr to TrackContextExpr
+pub fn optimize_track_fns(job: &mut ComponentCompilationJob<'_>) {
+    let allocator = job.allocator;
+    let root_xref = job.root.xref;
+
+    // Get a pointer to the expression store for looking up ExpressionRef values
+    let expression_store_ptr =
+        &job.expressions as *const crate::pipeline::expression_store::ExpressionStore<'_>;
+
+    // Collect view xrefs
+    let view_xrefs: std::vec::Vec<_> = job.all_views().map(|v| v.xref).collect();
+
+    for xref in view_xrefs {
+        if let Some(view) = job.view_mut(xref) {
+            let view_xref = view.xref;
+            for op in view.create.iter_mut() {
+                if let CreateOp::RepeaterCreate(rep) = op {
+                    // SAFETY: We're only reading from expression_store, not modifying it
+                    let expressions = unsafe { &*expression_store_ptr };
+                    optimize_track_expression(allocator, rep, root_xref, view_xref, expressions);
+                }
+            }
+        }
+    }
+}
+
+/// Optimize a repeater's track expression.
+fn optimize_track_expression<'a>(
+    allocator: &'a oxc_allocator::Allocator,
+    rep: &mut crate::ir::ops::RepeaterCreateOp<'a>,
+    root_xref: XrefId,
+    view_xref: XrefId,
+    expressions: &crate::pipeline::expression_store::ExpressionStore<'a>,
+) {
+    // Check for simple $index or $item tracking
+    if let Some(opt_fn) = check_simple_track_variable(&rep.track, expressions) {
+        // Set the optimized track function name
+        rep.track_fn_name = Some(Atom::from(opt_fn));
+        return;
+    }
+
+    // Check for method call pattern: this.fn($index) or this.fn($index, $item)
+    // These can be passed directly to the repeater runtime.
+    if let Some((method_name, is_root_context)) =
+        check_track_by_function_call(&rep.track, root_xref, expressions)
+    {
+        rep.uses_component_instance = true;
+        if is_root_context && view_xref == root_xref {
+            // Method is on the component context in the root view
+            // Emit as ctx.methodName
+            let fn_name = format!("ctx.{}", method_name);
+            let name_str = allocator.alloc_str(&fn_name);
+            rep.track_fn_name = Some(Atom::from(name_str));
+        } else {
+            // Need to use componentInstance() to access the method
+            // Create the full function reference string
+            let fn_name = format!("{}().{}", Identifiers::COMPONENT_INSTANCE, method_name);
+            let name_str = allocator.alloc_str(&fn_name);
+            rep.track_fn_name = Some(Atom::from(name_str));
+        }
+        return;
+    }
+
+    // Check for simple property read on the component: this.fn (without calling it)
+    // This pattern is used when the track function is a pre-defined function on the component.
+    // Example: `track trackByFn` where trackByFn is a property/method on the component.
+    if let Some(prop_name) = check_component_property_track(&rep.track, expressions) {
+        rep.uses_component_instance = true;
+        // In root view, emit as ctx.propName; otherwise use componentInstance()
+        if view_xref == root_xref {
+            let fn_name = format!("ctx.{}", prop_name);
+            let name_str = allocator.alloc_str(&fn_name);
+            rep.track_fn_name = Some(Atom::from(name_str));
+        } else {
+            let fn_name = format!("{}().{}", Identifiers::COMPONENT_INSTANCE, prop_name);
+            let name_str = allocator.alloc_str(&fn_name);
+            rep.track_fn_name = Some(Atom::from(name_str));
+        }
+        return;
+    }
+
+    // First check if the expression contains any ContextExpr or AST expressions
+    // that reference the component instance (implicit receiver)
+    let has_context = expression_contains_context(&rep.track, expressions);
+    if has_context {
+        rep.uses_component_instance = true;
+    }
+
+    // For non-optimizable tracks, replace ContextExpr with TrackContextExpr
+    // This signals that context reads in track expressions need special handling
+    transform_expressions_in_expression(
+        &mut rep.track,
+        &|expr, _flags| {
+            if let IrExpression::Context(ctx) = expr {
+                *expr = IrExpression::TrackContext(oxc_allocator::Box::new_in(
+                    TrackContextExpr { view: ctx.view, source_span: None },
+                    allocator,
+                ));
+            }
+        },
+        VisitorContextFlag::NONE,
+    );
+
+    // Also create an op list for the tracking expression since it may need
+    // additional ops when generating the final code (e.g. temporary variables).
+    // TypeScript: const trackOpList = new ir.OpList<ir.UpdateOp>();
+    // trackOpList.push(ir.createStatementOp(new o.ReturnStatement(op.track, op.track.sourceSpan)));
+    // op.trackByOps = trackOpList;
+
+    // Convert the track IR expression to output expression for the return statement
+    // The track expression needs to be wrapped in a return statement
+    // We wrap the IR expression in WrappedIrNode so it will be resolved during reify
+    let track_output = OutputExpression::WrappedIrNode(oxc_allocator::Box::new_in(
+        WrappedIrExpr {
+            node: oxc_allocator::Box::new_in(rep.track.clone_in(allocator), allocator),
+            source_span: None,
+        },
+        allocator,
+    ));
+
+    let return_stmt = OutputStatement::Return(oxc_allocator::Box::new_in(
+        ReturnStatement { value: track_output, source_span: None },
+        allocator,
+    ));
+
+    let statement_op =
+        UpdateOp::Statement(StatementOp { base: UpdateOpBase::default(), statement: return_stmt });
+
+    let mut track_by_ops = oxc_allocator::Vec::new_in(allocator);
+    track_by_ops.push(statement_op);
+    rep.track_by_ops = Some(track_by_ops);
+}
+
+/// Check if an expression contains any Context expressions or AST expressions that
+/// reference the component instance (implicit receiver).
+fn expression_contains_context(
+    expr: &IrExpression<'_>,
+    expressions: &crate::pipeline::expression_store::ExpressionStore<'_>,
+) -> bool {
+    match expr {
+        IrExpression::Context(_) => true,
+        // Check AST expressions for implicit receiver usage (this.property, this.method())
+        IrExpression::Ast(ast) => ast_contains_implicit_receiver(ast),
+        // Check ExpressionRef by looking up the stored expression
+        IrExpression::ExpressionRef(id) => {
+            let stored_expr = expressions.get(*id);
+            ast_contains_implicit_receiver(stored_expr)
+        }
+        // Resolved expressions (created by resolveNames phase)
+        IrExpression::ResolvedCall(rc) => {
+            expression_contains_context(&rc.receiver, expressions)
+                || rc.args.iter().any(|e| expression_contains_context(e, expressions))
+        }
+        IrExpression::ResolvedPropertyRead(rp) => {
+            expression_contains_context(&rp.receiver, expressions)
+        }
+        IrExpression::ResolvedBinary(rb) => {
+            expression_contains_context(&rb.left, expressions)
+                || expression_contains_context(&rb.right, expressions)
+        }
+        IrExpression::ResolvedKeyedRead(rk) => {
+            expression_contains_context(&rk.receiver, expressions)
+                || expression_contains_context(&rk.key, expressions)
+        }
+        IrExpression::ResolvedSafePropertyRead(rsp) => {
+            expression_contains_context(&rsp.receiver, expressions)
+        }
+        IrExpression::SafeTernary(st) => {
+            expression_contains_context(&st.guard, expressions)
+                || expression_contains_context(&st.expr, expressions)
+        }
+        IrExpression::SafePropertyRead(sp) => {
+            expression_contains_context(&sp.receiver, expressions)
+        }
+        IrExpression::SafeKeyedRead(sk) => {
+            expression_contains_context(&sk.receiver, expressions)
+                || expression_contains_context(&sk.index, expressions)
+        }
+        IrExpression::SafeInvokeFunction(sf) => {
+            expression_contains_context(&sf.receiver, expressions)
+                || sf.args.iter().any(|e| expression_contains_context(e, expressions))
+        }
+        IrExpression::PipeBinding(pb) => {
+            pb.args.iter().any(|e| expression_contains_context(e, expressions))
+        }
+        IrExpression::PipeBindingVariadic(pbv) => {
+            expression_contains_context(&pbv.args, expressions)
+        }
+        IrExpression::PureFunction(pf) => {
+            pf.args.iter().any(|e| expression_contains_context(e, expressions))
+        }
+        IrExpression::Interpolation(i) => {
+            i.expressions.iter().any(|e| expression_contains_context(e, expressions))
+        }
+        IrExpression::ResetView(rv) => expression_contains_context(&rv.expr, expressions),
+        IrExpression::ConditionalCase(cc) => {
+            cc.expr.as_ref().is_some_and(|e| expression_contains_context(e, expressions))
+        }
+        IrExpression::TwoWayBindingSet(tbs) => {
+            expression_contains_context(&tbs.target, expressions)
+                || expression_contains_context(&tbs.value, expressions)
+        }
+        IrExpression::StoreLet(sl) => expression_contains_context(&sl.value, expressions),
+        IrExpression::ConstCollected(cc) => expression_contains_context(&cc.expr, expressions),
+        IrExpression::RestoreView(rv) => {
+            if let crate::ir::expression::RestoreViewTarget::Dynamic(e) = &rv.view {
+                expression_contains_context(e, expressions)
+            } else {
+                false
+            }
+        }
+        // Leaf expressions
+        _ => false,
+    }
+}
+
+/// Check if an Angular AST expression contains any reference to the implicit receiver (this).
+/// This includes property reads like `this.foo` and method calls like `this.bar()`.
+fn ast_contains_implicit_receiver(ast: &crate::ast::expression::AngularExpression<'_>) -> bool {
+    use crate::ast::expression::AngularExpression;
+
+    match ast {
+        // Direct implicit receiver reference
+        AngularExpression::ImplicitReceiver(_) => true,
+        // Property read - check if it's on implicit receiver or recurse
+        AngularExpression::PropertyRead(pr) => ast_contains_implicit_receiver(&pr.receiver),
+        // Safe property read
+        AngularExpression::SafePropertyRead(pr) => ast_contains_implicit_receiver(&pr.receiver),
+        // Keyed read
+        AngularExpression::KeyedRead(kr) => {
+            ast_contains_implicit_receiver(&kr.receiver) || ast_contains_implicit_receiver(&kr.key)
+        }
+        // Safe keyed read
+        AngularExpression::SafeKeyedRead(kr) => {
+            ast_contains_implicit_receiver(&kr.receiver) || ast_contains_implicit_receiver(&kr.key)
+        }
+        // Function call
+        AngularExpression::Call(call) => {
+            ast_contains_implicit_receiver(&call.receiver)
+                || call.args.iter().any(ast_contains_implicit_receiver)
+        }
+        // Safe call
+        AngularExpression::SafeCall(call) => {
+            ast_contains_implicit_receiver(&call.receiver)
+                || call.args.iter().any(ast_contains_implicit_receiver)
+        }
+        // Binary expression
+        AngularExpression::Binary(b) => {
+            ast_contains_implicit_receiver(&b.left) || ast_contains_implicit_receiver(&b.right)
+        }
+        // Unary expression
+        AngularExpression::Unary(u) => ast_contains_implicit_receiver(&u.expr),
+        // Conditional (ternary)
+        AngularExpression::Conditional(c) => {
+            ast_contains_implicit_receiver(&c.condition)
+                || ast_contains_implicit_receiver(&c.true_exp)
+                || ast_contains_implicit_receiver(&c.false_exp)
+        }
+        // Pipe binding
+        AngularExpression::BindingPipe(p) => {
+            ast_contains_implicit_receiver(&p.exp)
+                || p.args.iter().any(ast_contains_implicit_receiver)
+        }
+        // Not expressions
+        AngularExpression::PrefixNot(n) => ast_contains_implicit_receiver(&n.expression),
+        AngularExpression::NonNullAssert(n) => ast_contains_implicit_receiver(&n.expression),
+        // Typeof/void expressions
+        AngularExpression::TypeofExpression(t) => ast_contains_implicit_receiver(&t.expression),
+        AngularExpression::VoidExpression(v) => ast_contains_implicit_receiver(&v.expression),
+        AngularExpression::SpreadElement(spread) => {
+            ast_contains_implicit_receiver(&spread.expression)
+        }
+        // Chain - check all expressions
+        AngularExpression::Chain(c) => c.expressions.iter().any(ast_contains_implicit_receiver),
+        // Interpolation - check all expressions
+        AngularExpression::Interpolation(i) => {
+            i.expressions.iter().any(ast_contains_implicit_receiver)
+        }
+        // Template literals
+        AngularExpression::TemplateLiteral(t) => {
+            t.expressions.iter().any(ast_contains_implicit_receiver)
+        }
+        AngularExpression::TaggedTemplateLiteral(t) => {
+            ast_contains_implicit_receiver(&t.tag)
+                || t.template.expressions.iter().any(ast_contains_implicit_receiver)
+        }
+        // Array literal
+        AngularExpression::LiteralArray(arr) => {
+            arr.expressions.iter().any(ast_contains_implicit_receiver)
+        }
+        // Map literal
+        AngularExpression::LiteralMap(map) => map.values.iter().any(ast_contains_implicit_receiver),
+        // Parenthesized expression
+        AngularExpression::ParenthesizedExpression(p) => {
+            ast_contains_implicit_receiver(&p.expression)
+        }
+        // Arrow function - check the body
+        AngularExpression::ArrowFunction(arrow) => ast_contains_implicit_receiver(&arrow.body),
+        // Literals and other leaf nodes don't contain implicit receiver
+        AngularExpression::LiteralPrimitive(_)
+        | AngularExpression::Empty(_)
+        | AngularExpression::ThisReceiver(_)
+        | AngularExpression::RegularExpressionLiteral(_) => false,
+    }
+}
+
+/// Check if the track expression is a simple variable read of $index or $item.
+fn check_simple_track_variable(
+    track: &IrExpression<'_>,
+    expressions: &crate::pipeline::expression_store::ExpressionStore<'_>,
+) -> Option<&'static str> {
+    // Check for LexicalRead of $index or $item
+    if let IrExpression::LexicalRead(lr) = track {
+        match lr.name.as_str() {
+            "$index" => return Some(Identifiers::REPEATER_TRACK_BY_INDEX),
+            "$item" => return Some(Identifiers::REPEATER_TRACK_BY_IDENTITY),
+            _ => {}
+        }
+    }
+
+    // Check for OutputExpr(ReadVar) - this is the form after track_variables phase
+    // transforms the loop variable to $item or $index
+    if let IrExpression::OutputExpr(output) = track {
+        if let crate::output::ast::OutputExpression::ReadVar(rv) = output.as_ref() {
+            match rv.name.as_str() {
+                "$index" => return Some(Identifiers::REPEATER_TRACK_BY_INDEX),
+                "$item" => return Some(Identifiers::REPEATER_TRACK_BY_IDENTITY),
+                _ => {}
+            }
+        }
+    }
+
+    // Check for ExpressionRef pointing to a simple variable
+    if let IrExpression::ExpressionRef(id) = track {
+        let stored_expr = expressions.get(*id);
+        return check_ast_for_simple_track_variable(stored_expr);
+    }
+
+    // Check for AST PropertyRead of $index or $item on implicit receiver
+    if let IrExpression::Ast(ast) = track {
+        return check_ast_for_simple_track_variable(ast.as_ref());
+    }
+
+    None
+}
+
+/// Check if an AST expression is a simple $index or $item variable read.
+fn check_ast_for_simple_track_variable(
+    ast: &crate::ast::expression::AngularExpression<'_>,
+) -> Option<&'static str> {
+    if let crate::ast::expression::AngularExpression::PropertyRead(pr) = ast {
+        if matches!(&pr.receiver, crate::ast::expression::AngularExpression::ImplicitReceiver(_)) {
+            match pr.name.as_str() {
+                "$index" => return Some(Identifiers::REPEATER_TRACK_BY_INDEX),
+                "$item" => return Some(Identifiers::REPEATER_TRACK_BY_IDENTITY),
+                _ => {}
+            }
+        }
+    }
+    None
+}
+
+/// Check if the track expression is a simple property read on the component (e.g., `trackByFn`).
+///
+/// This pattern is used when the track function is a pre-bound function on the component,
+/// like `track trackByFn` where `trackByFn` is a method/property on the component.
+/// Angular emits `ctx.trackByFn` directly instead of wrapping it.
+///
+/// Returns the property name if found.
+fn check_component_property_track(
+    track: &IrExpression<'_>,
+    expressions: &crate::pipeline::expression_store::ExpressionStore<'_>,
+) -> Option<String> {
+    use crate::ast::expression::AngularExpression;
+
+    // Handle different expression types
+    match track {
+        // AST PropertyRead on implicit receiver
+        IrExpression::Ast(ast) => {
+            if let AngularExpression::PropertyRead(pr) = ast.as_ref() {
+                if matches!(&pr.receiver, AngularExpression::ImplicitReceiver(_)) {
+                    // Don't match $index or $item - those are handled by check_simple_track_variable
+                    let name = pr.name.as_str();
+                    if name != "$index" && name != "$item" {
+                        return Some(name.to_string());
+                    }
+                }
+            }
+        }
+        // ExpressionRef - look up the stored expression
+        IrExpression::ExpressionRef(id) => {
+            let stored_expr = expressions.get(*id);
+            if let AngularExpression::PropertyRead(pr) = stored_expr {
+                if matches!(&pr.receiver, AngularExpression::ImplicitReceiver(_)) {
+                    let name = pr.name.as_str();
+                    if name != "$index" && name != "$item" {
+                        return Some(name.to_string());
+                    }
+                }
+            }
+        }
+        // ResolvedPropertyRead with Context receiver (after resolveNames phase)
+        IrExpression::ResolvedPropertyRead(rp) => {
+            if matches!(rp.receiver.as_ref(), IrExpression::Context(_)) {
+                return Some(rp.name.to_string());
+            }
+        }
+        _ => {}
+    }
+
+    None
+}
+
+/// Check if the track expression is a function call pattern: `this.fn($index)` or `this.fn($index, $item)`.
+///
+/// These patterns can be optimized by passing the method reference directly to the repeater.
+/// Returns the method name (as String) and whether the context is the root view.
+fn check_track_by_function_call(
+    track: &IrExpression<'_>,
+    _root_xref: XrefId,
+    expressions: &crate::pipeline::expression_store::ExpressionStore<'_>,
+) -> Option<(String, bool)> {
+    use crate::ast::expression::AngularExpression;
+
+    // Handle ResolvedCall expressions (created by resolveNames phase)
+    if let IrExpression::ResolvedCall(rc) = track {
+        // Must have 1 or 2 arguments
+        if rc.args.is_empty() || rc.args.len() > 2 {
+            return None;
+        }
+
+        // Check arguments: Angular only optimizes these specific patterns to pass the method reference directly:
+        // 1. trackByFn($index) - single index argument (runtime passes index as first param)
+        // 2. trackByFn($index, $item) - both arguments in that order (matches runtime signature)
+        //
+        // Other patterns like trackByFn($item) need a wrapper function because the runtime
+        // signature is (index, item) but the method only takes (item).
+        let args_valid = if rc.args.len() == 1 {
+            // Single argument: must be $index only
+            is_index_variable(&rc.args[0])
+        } else {
+            // Two arguments: must be ($index, $item) in that order
+            is_index_variable(&rc.args[0]) && is_item_variable(&rc.args[1])
+        };
+
+        if !args_valid {
+            return None;
+        }
+
+        // Check receiver: must be a ResolvedPropertyRead on Context
+        if let IrExpression::ResolvedPropertyRead(rp) = rc.receiver.as_ref() {
+            if matches!(rp.receiver.as_ref(), IrExpression::Context(_)) {
+                return Some((rp.name.to_string(), true));
+            }
+        }
+
+        return None;
+    }
+
+    // Get the AST expression, handling both direct Ast and ExpressionRef
+    let ast = match track {
+        IrExpression::Ast(ast) => ast.as_ref(),
+        IrExpression::ExpressionRef(id) => expressions.get(*id),
+        _ => return None,
+    };
+
+    // Check for Call expression
+    if let AngularExpression::Call(call) = ast {
+        // Must have 1 or 2 arguments
+        if call.args.is_empty() || call.args.len() > 2 {
+            return None;
+        }
+
+        // Check arguments: first must be $index, second (if present) must be $item
+        let first_is_index = matches!(&call.args[0], AngularExpression::PropertyRead(pr)
+            if matches!(&pr.receiver, AngularExpression::ImplicitReceiver(_))
+            && pr.name.as_str() == "$index");
+
+        if !first_is_index {
+            return None;
+        }
+
+        if call.args.len() == 2 {
+            let second_is_item = matches!(&call.args[1], AngularExpression::PropertyRead(pr)
+                if matches!(&pr.receiver, AngularExpression::ImplicitReceiver(_))
+                && pr.name.as_str() == "$item");
+            if !second_is_item {
+                return None;
+            }
+        }
+
+        // Check receiver: must be a property read on the component context
+        // Pattern: receiver.methodName where receiver is context (this)
+        if let AngularExpression::PropertyRead(method_read) = &call.receiver {
+            // The receiver of the property read should be the implicit receiver (this/context)
+            if matches!(&method_read.receiver, AngularExpression::ImplicitReceiver(_)) {
+                // This is a method call on the implicit receiver: this.methodName($index, ...)
+                // In Angular, this is a call on the component context
+                return Some((method_read.name.to_string(), true));
+            }
+        }
+    }
+
+    None
+}
+
+/// Check if an expression is the $index variable.
+fn is_index_variable(expr: &IrExpression<'_>) -> bool {
+    match expr {
+        IrExpression::LexicalRead(lr) => lr.name.as_str() == "$index",
+        IrExpression::OutputExpr(output) => {
+            if let crate::output::ast::OutputExpression::ReadVar(rv) = output.as_ref() {
+                rv.name.as_str() == "$index"
+            } else {
+                false
+            }
+        }
+        _ => false,
+    }
+}
+
+/// Check if an expression is the $item variable.
+fn is_item_variable(expr: &IrExpression<'_>) -> bool {
+    match expr {
+        IrExpression::LexicalRead(lr) => lr.name.as_str() == "$item",
+        IrExpression::OutputExpr(output) => {
+            if let crate::output::ast::OutputExpression::ReadVar(rv) = output.as_ref() {
+                rv.name.as_str() == "$item"
+            } else {
+                false
+            }
+        }
+        _ => false,
+    }
+}

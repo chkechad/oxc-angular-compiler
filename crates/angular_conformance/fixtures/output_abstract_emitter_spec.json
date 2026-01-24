@@ -1,0 +1,58 @@
+{
+  "name": "abstract_emitter_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/output/abstract_emitter_spec.ts",
+  "test_groups": [
+    {
+      "name": "AbstractEmitter",
+      "groups": [
+        {
+          "name": "escapeIdentifier",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should escape single quotes",
+              "path": "AbstractEmitter/escapeIdentifier/should escape single quotes",
+              "assertions": []
+            },
+            {
+              "name": "should escape backslash",
+              "path": "AbstractEmitter/escapeIdentifier/should escape backslash",
+              "assertions": []
+            },
+            {
+              "name": "should escape newlines",
+              "path": "AbstractEmitter/escapeIdentifier/should escape newlines",
+              "assertions": []
+            },
+            {
+              "name": "should escape carriage returns",
+              "path": "AbstractEmitter/escapeIdentifier/should escape carriage returns",
+              "assertions": []
+            },
+            {
+              "name": "should escape $",
+              "path": "AbstractEmitter/escapeIdentifier/should escape $",
+              "assertions": []
+            },
+            {
+              "name": "should not escape $",
+              "path": "AbstractEmitter/escapeIdentifier/should not escape $",
+              "assertions": []
+            },
+            {
+              "name": "should add quotes for non-identifiers",
+              "path": "AbstractEmitter/escapeIdentifier/should add quotes for non-identifiers",
+              "assertions": []
+            },
+            {
+              "name": "does not escape class (but it probably should)",
+              "path": "AbstractEmitter/escapeIdentifier/does not escape class (but it probably should)",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

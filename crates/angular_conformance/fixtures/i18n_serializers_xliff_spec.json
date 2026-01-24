@@ -1,0 +1,87 @@
+{
+  "name": "xliff_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/i18n/serializers/xliff_spec.ts",
+  "test_groups": [
+    {
+      "name": "XLIFF serializer",
+      "groups": [
+        {
+          "name": "write",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should write a valid xliff file",
+              "path": "XLIFF serializer/write/should write a valid xliff file",
+              "assertions": []
+            },
+            {
+              "name": "should write a valid xliff file with a source language",
+              "path": "XLIFF serializer/write/should write a valid xliff file with a source language",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "load",
+          "groups": [
+            {
+              "name": "structure errors",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should throw when a trans-unit has no translation",
+                  "path": "XLIFF serializer/load/structure errors/should throw when a trans-unit has no translation",
+                  "assertions": []
+                },
+                {
+                  "name": "should throw when a trans-unit has no id attribute",
+                  "path": "XLIFF serializer/load/structure errors/should throw when a trans-unit has no id attribute",
+                  "assertions": []
+                },
+                {
+                  "name": "should throw on duplicate trans-unit id",
+                  "path": "XLIFF serializer/load/structure errors/should throw on duplicate trans-unit id",
+                  "assertions": []
+                }
+              ]
+            },
+            {
+              "name": "message errors",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should throw on unknown message tags",
+                  "path": "XLIFF serializer/load/message errors/should throw on unknown message tags",
+                  "assertions": []
+                },
+                {
+                  "name": "should throw when a placeholder misses an id attribute",
+                  "path": "XLIFF serializer/load/message errors/should throw when a placeholder misses an id attribute",
+                  "assertions": []
+                }
+              ]
+            }
+          ],
+          "tests": [
+            {
+              "name": "should load XLIFF files",
+              "path": "XLIFF serializer/load/should load XLIFF files",
+              "assertions": []
+            },
+            {
+              "name": "should return the target locale",
+              "path": "XLIFF serializer/load/should return the target locale",
+              "assertions": []
+            },
+            {
+              "name": "should ignore alt-trans targets",
+              "path": "XLIFF serializer/load/should ignore alt-trans targets",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

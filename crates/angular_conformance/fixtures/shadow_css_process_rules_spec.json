@@ -1,0 +1,59 @@
+{
+  "name": "process_rules_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/shadow_css/process_rules_spec.ts",
+  "test_groups": [
+    {
+      "name": "ShadowCss, processRules",
+      "groups": [
+        {
+          "name": "parse rules",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should work with empty css",
+              "path": "ShadowCss, processRules/parse rules/should work with empty css",
+              "assertions": []
+            },
+            {
+              "name": "should capture a rule without body",
+              "path": "ShadowCss, processRules/parse rules/should capture a rule without body",
+              "assertions": []
+            },
+            {
+              "name": "should capture css rules with body",
+              "path": "ShadowCss, processRules/parse rules/should capture css rules with body",
+              "assertions": []
+            },
+            {
+              "name": "should capture css rules with nested rules",
+              "path": "ShadowCss, processRules/parse rules/should capture css rules with nested rules",
+              "assertions": []
+            },
+            {
+              "name": "should capture multiple rules where some have no body",
+              "path": "ShadowCss, processRules/parse rules/should capture multiple rules where some have no body",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "modify rules",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should allow to change the selector while preserving whitespaces",
+              "path": "ShadowCss, processRules/modify rules/should allow to change the selector while preserving whitespaces",
+              "assertions": []
+            },
+            {
+              "name": "should allow to change the content",
+              "path": "ShadowCss, processRules/modify rules/should allow to change the content",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

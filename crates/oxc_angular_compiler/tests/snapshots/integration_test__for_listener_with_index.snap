@@ -1,0 +1,29 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+const _forTrack0 = ($index,$item) =>$item.id;
+function TestComponent_For_1_Template(rf,ctx) {
+  if ((rf & 1)) {
+    const _r1 = i0.ɵɵgetCurrentView();
+    i0.ɵɵtext(0," ");
+    i0.ɵɵelementStart(1,"button",0);
+    i0.ɵɵlistener("click",function TestComponent_For_1_Template_button_click_1_listener() {
+      const ɵ$index_1_r2 = i0.ɵɵrestoreView(_r1).$index;
+      const ctx_r2 = i0.ɵɵnextContext();
+      return i0.ɵɵresetView(ctx_r2.remove(ɵ$index_1_r2));
+    });
+    i0.ɵɵtext(2);
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(3," ");
+  }
+  if ((rf & 2)) {
+    const ɵ$index_1_r2 = ctx.$index;
+    i0.ɵɵadvance(2);
+    i0.ɵɵtextInterpolate1("Remove #",ɵ$index_1_r2);
+  }
+}
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) { i0.ɵɵrepeaterCreate(0,TestComponent_For_1_Template,4,1,null,null,_forTrack0); }
+  if ((rf & 2)) { i0.ɵɵrepeater(ctx.items); }
+}

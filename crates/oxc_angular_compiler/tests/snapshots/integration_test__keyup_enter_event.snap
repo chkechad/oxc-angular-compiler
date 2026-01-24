@@ -1,0 +1,13 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵelementStart(0,"input",0);
+    i0.ɵɵlistener("keyup.enter",function TestComponent_Template_input_keyup_enter_0_listener() {
+      return ctx.onSubmit();
+    });
+    i0.ɵɵelementEnd();
+  }
+}

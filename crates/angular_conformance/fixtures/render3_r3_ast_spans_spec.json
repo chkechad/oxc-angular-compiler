@@ -1,0 +1,1240 @@
+{
+  "name": "r3_ast_spans_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/render3/r3_ast_spans_spec.ts",
+  "test_groups": [
+    {
+      "name": "R3 AST source spans",
+      "groups": [
+        {
+          "name": "nodes without binding",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for text nodes",
+              "path": "R3 AST source spans/nodes without binding/is correct for text nodes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "a",
+                  "expected": [["Text", "a"]],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for elements with attributes",
+              "path": "R3 AST source spans/nodes without binding/is correct for elements with attributes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div a=\"b\"></div>",
+                  "expected": [
+                    ["Element", "<div a=\"b\"></div>", "<div a=\"b\">", "</div>"],
+                    ["TextAttribute", "a=\"b\"", "a", "b"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for elements with attributes without value",
+              "path": "R3 AST source spans/nodes without binding/is correct for elements with attributes without value",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div a></div>",
+                  "expected": [
+                    ["Element", "<div a></div>", "<div a>", "</div>"],
+                    ["TextAttribute", "a", "a", "<empty>"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for self-closing elements with trailing whitespace",
+              "path": "R3 AST source spans/nodes without binding/is correct for self-closing elements with trailing whitespace",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<input />\n  <span>\n</span>",
+                  "expected": [
+                    ["Element", "<input />", "<input />", "<input />"],
+                    ["Element", "<span>\n</span>", "<span>", "</span>"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bound text nodes",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for bound text nodes",
+              "path": "R3 AST source spans/bound text nodes/is correct for bound text nodes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "{{a}}",
+                  "expected": [["BoundText", "{{a}}"]],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bound attributes",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for bound properties",
+              "path": "R3 AST source spans/bound attributes/is correct for bound properties",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [someProp]=\"v\"></div>",
+                  "expected": [
+                    ["Element", "<div [someProp]=\"v\"></div>", "<div [someProp]=\"v\">", "</div>"],
+                    ["BoundAttribute", "[someProp]=\"v\"", "someProp", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound properties without value",
+              "path": "R3 AST source spans/bound attributes/is correct for bound properties without value",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [someProp]></div>",
+                  "expected": [
+                    ["Element", "<div [someProp]></div>", "<div [someProp]>", "</div>"],
+                    ["BoundAttribute", "[someProp]", "someProp", "<empty>"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound properties via bind- ",
+              "path": "R3 AST source spans/bound attributes/is correct for bound properties via bind- ",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div bind-prop=\"v\"></div>",
+                  "expected": [
+                    ["Element", "<div bind-prop=\"v\"></div>", "<div bind-prop=\"v\">", "</div>"],
+                    ["BoundAttribute", "bind-prop=\"v\"", "prop", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound properties via {{...}}",
+              "path": "R3 AST source spans/bound attributes/is correct for bound properties via {{...}}",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div prop=\"{{v}}\"></div>",
+                  "expected": [
+                    ["Element", "<div prop=\"{{v}}\"></div>", "<div prop=\"{{v}}\">", "</div>"],
+                    ["BoundAttribute", "prop=\"{{v}}\"", "prop", "{{v}}"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound properties via data-",
+              "path": "R3 AST source spans/bound attributes/is correct for bound properties via data-",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div data-prop=\"{{v}}\"></div>",
+                  "expected": [
+                    [
+                      "Element",
+                      "<div data-prop=\"{{v}}\"></div>",
+                      "<div data-prop=\"{{v}}\">",
+                      "</div>"
+                    ],
+                    ["BoundAttribute", "data-prop=\"{{v}}\"", "prop", "{{v}}"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound properties via @",
+              "path": "R3 AST source spans/bound attributes/is correct for bound properties via @",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div bind-@animation=\"v\"></div>",
+                  "expected": [
+                    [
+                      "Element",
+                      "<div bind-@animation=\"v\"></div>",
+                      "<div bind-@animation=\"v\">",
+                      "</div>"
+                    ],
+                    ["BoundAttribute", "bind-@animation=\"v\"", "animation", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound properties via animation-",
+              "path": "R3 AST source spans/bound attributes/is correct for bound properties via animation-",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div bind-animate-animationName=\"v\"></div>",
+                  "expected": [
+                    [
+                      "Element",
+                      "<div bind-animate-animationName=\"v\"></div>",
+                      "<div bind-animate-animationName=\"v\">",
+                      "</div>"
+                    ],
+                    ["BoundAttribute", "bind-animate-animationName=\"v\"", "animationName", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound properties via @ without value",
+              "path": "R3 AST source spans/bound attributes/is correct for bound properties via @ without value",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div @animation></div>",
+                  "expected": [
+                    ["Element", "<div @animation></div>", "<div @animation>", "</div>"],
+                    ["BoundAttribute", "@animation", "animation", "<empty>"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "should not throw off span of value in bound attribute when leading spaces are present",
+              "path": "R3 AST source spans/bound attributes/should not throw off span of value in bound attribute when leading spaces are present",
+              "assertions": []
+            },
+            {
+              "name": "should not throw off span of value in template attribute when leading spaces are present",
+              "path": "R3 AST source spans/bound attributes/should not throw off span of value in template attribute when leading spaces are present",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "templates",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for * directives",
+              "path": "R3 AST source spans/templates/is correct for * directives",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div *ngIf></div>",
+                  "expected": [
+                    ["Template", "<div *ngIf></div>", "<div *ngIf>", "</div>"],
+                    ["TextAttribute", "ngIf", "ngIf", "<empty>"],
+                    ["Element", "<div *ngIf></div>", "<div *ngIf>", "</div>"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for <ng-template>",
+              "path": "R3 AST source spans/templates/is correct for <ng-template>",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template></ng-template>",
+                  "expected": [
+                    ["Template", "<ng-template></ng-template>", "<ng-template>", "</ng-template>"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for reference via #...",
+              "path": "R3 AST source spans/templates/is correct for reference via #...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template #a></ng-template>",
+                  "expected": [
+                    [
+                      "Template",
+                      "<ng-template #a></ng-template>",
+                      "<ng-template #a>",
+                      "</ng-template>"
+                    ],
+                    ["Reference", "#a", "a", "<empty>"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for reference with name",
+              "path": "R3 AST source spans/templates/is correct for reference with name",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template #a=\"b\"></ng-template>",
+                  "expected": [
+                    [
+                      "Template",
+                      "<ng-template #a=\"b\"></ng-template>",
+                      "<ng-template #a=\"b\">",
+                      "</ng-template>"
+                    ],
+                    ["Reference", "#a=\"b\"", "a", "b"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for reference via ref-...",
+              "path": "R3 AST source spans/templates/is correct for reference via ref-...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template ref-a></ng-template>",
+                  "expected": [
+                    [
+                      "Template",
+                      "<ng-template ref-a></ng-template>",
+                      "<ng-template ref-a>",
+                      "</ng-template>"
+                    ],
+                    ["Reference", "ref-a", "a", "<empty>"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for reference via data-ref-...",
+              "path": "R3 AST source spans/templates/is correct for reference via data-ref-...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template data-ref-a></ng-template>",
+                  "expected": [
+                    [
+                      "Template",
+                      "<ng-template data-ref-a></ng-template>",
+                      "<ng-template data-ref-a>",
+                      "</ng-template>"
+                    ],
+                    ["Reference", "data-ref-a", "a", "<empty>"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for variables via let-...",
+              "path": "R3 AST source spans/templates/is correct for variables via let-...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template let-a=\"b\"></ng-template>",
+                  "expected": [
+                    [
+                      "Template",
+                      "<ng-template let-a=\"b\"></ng-template>",
+                      "<ng-template let-a=\"b\">",
+                      "</ng-template>"
+                    ],
+                    ["Variable", "let-a=\"b\"", "a", "b"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for variables via data-let-...",
+              "path": "R3 AST source spans/templates/is correct for variables via data-let-...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template data-let-a=\"b\"></ng-template>",
+                  "expected": [
+                    [
+                      "Template",
+                      "<ng-template data-let-a=\"b\"></ng-template>",
+                      "<ng-template data-let-a=\"b\">",
+                      "</ng-template>"
+                    ],
+                    ["Variable", "data-let-a=\"b\"", "a", "b"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for attributes",
+              "path": "R3 AST source spans/templates/is correct for attributes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template k1=\"v1\"></ng-template>",
+                  "expected": [
+                    [
+                      "Template",
+                      "<ng-template k1=\"v1\"></ng-template>",
+                      "<ng-template k1=\"v1\">",
+                      "</ng-template>"
+                    ],
+                    ["TextAttribute", "k1=\"v1\"", "k1", "v1"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound attributes",
+              "path": "R3 AST source spans/templates/is correct for bound attributes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<ng-template [k1]=\"v1\"></ng-template>",
+                  "expected": [
+                    [
+                      "Template",
+                      "<ng-template [k1]=\"v1\"></ng-template>",
+                      "<ng-template [k1]=\"v1\">",
+                      "</ng-template>"
+                    ],
+                    ["BoundAttribute", "[k1]=\"v1\"", "k1", "v1"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "inline templates",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for attribute and bound attributes",
+              "path": "R3 AST source spans/inline templates/is correct for attribute and bound attributes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div *ngFor=\"let item of items\"></div>",
+                  "expected": [
+                    [
+                      "Template",
+                      "<div *ngFor=\"let item of items\"></div>",
+                      "<div *ngFor=\"let item of items\">",
+                      "</div>"
+                    ],
+                    ["TextAttribute", "ngFor", "ngFor", "<empty>"],
+                    ["BoundAttribute", "of items", "of", "items"],
+                    ["Variable", "let item ", "item", "<empty>"],
+                    [
+                      "Element",
+                      "<div *ngFor=\"let item of items\"></div>",
+                      "<div *ngFor=\"let item of items\">",
+                      "</div>"
+                    ]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div *ngFor=\"item of items\"></div>",
+                  "expected": [
+                    [
+                      "Template",
+                      "<div *ngFor=\"item of items\"></div>",
+                      "<div *ngFor=\"item of items\">",
+                      "</div>"
+                    ],
+                    ["BoundAttribute", "ngFor=\"item ", "ngFor", "item"],
+                    ["BoundAttribute", "of items", "of", "items"],
+                    [
+                      "Element",
+                      "<div *ngFor=\"item of items\"></div>",
+                      "<div *ngFor=\"item of items\">",
+                      "</div>"
+                    ]
+                  ],
+                  "ignore_error": false
+                },
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div *ngFor=\"let item of items; trackBy: trackByFn\"></div>",
+                  "expected": [
+                    [
+                      "Template",
+                      "<div *ngFor=\"let item of items; trackBy: trackByFn\"></div>",
+                      "<div *ngFor=\"let item of items; trackBy: trackByFn\">",
+                      "</div>"
+                    ],
+                    ["TextAttribute", "ngFor", "ngFor", "<empty>"],
+                    ["BoundAttribute", "of items; ", "of", "items"],
+                    ["BoundAttribute", "trackBy: trackByFn", "trackBy", "trackByFn"],
+                    ["Variable", "let item ", "item", "<empty>"],
+                    [
+                      "Element",
+                      "<div *ngFor=\"let item of items; trackBy: trackByFn\"></div>",
+                      "<div *ngFor=\"let item of items; trackBy: trackByFn\">",
+                      "</div>"
+                    ]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for variables via let ...",
+              "path": "R3 AST source spans/inline templates/is correct for variables via let ...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div *ngIf=\"let a=b\"></div>",
+                  "expected": [
+                    [
+                      "Template",
+                      "<div *ngIf=\"let a=b\"></div>",
+                      "<div *ngIf=\"let a=b\">",
+                      "</div>"
+                    ],
+                    ["TextAttribute", "ngIf", "ngIf", "<empty>"],
+                    ["Variable", "let a=b", "a", "b"],
+                    [
+                      "Element",
+                      "<div *ngIf=\"let a=b\"></div>",
+                      "<div *ngIf=\"let a=b\">",
+                      "</div>"
+                    ]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for variables via as ...",
+              "path": "R3 AST source spans/inline templates/is correct for variables via as ...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div *ngIf=\"expr as local\"></div>",
+                  "expected": [
+                    [
+                      "Template",
+                      "<div *ngIf=\"expr as local\"></div>",
+                      "<div *ngIf=\"expr as local\">",
+                      "</div>"
+                    ],
+                    ["BoundAttribute", "ngIf=\"expr ", "ngIf", "expr"],
+                    ["Variable", "ngIf=\"expr as local", "local", "ngIf"],
+                    [
+                      "Element",
+                      "<div *ngIf=\"expr as local\"></div>",
+                      "<div *ngIf=\"expr as local\">",
+                      "</div>"
+                    ]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "events",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for event names case sensitive",
+              "path": "R3 AST source spans/events/is correct for event names case sensitive",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div (someEvent)=\"v\"></div>",
+                  "expected": [
+                    [
+                      "Element",
+                      "<div (someEvent)=\"v\"></div>",
+                      "<div (someEvent)=\"v\">",
+                      "</div>"
+                    ],
+                    ["BoundEvent", "(someEvent)=\"v\"", "someEvent", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound events via on-",
+              "path": "R3 AST source spans/events/is correct for bound events via on-",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div on-event=\"v\"></div>",
+                  "expected": [
+                    ["Element", "<div on-event=\"v\"></div>", "<div on-event=\"v\">", "</div>"],
+                    ["BoundEvent", "on-event=\"v\"", "event", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound events via data-on-",
+              "path": "R3 AST source spans/events/is correct for bound events via data-on-",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div data-on-event=\"v\"></div>",
+                  "expected": [
+                    [
+                      "Element",
+                      "<div data-on-event=\"v\"></div>",
+                      "<div data-on-event=\"v\">",
+                      "</div>"
+                    ],
+                    ["BoundEvent", "data-on-event=\"v\"", "event", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound events and properties via [(...)]",
+              "path": "R3 AST source spans/events/is correct for bound events and properties via [(...)]",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div [(prop)]=\"v\"></div>",
+                  "expected": [
+                    ["Element", "<div [(prop)]=\"v\"></div>", "<div [(prop)]=\"v\">", "</div>"],
+                    ["BoundAttribute", "[(prop)]=\"v\"", "prop", "v"],
+                    ["BoundEvent", "[(prop)]=\"v\"", "prop", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound events and properties via bindon-",
+              "path": "R3 AST source spans/events/is correct for bound events and properties via bindon-",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div bindon-prop=\"v\"></div>",
+                  "expected": [
+                    [
+                      "Element",
+                      "<div bindon-prop=\"v\"></div>",
+                      "<div bindon-prop=\"v\">",
+                      "</div>"
+                    ],
+                    ["BoundAttribute", "bindon-prop=\"v\"", "prop", "v"],
+                    ["BoundEvent", "bindon-prop=\"v\"", "prop", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound events and properties via data-bindon-",
+              "path": "R3 AST source spans/events/is correct for bound events and properties via data-bindon-",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div data-bindon-prop=\"v\"></div>",
+                  "expected": [
+                    [
+                      "Element",
+                      "<div data-bindon-prop=\"v\"></div>",
+                      "<div data-bindon-prop=\"v\">",
+                      "</div>"
+                    ],
+                    ["BoundAttribute", "data-bindon-prop=\"v\"", "prop", "v"],
+                    ["BoundEvent", "data-bindon-prop=\"v\"", "prop", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for bound events via @",
+              "path": "R3 AST source spans/events/is correct for bound events via @",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div (@name.done)=\"v\"></div>",
+                  "expected": [
+                    [
+                      "Element",
+                      "<div (@name.done)=\"v\"></div>",
+                      "<div (@name.done)=\"v\">",
+                      "</div>"
+                    ],
+                    ["BoundEvent", "(@name.done)=\"v\"", "name.done", "v"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "references",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for references via #...",
+              "path": "R3 AST source spans/references/is correct for references via #...",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div #a></div>",
+                  "expected": [
+                    ["Element", "<div #a></div>", "<div #a>", "</div>"],
+                    ["Reference", "#a", "a", "<empty>"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for references with name",
+              "path": "R3 AST source spans/references/is correct for references with name",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div #a=\"b\"></div>",
+                  "expected": [
+                    ["Element", "<div #a=\"b\"></div>", "<div #a=\"b\">", "</div>"],
+                    ["Reference", "#a=\"b\"", "a", "b"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for references via ref-",
+              "path": "R3 AST source spans/references/is correct for references via ref-",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div ref-a></div>",
+                  "expected": [
+                    ["Element", "<div ref-a></div>", "<div ref-a>", "</div>"],
+                    ["Reference", "ref-a", "a", "<empty>"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for references via data-ref-",
+              "path": "R3 AST source spans/references/is correct for references via data-ref-",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div ref-a></div>",
+                  "expected": [
+                    ["Element", "<div ref-a></div>", "<div ref-a>", "</div>"],
+                    ["Reference", "ref-a", "a", "<empty>"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ICU expressions",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for variables and placeholders",
+              "path": "R3 AST source spans/ICU expressions/is correct for variables and placeholders",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<span i18n>{item.var, plural, other { {{item.placeholder}} items } }</span>",
+                  "expected": [
+                    [
+                      "Element",
+                      "<span i18n>{item.var, plural, other { {{item.placeholder}} items } }</span>",
+                      "<span i18n>",
+                      "</span>"
+                    ],
+                    ["Icu", "{item.var, plural, other { {{item.placeholder}} items } }"],
+                    ["Icu:Var", "item.var"],
+                    ["Icu:Placeholder", "{{item.placeholder}}"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for nested ICUs",
+              "path": "R3 AST source spans/ICU expressions/is correct for nested ICUs",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<span i18n>{item.var, plural, other { {{item.placeholder}} {nestedVar, plural, other { {{nestedPlaceholder}} }}} }</span>",
+                  "expected": [
+                    [
+                      "Element",
+                      "<span i18n>{item.var, plural, other { {{item.placeholder}} {nestedVar, plural, other { {{nestedPlaceholder}} }}} }</span>",
+                      "<span i18n>",
+                      "</span>"
+                    ],
+                    [
+                      "Icu",
+                      "{item.var, plural, other { {{item.placeholder}} {nestedVar, plural, other { {{nestedPlaceholder}} }}} }"
+                    ],
+                    ["Icu:Var", "nestedVar"],
+                    ["Icu:Var", "item.var"],
+                    ["Icu:Placeholder", "{{item.placeholder}}"],
+                    ["Icu:Placeholder", "{{nestedPlaceholder}}"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "deferred blocks",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for deferred blocks",
+              "path": "R3 AST source spans/deferred blocks/is correct for deferred blocks",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@defer (when isVisible() && foo; on hover(button), timer(10s), idle, immediate, interaction(button), viewport(container); prefetch on immediate; prefetch when isDataLoaded(); hydrate on interaction; hydrate when isVisible(); hydrate on timer(1200)) {<calendar-cmp [date]=\"current\"/>}@loading (minimum 1s; after 100ms) {Loading...}@placeholder (minimum 500) {Placeholder content!}@error {Loading failed :(}",
+                  "expected": [
+                    [
+                      "DeferredBlock",
+                      "@defer (when isVisible() && foo; on hover(button), timer(10s), idle, immediate, interaction(button), viewport(container); prefetch on immediate; prefetch when isDataLoaded(); hydrate on interaction; hydrate when isVisible(); hydrate on timer(1200)) {<calendar-cmp [date]=\"current\"/>}@loading (minimum 1s; after 100ms) {Loading...}@placeholder (minimum 500) {Placeholder content!}@error {Loading failed :(}",
+                      "@defer (when isVisible() && foo; on hover(button), timer(10s), idle, immediate, interaction(button), viewport(container); prefetch on immediate; prefetch when isDataLoaded(); hydrate on interaction; hydrate when isVisible(); hydrate on timer(1200)) {",
+                      "}"
+                    ],
+                    ["InteractionDeferredTrigger", "hydrate on interaction"],
+                    ["BoundDeferredTrigger", "hydrate when isVisible()"],
+                    ["TimerDeferredTrigger", "hydrate on timer(1200)"],
+                    ["BoundDeferredTrigger", "when isVisible() && foo"],
+                    ["HoverDeferredTrigger", "on hover(button)"],
+                    ["TimerDeferredTrigger", "timer(10s)"],
+                    ["IdleDeferredTrigger", "idle"],
+                    ["ImmediateDeferredTrigger", "immediate"],
+                    ["InteractionDeferredTrigger", "interaction(button)"],
+                    ["ViewportDeferredTrigger", "viewport(container)"],
+                    ["ImmediateDeferredTrigger", "prefetch on immediate"],
+                    ["BoundDeferredTrigger", "prefetch when isDataLoaded()"],
+                    [
+                      "Element",
+                      "<calendar-cmp [date]=\"current\"/>",
+                      "<calendar-cmp [date]=\"current\"/>",
+                      "<calendar-cmp [date]=\"current\"/>"
+                    ],
+                    ["BoundAttribute", "[date]=\"current\"", "date", "current"],
+                    [
+                      "DeferredBlockPlaceholder",
+                      "@placeholder (minimum 500) {Placeholder content!}",
+                      "@placeholder (minimum 500) {",
+                      "}"
+                    ],
+                    ["Text", "Placeholder content!"],
+                    [
+                      "DeferredBlockLoading",
+                      "@loading (minimum 1s; after 100ms) {Loading...}",
+                      "@loading (minimum 1s; after 100ms) {",
+                      "}"
+                    ],
+                    ["Text", "Loading..."],
+                    ["DeferredBlockError", "@error {Loading failed :(}", "@error {", "}"],
+                    ["Text", "Loading failed :("]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "switch blocks",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for switch blocks",
+              "path": "R3 AST source spans/switch blocks/is correct for switch blocks",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@switch (cond.kind) {@case (x()) {X case}@case ('hello') {Y case}@case (42) {Z case}@default {No case matched}}",
+                  "expected": [
+                    [
+                      "SwitchBlock",
+                      "@switch (cond.kind) {@case (x()) {X case}@case ('hello') {Y case}@case (42) {Z case}@default {No case matched}}",
+                      "@switch (cond.kind) {",
+                      "}"
+                    ],
+                    ["SwitchBlockCaseGroup", "@case (x()) {X case}", "@case (x()) {"],
+                    ["SwitchBlockCase", "@case (x()) {X case}", "@case (x()) {"],
+                    ["Text", "X case"],
+                    ["SwitchBlockCaseGroup", "@case ('hello') {Y case}", "@case ('hello') {"],
+                    ["SwitchBlockCase", "@case ('hello') {Y case}", "@case ('hello') {"],
+                    ["Text", "Y case"],
+                    ["SwitchBlockCaseGroup", "@case (42) {Z case}", "@case (42) {"],
+                    ["SwitchBlockCase", "@case (42) {Z case}", "@case (42) {"],
+                    ["Text", "Z case"],
+                    ["SwitchBlockCaseGroup", "@default {No case matched}", "@default {"],
+                    ["SwitchBlockCase", "@default {No case matched}", "@default {"],
+                    ["Text", "No case matched"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            },
+            {
+              "name": "is correct for switch blocks with consecutive cases",
+              "path": "R3 AST source spans/switch blocks/is correct for switch blocks with consecutive cases",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@switch (cond.kind) {@case (x()) @case ('hello') {X case}@default {No case matched}}",
+                  "expected": [
+                    [
+                      "SwitchBlock",
+                      "@switch (cond.kind) {@case (x()) @case ('hello') {X case}@default {No case matched}}",
+                      "@switch (cond.kind) {",
+                      "}"
+                    ],
+                    [
+                      "SwitchBlockCaseGroup",
+                      "@case (x()) @case ('hello') {X case}",
+                      "@case (x()) @case ('hello') {"
+                    ],
+                    ["SwitchBlockCase", "@case (x()) ", "@case (x()) "],
+                    ["SwitchBlockCase", "@case ('hello') {X case}", "@case ('hello') {"],
+                    ["Text", "X case"],
+                    ["SwitchBlockCaseGroup", "@default {No case matched}", "@default {"],
+                    ["SwitchBlockCase", "@default {No case matched}", "@default {"],
+                    ["Text", "No case matched"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "for loop blocks",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for loop blocks",
+              "path": "R3 AST source spans/for loop blocks/is correct for loop blocks",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@for (item of items.foo.bar; track item.id; let i = $index, _o_d_d_ = $odd) {<h1>{{ item }}</h1>}@empty {There were no items in the list.}",
+                  "expected": [
+                    [
+                      "ForLoopBlock",
+                      "@for (item of items.foo.bar; track item.id; let i = $index, _o_d_d_ = $odd) {<h1>{{ item }}</h1>}@empty {There were no items in the list.}",
+                      "@for (item of items.foo.bar; track item.id; let i = $index, _o_d_d_ = $odd) {",
+                      "}"
+                    ],
+                    ["Variable", "item", "item", "<empty>"],
+                    ["Variable", "", "", "<empty>"],
+                    ["Variable", "", "", "<empty>"],
+                    ["Variable", "", "", "<empty>"],
+                    ["Variable", "", "", "<empty>"],
+                    ["Variable", "", "", "<empty>"],
+                    ["Variable", "", "", "<empty>"],
+                    ["Variable", "i = $index", "i", "$index"],
+                    ["Variable", "_o_d_d_ = $odd", "_o_d_d_", "$odd"],
+                    ["Element", "<h1>{{ item }}</h1>", "<h1>", "</h1>"],
+                    ["BoundText", "{{ item }}"],
+                    ["ForLoopBlockEmpty", "@empty {There were no items in the list.}", "@empty {"],
+                    ["Text", "There were no items in the list."]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "if blocks",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for if blocks",
+              "path": "R3 AST source spans/if blocks/is correct for if blocks",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@if (cond.expr; as foo) {Main case was true!}@else if (other.expr) {Extra case was true!}@else {False case!}",
+                  "expected": [
+                    [
+                      "IfBlock",
+                      "@if (cond.expr; as foo) {Main case was true!}@else if (other.expr) {Extra case was true!}@else {False case!}",
+                      "@if (cond.expr; as foo) {",
+                      "}"
+                    ],
+                    [
+                      "IfBlockBranch",
+                      "@if (cond.expr; as foo) {Main case was true!}",
+                      "@if (cond.expr; as foo) {"
+                    ],
+                    ["Variable", "foo", "foo", "<empty>"],
+                    ["Text", "Main case was true!"],
+                    [
+                      "IfBlockBranch",
+                      "@else if (other.expr) {Extra case was true!}",
+                      "@else if (other.expr) {"
+                    ],
+                    ["Text", "Extra case was true!"],
+                    ["IfBlockBranch", "@else {False case!}", "@else {"],
+                    ["Text", "False case!"]
+                  ],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "@let declaration",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for a let declaration",
+              "path": "R3 AST source spans/@let declaration/is correct for a let declaration",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@let foo = 123;",
+                  "expected": [["LetDeclaration", "@let foo = 123", "foo", "123"]],
+                  "ignore_error": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "component tags",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for a simple component",
+              "path": "R3 AST source spans/component tags/is correct for a simple component",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<MyComp></MyComp>",
+                  "expected": [["Component", "<MyComp></MyComp>", "<MyComp>", "</MyComp>"]],
+                  "ignore_error": true
+                }
+              ]
+            },
+            {
+              "name": "is correct for a self-closing component",
+              "path": "R3 AST source spans/component tags/is correct for a self-closing component",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<MyComp/>",
+                  "expected": [["Component", "<MyComp/>", "<MyComp/>", "<MyComp/>"]],
+                  "ignore_error": true
+                }
+              ]
+            },
+            {
+              "name": "is correct for a component with a tag name",
+              "path": "R3 AST source spans/component tags/is correct for a component with a tag name",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<MyComp:button></MyComp:button>",
+                  "expected": [
+                    [
+                      "Component",
+                      "<MyComp:button></MyComp:button>",
+                      "<MyComp:button>",
+                      "</MyComp:button>"
+                    ]
+                  ],
+                  "ignore_error": true
+                }
+              ]
+            },
+            {
+              "name": "is correct for a component with attributes and directives",
+              "path": "R3 AST source spans/component tags/is correct for a component with attributes and directives",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<MyComp before=\"foo\" @Dir middle @OtherDir([a]=\"a\" (b)=\"b()\") after=\"123\">Hello</MyComp>",
+                  "expected": [
+                    [
+                      "Component",
+                      "<MyComp before=\"foo\" @Dir middle @OtherDir([a]=\"a\" (b)=\"b()\") after=\"123\">Hello</MyComp>",
+                      "<MyComp before=\"foo\" @Dir middle @OtherDir([a]=\"a\" (b)=\"b()\") after=\"123\">",
+                      "</MyComp>"
+                    ],
+                    ["TextAttribute", "before=\"foo\"", "before", "foo"],
+                    ["TextAttribute", "middle", "middle", "<empty>"],
+                    ["TextAttribute", "after=\"123\"", "after", "123"],
+                    ["Directive", "@Dir", "@Dir", "<empty>"],
+                    ["Directive", "@OtherDir([a]=\"a\" (b)=\"b()\")", "@OtherDir(", ")"],
+                    ["BoundAttribute", "[a]=\"a\"", "a", "a"],
+                    ["BoundEvent", "(b)=\"b()\"", "b", "b()"],
+                    ["Text", "Hello"]
+                  ],
+                  "ignore_error": true
+                }
+              ]
+            },
+            {
+              "name": "is correct for a component nested inside other markup",
+              "path": "R3 AST source spans/component tags/is correct for a component nested inside other markup",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "@if (expr) {<div>Hello: <MyComp><span><OtherComp/></span></MyComp></div>}",
+                  "expected": [
+                    [
+                      "IfBlock",
+                      "@if (expr) {<div>Hello: <MyComp><span><OtherComp/></span></MyComp></div>}",
+                      "@if (expr) {",
+                      "}"
+                    ],
+                    [
+                      "IfBlockBranch",
+                      "@if (expr) {<div>Hello: <MyComp><span><OtherComp/></span></MyComp></div>}",
+                      "@if (expr) {"
+                    ],
+                    [
+                      "Element",
+                      "<div>Hello: <MyComp><span><OtherComp/></span></MyComp></div>",
+                      "<div>",
+                      "</div>"
+                    ],
+                    ["Text", "Hello: "],
+                    [
+                      "Component",
+                      "<MyComp><span><OtherComp/></span></MyComp>",
+                      "<MyComp>",
+                      "</MyComp>"
+                    ],
+                    ["Element", "<span><OtherComp/></span>", "<span>", "</span>"],
+                    ["Component", "<OtherComp/>", "<OtherComp/>", "<OtherComp/>"]
+                  ],
+                  "ignore_error": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "directives",
+          "groups": [],
+          "tests": [
+            {
+              "name": "is correct for a directive with no attributes",
+              "path": "R3 AST source spans/directives/is correct for a directive with no attributes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div @Dir></div>",
+                  "expected": [
+                    ["Element", "<div @Dir></div>", "<div @Dir>", "</div>"],
+                    ["Directive", "@Dir", "@Dir", "<empty>"]
+                  ],
+                  "ignore_error": true
+                }
+              ]
+            },
+            {
+              "name": "is correct for a directive with attributes",
+              "path": "R3 AST source spans/directives/is correct for a directive with attributes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div @Dir(a=\"1\" [b]=\"two\" (c)=\"c()\")></div>",
+                  "expected": [
+                    [
+                      "Element",
+                      "<div @Dir(a=\"1\" [b]=\"two\" (c)=\"c()\")></div>",
+                      "<div @Dir(a=\"1\" [b]=\"two\" (c)=\"c()\")>",
+                      "</div>"
+                    ],
+                    ["Directive", "@Dir(a=\"1\" [b]=\"two\" (c)=\"c()\")", "@Dir(", ")"],
+                    ["TextAttribute", "a=\"1\"", "a", "1"],
+                    ["BoundAttribute", "[b]=\"two\"", "b", "two"],
+                    ["BoundEvent", "(c)=\"c()\"", "c", "c()"]
+                  ],
+                  "ignore_error": true
+                }
+              ]
+            },
+            {
+              "name": "is correct for directives mixed with other attributes",
+              "path": "R3 AST source spans/directives/is correct for directives mixed with other attributes",
+              "assertions": [
+                {
+                  "type": "ExpectFromHtml",
+                  "input": "<div before=\"foo\" @Dir middle @OtherDir([a]=\"a\" (b)=\"b()\") after=\"123\"></div>",
+                  "expected": [
+                    [
+                      "Element",
+                      "<div before=\"foo\" @Dir middle @OtherDir([a]=\"a\" (b)=\"b()\") after=\"123\"></div>",
+                      "<div before=\"foo\" @Dir middle @OtherDir([a]=\"a\" (b)=\"b()\") after=\"123\">",
+                      "</div>"
+                    ],
+                    ["TextAttribute", "before=\"foo\"", "before", "foo"],
+                    ["TextAttribute", "middle", "middle", "<empty>"],
+                    ["TextAttribute", "after=\"123\"", "after", "123"],
+                    ["Directive", "@Dir", "@Dir", "<empty>"],
+                    ["Directive", "@OtherDir([a]=\"a\" (b)=\"b()\")", "@OtherDir(", ")"],
+                    ["BoundAttribute", "[a]=\"a\"", "a", "a"],
+                    ["BoundEvent", "(b)=\"b()\"", "b", "b()"]
+                  ],
+                  "ignore_error": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

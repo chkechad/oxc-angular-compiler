@@ -1,0 +1,54 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "rootDir": ".",
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "useDefineForClassFields": false,
+    "declaration": false,
+    "sourceMap": true,
+    "importHelpers": true,
+    "types": ["node"],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "paths": {
+      "typedb-web-schema": ["../../../../../typedb-web/schema"],
+      "typedb-web-common": ["../../../../../typedb-web/common"]
+    }
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictDomEventTypes": false
+  },
+  "include": [
+    "main.ts",
+    "../../../../../typedb-web/main/src/**/*.ts",
+    "../../../../../typedb-web/common/**/*.ts",
+    "../../../../../typedb-web/schema/**/*.ts"
+  ],
+  "exclude": [
+    "../../../../../typedb-web/main/src/**/*.spec.ts",
+    "../../../../../typedb-web/main/src/**/*.stories.ts",
+    "../../../../../typedb-web/main/src/test.ts",
+    "../../../../../typedb-web/main/src/main.server.ts",
+    "../../../../../typedb-web/main/server.ts"
+  ]
+}

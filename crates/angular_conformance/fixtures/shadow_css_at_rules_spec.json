@@ -1,0 +1,226 @@
+{
+  "name": "at_rules_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/shadow_css/at_rules_spec.ts",
+  "test_groups": [
+    {
+      "name": "ShadowCss, at-rules",
+      "groups": [
+        {
+          "name": "@media",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should handle media rules with simple rules",
+              "path": "ShadowCss, at-rules/@media/should handle media rules with simple rules",
+              "assertions": []
+            },
+            {
+              "name": "should handle media rules with both width and height",
+              "path": "ShadowCss, at-rules/@media/should handle media rules with both width and height",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "@page",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should preserve @page rules",
+              "path": "ShadowCss, at-rules/@page/should preserve @page rules",
+              "assertions": []
+            },
+            {
+              "name": "should strip ::ng-deep and :host from within @page rules",
+              "path": "ShadowCss, at-rules/@page/should strip ::ng-deep and :host from within @page rules",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": "@page { margin-right: 4in; }",
+                  "content_attr": "contenta",
+                  "host_attr": "h",
+                  "expected": "@page { margin-right:4in;}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": "@page { ::ng-deep @top-left { content: \"Hamlet\";}}",
+                  "content_attr": "contenta",
+                  "host_attr": "h",
+                  "expected": "@page { @top-left { content:\"Hamlet\";}}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": "@page { :host ::ng-deep @top-left { content:\"Hamlet\";}}",
+                  "content_attr": "contenta",
+                  "host_attr": "h",
+                  "expected": "@page { @top-left { content:\"Hamlet\";}}",
+                  "normalized": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "@supports",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should handle support rules",
+              "path": "ShadowCss, at-rules/@supports/should handle support rules",
+              "assertions": []
+            },
+            {
+              "name": "should strip ::ng-deep and :host from within @supports",
+              "path": "ShadowCss, at-rules/@supports/should strip ::ng-deep and :host from within @supports",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": "@supports (display: flex) { @font-face { :host ::ng-deep font-family{} } }",
+                  "content_attr": "contenta",
+                  "host_attr": "h",
+                  "expected": "@supports (display:flex) { @font-face { font-family{}}}",
+                  "normalized": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "@font-face",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should strip ::ng-deep and :host from within @font-face",
+              "path": "ShadowCss, at-rules/@font-face/should strip ::ng-deep and :host from within @font-face",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": "@font-face { font-family {} }",
+                  "content_attr": "contenta",
+                  "host_attr": "h",
+                  "expected": "@font-face { font-family {}}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": "@font-face { ::ng-deep font-family{} }",
+                  "content_attr": "contenta",
+                  "host_attr": "h",
+                  "expected": "@font-face { font-family{}}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": "@font-face { :host ::ng-deep font-family{} }",
+                  "content_attr": "contenta",
+                  "host_attr": "h",
+                  "expected": "@font-face { font-family{}}",
+                  "normalized": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "@import",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should pass through @import directives",
+              "path": "ShadowCss, at-rules/@import/should pass through @import directives",
+              "assertions": []
+            },
+            {
+              "name": "should shim rules after @import",
+              "path": "ShadowCss, at-rules/@import/should shim rules after @import",
+              "assertions": []
+            },
+            {
+              "name": "should shim rules with quoted content after @import",
+              "path": "ShadowCss, at-rules/@import/should shim rules with quoted content after @import",
+              "assertions": []
+            },
+            {
+              "name": "should pass through @import directives whose URL contains colons and semicolons",
+              "path": "ShadowCss, at-rules/@import/should pass through @import directives whose URL contains colons and semicolons",
+              "assertions": []
+            },
+            {
+              "name": "should shim rules after @import with colons and semicolons",
+              "path": "ShadowCss, at-rules/@import/should shim rules after @import with colons and semicolons",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "@container",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should scope normal selectors inside an unnamed container rules",
+              "path": "ShadowCss, at-rules/@container/should scope normal selectors inside an unnamed container rules",
+              "assertions": []
+            },
+            {
+              "name": "should scope normal selectors inside a named container rules",
+              "path": "ShadowCss, at-rules/@container/should scope normal selectors inside a named container rules",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "@scope",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should scope normal selectors inside a scope rule with scoping limits",
+              "path": "ShadowCss, at-rules/@scope/should scope normal selectors inside a scope rule with scoping limits",
+              "assertions": []
+            },
+            {
+              "name": "should scope normal selectors inside a scope rule",
+              "path": "ShadowCss, at-rules/@scope/should scope normal selectors inside a scope rule",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "@document",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should handle document rules",
+              "path": "ShadowCss, at-rules/@document/should handle document rules",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "@layer",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should handle layer rules",
+              "path": "ShadowCss, at-rules/@layer/should handle layer rules",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "@starting-style",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should scope normal selectors inside a starting-style rule",
+              "path": "ShadowCss, at-rules/@starting-style/should scope normal selectors inside a starting-style rule",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

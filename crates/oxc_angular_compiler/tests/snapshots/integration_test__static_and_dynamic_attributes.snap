@@ -1,0 +1,13 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) {
+    const _r0 = i0.ɵɵgetCurrentView();
+    i0.ɵɵelementStart(0,'a',0);
+    i0.ɵɵtext(1,'Text');
+    i0.ɵɵelementEnd();
+  }
+  if ((rf & 2)) { i0.ɵɵproperty('href',ctx.link); }
+}

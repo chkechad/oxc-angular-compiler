@@ -1,0 +1,17 @@
+{
+  "name": "i18n_html_parser_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/i18n/i18n_html_parser_spec.ts",
+  "test_groups": [
+    {
+      "name": "I18N html parser",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should parse the translations only once",
+          "path": "I18N html parser/should parse the translations only once",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

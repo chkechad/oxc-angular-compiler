@@ -1,0 +1,166 @@
+{
+  "name": "dom_element_schema_registry_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/schema/dom_element_schema_registry_spec.ts",
+  "test_groups": [
+    {
+      "name": "DOMElementSchema",
+      "groups": [
+        {
+          "name": "Angular custom elements",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should support <ng-container>",
+              "path": "DOMElementSchema/Angular custom elements/should support <ng-container>",
+              "assertions": []
+            },
+            {
+              "name": "should support <ng-content>",
+              "path": "DOMElementSchema/Angular custom elements/should support <ng-content>",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "normalizeAnimationStyleProperty",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should normalize the given CSS property to camelCase",
+              "path": "DOMElementSchema/normalizeAnimationStyleProperty/should normalize the given CSS property to camelCase",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "normalizeAnimationStyleValue",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should normalize the given dimensional CSS style value to contain a PX value when numeric",
+              "path": "DOMElementSchema/normalizeAnimationStyleValue/should normalize the given dimensional CSS style value to contain a PX value when numeric",
+              "assertions": []
+            },
+            {
+              "name": "should not normalize any values that are of zero",
+              "path": "DOMElementSchema/normalizeAnimationStyleValue/should not normalize any values that are of zero",
+              "assertions": []
+            },
+            {
+              "name": "should retain the given dimensional CSS style value's unit if it already exists",
+              "path": "DOMElementSchema/normalizeAnimationStyleValue/should retain the given dimensional CSS style value's unit if it already exists",
+              "assertions": []
+            },
+            {
+              "name": "should trim the provided CSS style value",
+              "path": "DOMElementSchema/normalizeAnimationStyleValue/should trim the provided CSS style value",
+              "assertions": []
+            },
+            {
+              "name": "should stringify all non dimensional numeric style values",
+              "path": "DOMElementSchema/normalizeAnimationStyleValue/should stringify all non dimensional numeric style values",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "name": "should detect elements",
+          "path": "DOMElementSchema/should detect elements",
+          "assertions": []
+        },
+        {
+          "name": "should detect elements missing from chrome",
+          "path": "DOMElementSchema/should detect elements missing from chrome",
+          "assertions": []
+        },
+        {
+          "name": "should detect properties on regular elements",
+          "path": "DOMElementSchema/should detect properties on regular elements",
+          "assertions": []
+        },
+        {
+          "name": "should detect properties on elements missing from Chrome",
+          "path": "DOMElementSchema/should detect properties on elements missing from Chrome",
+          "assertions": []
+        },
+        {
+          "name": "should detect different kinds of types",
+          "path": "DOMElementSchema/should detect different kinds of types",
+          "assertions": []
+        },
+        {
+          "name": "should treat custom elements as an unknown element by default",
+          "path": "DOMElementSchema/should treat custom elements as an unknown element by default",
+          "assertions": []
+        },
+        {
+          "name": "should return true for custom-like elements if the CUSTOM_ELEMENTS_SCHEMA was used",
+          "path": "DOMElementSchema/should return true for custom-like elements if the CUSTOM_ELEMENTS_SCHEMA was used",
+          "assertions": []
+        },
+        {
+          "name": "should return true for all elements if the NO_ERRORS_SCHEMA was used",
+          "path": "DOMElementSchema/should return true for all elements if the NO_ERRORS_SCHEMA was used",
+          "assertions": []
+        },
+        {
+          "name": "should re-map property names that are specified in DOM facade",
+          "path": "DOMElementSchema/should re-map property names that are specified in DOM facade",
+          "assertions": []
+        },
+        {
+          "name": "should not re-map property names that are not specified in DOM facade",
+          "path": "DOMElementSchema/should not re-map property names that are not specified in DOM facade",
+          "assertions": []
+        },
+        {
+          "name": "should return an error message when asserting event properties",
+          "path": "DOMElementSchema/should return an error message when asserting event properties",
+          "assertions": []
+        },
+        {
+          "name": "should return an error message when asserting event attributes",
+          "path": "DOMElementSchema/should return an error message when asserting event attributes",
+          "assertions": []
+        },
+        {
+          "name": "should not return an error message when asserting non-event properties or attributes",
+          "path": "DOMElementSchema/should not return an error message when asserting non-event properties or attributes",
+          "assertions": []
+        },
+        {
+          "name": "should return security contexts for elements",
+          "path": "DOMElementSchema/should return security contexts for elements",
+          "assertions": []
+        },
+        {
+          "name": "should detect properties on namespaced elements",
+          "path": "DOMElementSchema/should detect properties on namespaced elements",
+          "assertions": []
+        },
+        {
+          "name": "should check security contexts case insensitive",
+          "path": "DOMElementSchema/should check security contexts case insensitive",
+          "assertions": []
+        },
+        {
+          "name": "should check security contexts for attributes",
+          "path": "DOMElementSchema/should check security contexts for attributes",
+          "assertions": []
+        },
+        {
+          "name": "generate a new schema",
+          "path": "DOMElementSchema/generate a new schema",
+          "assertions": []
+        },
+        {
+          "name": "should support aria property if attribute is also supported",
+          "path": "DOMElementSchema/should support aria property if attribute is also supported",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

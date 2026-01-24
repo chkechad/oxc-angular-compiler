@@ -1,0 +1,664 @@
+{
+  "name": "host_and_host_context_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/shadow_css/host_and_host_context_spec.ts",
+  "test_groups": [
+    {
+      "name": "ShadowCss, :host and :host-context",
+      "groups": [
+        {
+          "name": ":host",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should handle no context",
+              "path": "ShadowCss, :host and :host-context/:host/should handle no context",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle tag selector",
+              "path": "ShadowCss, :host and :host-context/:host/should handle tag selector",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host(ul) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "ul[a-host] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle class selector",
+              "path": "ShadowCss, :host and :host-context/:host/should handle class selector",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host(.x) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": ".x[a-host] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle attribute selector",
+              "path": "ShadowCss, :host and :host-context/:host/should handle attribute selector",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host([a=\"b\"]) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a=\"b\"][a-host] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host([a=b]) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a=b][a-host] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle attribute and next operator without spaces",
+              "path": "ShadowCss, :host and :host-context/:host/should handle attribute and next operator without spaces",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host[foo]>div {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[foo][a-host] > div[contenta] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle multiple tag selectors",
+              "path": "ShadowCss, :host and :host-context/:host/should handle multiple tag selectors",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host(ul,li) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "ul[a-host], li[a-host] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host(ul,li) > .z {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "ul[a-host] > .z[contenta], li[a-host] > .z[contenta] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle compound class selectors",
+              "path": "ShadowCss, :host and :host-context/:host/should handle compound class selectors",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host(.a.b) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": ".a.b[a-host] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle multiple class selectors",
+              "path": "ShadowCss, :host and :host-context/:host/should handle multiple class selectors",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host(.x,.y) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": ".x[a-host], .y[a-host] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host(.x,.y) > .z {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": ".x[a-host] > .z[contenta], .y[a-host] > .z[contenta] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle multiple attribute selectors",
+              "path": "ShadowCss, :host and :host-context/:host/should handle multiple attribute selectors",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host([a=\"b\"],[c=d]) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a=\"b\"][a-host], [c=d][a-host] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle pseudo selectors",
+              "path": "ShadowCss, :host and :host-context/:host/should handle pseudo selectors",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host(:before) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:before {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host:before {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:before {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host:nth-child(8n+1) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:nth-child(8n+1) {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host(:nth-child(3n of :not(p, a))) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:nth-child(3n of :not(p, a)) {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host:nth-of-type(8n+1) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:nth-of-type(8n+1) {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host(.class):before {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": ".class[a-host]:before {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host.class:before {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": ".class[a-host]:before {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host(:not(p)):before {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:not(p):before {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host(:not(:has(p))) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:not(:has(p)) {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host:not(:host.foo) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:not([a-host].foo) {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host:not(.foo:host) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:not(.foo[a-host]) {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host:not(:host.foo, :host.bar) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:not([a-host].foo, .bar[a-host]) {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host:not(:host.foo, .bar :host) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:not([a-host].foo, .bar [a-host]) {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host:not(.foo, .bar) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:not(.foo, .bar) {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host:not(:has(p, a)) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:not(:has(p, a)) {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host(:not(.foo, .bar)) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:not(.foo, .bar) {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host:has(> child-element:not(.foo)) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host]:has(> child-element:not(.foo)) {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle unexpected selectors in the most reasonable way",
+              "path": "ShadowCss, :host and :host-context/:host/should handle unexpected selectors in the most reasonable way",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": "cmp:host {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "cmp[a-host] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": "cmp:host >>> {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "cmp[a-host] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": "cmp:host child {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "cmp[a-host] child[contenta] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": "cmp:host >>> child {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "cmp[a-host] child {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": "cmp :host {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "cmp [a-host] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": "cmp :host >>> {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "cmp [a-host] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": "cmp :host child {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "cmp [a-host] child[contenta] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": "cmp :host >>> child {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "cmp [a-host] child {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should support newlines in the same selector and content ",
+              "path": "ShadowCss, :host and :host-context/:host/should support newlines in the same selector and content ",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": ":host-context",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should transform :host-context with pseudo selectors",
+              "path": "ShadowCss, :host and :host-context/:host-context/should transform :host-context with pseudo selectors",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context(backdrop:not(.borderless)) .backdrop {}",
+                  "content_attr": "contenta",
+                  "host_attr": "hosta",
+                  "expected": "backdrop:not(.borderless)[hosta] .backdrop[contenta], backdrop:not(.borderless) [hosta] .backdrop[contenta] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":where(:host-context(backdrop)) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "hosta",
+                  "expected": ":where(backdrop[hosta]), :where(backdrop [hosta]) {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":where(:host-context(outer1)) :host(bar) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "hosta",
+                  "expected": ":where(outer1) bar[hosta] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":where(:host-context(backdrop)) .foo ~ .bar {}",
+                  "content_attr": "contenta",
+                  "host_attr": "hosta",
+                  "expected": ":where(backdrop[hosta]) .foo[contenta] ~ .bar[contenta], :where(backdrop [hosta]) .foo[contenta] ~ .bar[contenta] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":where(:host-context(backdrop)) :host {}",
+                  "content_attr": "contenta",
+                  "host_attr": "hosta",
+                  "expected": ":where(backdrop) [hosta] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": "div:where(:host-context(backdrop)) :host {}",
+                  "content_attr": "contenta",
+                  "host_attr": "hosta",
+                  "expected": "div:where(backdrop) [hosta] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should transform :host-context with nested pseudo selectors",
+              "path": "ShadowCss, :host and :host-context/:host-context/should transform :host-context with nested pseudo selectors",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context(:where(.foo:not(.bar))) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "hosta",
+                  "expected": ":where(.foo:not(.bar))[hosta], :where(.foo:not(.bar)) [hosta] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context(:is(.foo:not(.bar))) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "hosta",
+                  "expected": ":is(.foo:not(.bar))[hosta], :is(.foo:not(.bar)) [hosta] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context(:where(.foo:not(.bar, .baz))) .inner {}",
+                  "content_attr": "contenta",
+                  "host_attr": "hosta",
+                  "expected": ":where(.foo:not(.bar, .baz))[hosta] .inner[contenta], :where(.foo:not(.bar, .baz)) [hosta] .inner[contenta] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle tag selector",
+              "path": "ShadowCss, :host and :host-context/:host-context/should handle tag selector",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context(div) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "div[a-host], div [a-host] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context(ul) > .y {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "ul[a-host] > .y[contenta], ul [a-host] > .y[contenta] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle class selector",
+              "path": "ShadowCss, :host and :host-context/:host-context/should handle class selector",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context(.x) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": ".x[a-host], .x [a-host] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context(.x) > .y {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": ".x[a-host] > .y[contenta], .x [a-host] > .y[contenta] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle attribute selector",
+              "path": "ShadowCss, :host and :host-context/:host-context/should handle attribute selector",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context([a=\"b\"]) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a=\"b\"][a-host], [a=\"b\"] [a-host] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context([a=b]) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a=b][a-host], [a=b] [a-host] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle multiple :host-context() selectors",
+              "path": "ShadowCss, :host and :host-context/:host-context/should handle multiple :host-context() selectors",
+              "assertions": []
+            },
+            {
+              "name": "should handle :host-context with no ancestor selectors",
+              "path": "ShadowCss, :host and :host-context/:host-context/should handle :host-context with no ancestor selectors",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context .inner {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host] .inner[contenta] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context() .inner {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "[a-host] .inner[contenta] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context :host-context(.a) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "host-a",
+                  "expected": ".a[host-a], .a [host-a] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle selectors",
+              "path": "ShadowCss, :host and :host-context/:host-context/should handle selectors",
+              "assertions": []
+            },
+            {
+              "name": "should handle :host-context with comma-separated child selector",
+              "path": "ShadowCss, :host and :host-context/:host-context/should handle :host-context with comma-separated child selector",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context(.foo) a:not(.a, .b) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": ".foo[a-host] a[contenta]:not(.a, .b), .foo [a-host] a[contenta]:not(.a, .b) {}",
+                  "normalized": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": ":host-context and :host combination selector",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should handle selectors on the same element",
+              "path": "ShadowCss, :host and :host-context/:host-context and :host combination selector/should handle selectors on the same element",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context(div):host(.x) > .y {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "div.x[a-host] > .y[contenta] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle no selector :host",
+              "path": "ShadowCss, :host and :host-context/:host-context and :host combination selector/should handle no selector :host",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host:host-context(.one) {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": ".one[a-host][a-host], .one [a-host] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context(.one) :host {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": ".one [a-host] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should handle selectors on different elements",
+              "path": "ShadowCss, :host and :host-context/:host-context and :host combination selector/should handle selectors on different elements",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context(div) :host(.x) > .y {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "div .x[a-host] > .y[contenta] {}",
+                  "normalized": true
+                },
+                {
+                  "type": "ShimCss",
+                  "input": ":host-context(div) > :host(.x) > .y {}",
+                  "content_attr": "contenta",
+                  "host_attr": "a-host",
+                  "expected": "div > .x[a-host] > .y[contenta] {}",
+                  "normalized": true
+                }
+              ]
+            },
+            {
+              "name": "should parse multiple rules containing :host-context and :host",
+              "path": "ShadowCss, :host and :host-context/:host-context and :host combination selector/should parse multiple rules containing :host-context and :host",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

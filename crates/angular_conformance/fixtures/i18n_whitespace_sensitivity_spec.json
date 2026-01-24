@@ -1,0 +1,38 @@
+{
+  "name": "whitespace_sensitivity_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/i18n/whitespace_sensitivity_spec.ts",
+  "test_groups": [
+    {
+      "name": "i18nPreserveWhitespaceForLegacyExtraction",
+      "groups": [
+        {
+          "name": "ignores whitespace changes when disabled",
+          "groups": [],
+          "tests": [
+            {
+              "name": "from converting one-line messages to block messages",
+              "path": "i18nPreserveWhitespaceForLegacyExtraction/ignores whitespace changes when disabled/from converting one-line messages to block messages",
+              "assertions": []
+            },
+            {
+              "name": "from indenting a message",
+              "path": "i18nPreserveWhitespaceForLegacyExtraction/ignores whitespace changes when disabled/from indenting a message",
+              "assertions": []
+            },
+            {
+              "name": "from adjusting line wrapping",
+              "path": "i18nPreserveWhitespaceForLegacyExtraction/ignores whitespace changes when disabled/from adjusting line wrapping",
+              "assertions": []
+            },
+            {
+              "name": "from trimming significant whitespace",
+              "path": "i18nPreserveWhitespaceForLegacyExtraction/ignores whitespace changes when disabled/from trimming significant whitespace",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

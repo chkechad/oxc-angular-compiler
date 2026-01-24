@@ -1,0 +1,47 @@
+{
+  "name": "xml_helper_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/i18n/serializers/xml_helper_spec.ts",
+  "test_groups": [
+    {
+      "name": "XML helper",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should serialize XML declaration",
+          "path": "XML helper/should serialize XML declaration",
+          "assertions": []
+        },
+        {
+          "name": "should serialize text node",
+          "path": "XML helper/should serialize text node",
+          "assertions": []
+        },
+        {
+          "name": "should escape text nodes",
+          "path": "XML helper/should escape text nodes",
+          "assertions": []
+        },
+        {
+          "name": "should serialize xml nodes without children",
+          "path": "XML helper/should serialize xml nodes without children",
+          "assertions": []
+        },
+        {
+          "name": "should serialize xml nodes with children",
+          "path": "XML helper/should serialize xml nodes with children",
+          "assertions": []
+        },
+        {
+          "name": "should serialize node lists",
+          "path": "XML helper/should serialize node lists",
+          "assertions": []
+        },
+        {
+          "name": "should escape attribute values",
+          "path": "XML helper/should escape attribute values",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

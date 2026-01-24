@@ -1,0 +1,1668 @@
+{
+  "name": "html_parser_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/ml_parser/html_parser_spec.ts",
+  "test_groups": [
+    {
+      "name": "HtmlParser",
+      "groups": [
+        {
+          "name": "parse",
+          "groups": [
+            {
+              "name": "text nodes",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should parse root level text nodes",
+                  "path": "HtmlParser/parse/text nodes/should parse root level text nodes",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "a",
+                      "expected": [["html.Text", "a", 0.0, ["a"]]]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse text nodes inside regular elements",
+                  "path": "HtmlParser/parse/text nodes/should parse text nodes inside regular elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div>a</div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        ["html.Text", "a", 1.0, ["a"]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse text nodes inside <ng-template> elements",
+                  "path": "HtmlParser/parse/text nodes/should parse text nodes inside <ng-template> elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<ng-template>a</ng-template>",
+                      "expected": [
+                        ["html.Element", "ng-template", 0.0],
+                        ["html.Text", "a", 1.0, ["a"]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse CDATA",
+                  "path": "HtmlParser/parse/text nodes/should parse CDATA",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<![CDATA[text]]>",
+                      "expected": [["html.Text", "text", 0.0, ["text"]]]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse text nodes with HTML entities (5+ hex digits)",
+                  "path": "HtmlParser/parse/text nodes/should parse text nodes with HTML entities (5+ hex digits)",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div>&#x1F6C8;</div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        ["html.Text", "🛈", 1.0, [""], ["🛈", "&#x1F6C8;"], [""]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse text nodes with decimal HTML entities (5+ digits)",
+                  "path": "HtmlParser/parse/text nodes/should parse text nodes with decimal HTML entities (5+ digits)",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div>&#128712;</div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        ["html.Text", "🛈", 1.0, [""], ["🛈", "&#128712;"], [""]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should normalize line endings within CDATA",
+                  "path": "HtmlParser/parse/text nodes/should normalize line endings within CDATA",
+                  "assertions": []
+                }
+              ]
+            },
+            {
+              "name": "elements",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should parse root level elements",
+                  "path": "HtmlParser/parse/elements/should parse root level elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div></div>",
+                      "expected": [["html.Element", "div", 0.0]]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse elements inside of regular elements",
+                  "path": "HtmlParser/parse/elements/should parse elements inside of regular elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div><span></span></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        ["html.Element", "span", 1.0]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse elements inside  <ng-template> elements",
+                  "path": "HtmlParser/parse/elements/should parse elements inside  <ng-template> elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<ng-template><span></span></ng-template>",
+                      "expected": [
+                        ["html.Element", "ng-template", 0.0],
+                        ["html.Element", "span", 1.0]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should support void elements",
+                  "path": "HtmlParser/parse/elements/should support void elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<link rel=\"author license\" href=\"/about\">",
+                      "expected": [
+                        ["html.Element", "link", 0.0],
+                        ["html.Attribute", "rel", "author license", ["author license"]],
+                        ["html.Attribute", "href", "/about", ["/about"]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should indicate whether an element is void",
+                  "path": "HtmlParser/parse/elements/should indicate whether an element is void",
+                  "assertions": []
+                },
+                {
+                  "name": "should not error on void elements from HTML5 spec",
+                  "path": "HtmlParser/parse/elements/should not error on void elements from HTML5 spec",
+                  "assertions": []
+                },
+                {
+                  "name": "should close void elements on text nodes",
+                  "path": "HtmlParser/parse/elements/should close void elements on text nodes",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<p>before<br>after</p>",
+                      "expected": [
+                        ["html.Element", "p", 0.0],
+                        ["html.Text", "before", 1.0, ["before"]],
+                        ["html.Element", "br", 1.0],
+                        ["html.Text", "after", 1.0, ["after"]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should support optional end tags",
+                  "path": "HtmlParser/parse/elements/should support optional end tags",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div><p>1<p>2</div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        ["html.Element", "p", 1.0],
+                        ["html.Text", "1", 2.0, ["1"]],
+                        ["html.Element", "p", 1.0],
+                        ["html.Text", "2", 2.0, ["2"]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should support nested elements",
+                  "path": "HtmlParser/parse/elements/should support nested elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<ul><li><ul><li></li></ul></li></ul>",
+                      "expected": [
+                        ["html.Element", "ul", 0.0],
+                        ["html.Element", "li", 1.0],
+                        ["html.Element", "ul", 2.0],
+                        ["html.Element", "li", 3.0]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should not wraps elements in a required parent",
+                  "path": "HtmlParser/parse/elements/should not wraps elements in a required parent",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div><tr></tr></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        ["html.Element", "tr", 1.0]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should support explicit namespace",
+                  "path": "HtmlParser/parse/elements/should support explicit namespace",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<myns:div></myns:div>",
+                      "expected": [["html.Element", ":myns:div", 0.0]]
+                    }
+                  ]
+                },
+                {
+                  "name": "should support implicit namespace",
+                  "path": "HtmlParser/parse/elements/should support implicit namespace",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<svg></svg>",
+                      "expected": [["html.Element", ":svg:svg", 0.0]]
+                    }
+                  ]
+                },
+                {
+                  "name": "should propagate the namespace",
+                  "path": "HtmlParser/parse/elements/should propagate the namespace",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<myns:div><p></p></myns:div>",
+                      "expected": [
+                        ["html.Element", ":myns:div", 0.0],
+                        ["html.Element", ":myns:p", 1.0]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should match closing tags case sensitive",
+                  "path": "HtmlParser/parse/elements/should match closing tags case sensitive",
+                  "assertions": []
+                },
+                {
+                  "name": "should support self closing void elements",
+                  "path": "HtmlParser/parse/elements/should support self closing void elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<input />",
+                      "expected": [["html.Element", "input", 0.0, "#selfClosing"]]
+                    }
+                  ]
+                },
+                {
+                  "name": "should support self closing foreign elements",
+                  "path": "HtmlParser/parse/elements/should support self closing foreign elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<math />",
+                      "expected": [["html.Element", ":math:math", 0.0, "#selfClosing"]]
+                    }
+                  ]
+                },
+                {
+                  "name": "should ignore LF immediately after textarea, pre and listing",
+                  "path": "HtmlParser/parse/elements/should ignore LF immediately after textarea, pre and listing",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<p>\n</p><textarea>\n</textarea><pre>\n\n</pre><listing>\n\n</listing>",
+                      "expected": [
+                        ["html.Element", "p", 0.0],
+                        ["html.Text", "\n", 1.0, ["\n"]],
+                        ["html.Element", "textarea", 0.0],
+                        ["html.Element", "pre", 0.0],
+                        ["html.Text", "\n", 1.0, ["\n"]],
+                        ["html.Element", "listing", 0.0],
+                        ["html.Text", "\n", 1.0, ["\n"]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should normalize line endings in text",
+                  "path": "HtmlParser/parse/elements/should normalize line endings in text",
+                  "assertions": []
+                },
+                {
+                  "name": "should parse element with JavaScript keyword tag name",
+                  "path": "HtmlParser/parse/elements/should parse element with JavaScript keyword tag name",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<constructor></constructor>",
+                      "expected": [["html.Element", "constructor", 0.0]]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "attributes",
+              "groups": [
+                {
+                  "name": "animate instructions",
+                  "groups": [],
+                  "tests": [
+                    {
+                      "name": "should parse animate.enter as a static attribute",
+                      "path": "HtmlParser/parse/attributes/animate instructions/should parse animate.enter as a static attribute",
+                      "assertions": [
+                        {
+                          "type": "HumanizeDom",
+                          "input": "<div animate.enter=\"foo\"></div>",
+                          "expected": [
+                            ["html.Element", "div", 0.0],
+                            ["html.Attribute", "animate.enter", "foo", ["foo"]]
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should parse animate.leave as a static attribute",
+                      "path": "HtmlParser/parse/attributes/animate instructions/should parse animate.leave as a static attribute",
+                      "assertions": [
+                        {
+                          "type": "HumanizeDom",
+                          "input": "<div animate.leave=\"bar\"></div>",
+                          "expected": [
+                            ["html.Element", "div", 0.0],
+                            ["html.Attribute", "animate.leave", "bar", ["bar"]]
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should not parse any other animate prefix binding as animate.leave",
+                      "path": "HtmlParser/parse/attributes/animate instructions/should not parse any other animate prefix binding as animate.leave",
+                      "assertions": [
+                        {
+                          "type": "HumanizeDom",
+                          "input": "<div animateAbc=\"bar\"></div>",
+                          "expected": [
+                            ["html.Element", "div", 0.0],
+                            ["html.Attribute", "animateAbc", "bar", ["bar"]]
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should parse both animate.enter and animate.leave as static attributes",
+                      "path": "HtmlParser/parse/attributes/animate instructions/should parse both animate.enter and animate.leave as static attributes",
+                      "assertions": [
+                        {
+                          "type": "HumanizeDom",
+                          "input": "<div animate.enter=\"foo\" animate.leave=\"bar\"></div>",
+                          "expected": [
+                            ["html.Element", "div", 0.0],
+                            ["html.Attribute", "animate.enter", "foo", ["foo"]],
+                            ["html.Attribute", "animate.leave", "bar", ["bar"]]
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should parse animate.enter as a property binding",
+                      "path": "HtmlParser/parse/attributes/animate instructions/should parse animate.enter as a property binding",
+                      "assertions": [
+                        {
+                          "type": "HumanizeDom",
+                          "input": "<div [animate.enter]=\"'foo'\"></div>",
+                          "expected": [
+                            ["html.Element", "div", 0.0],
+                            ["html.Attribute", "[animate.enter]", "'foo'", ["'foo'"]]
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should parse animate.leave as a property binding with a string array",
+                      "path": "HtmlParser/parse/attributes/animate instructions/should parse animate.leave as a property binding with a string array",
+                      "assertions": [
+                        {
+                          "type": "HumanizeDom",
+                          "input": "<div [animate.leave]=\"['bar', 'baz']\"></div>",
+                          "expected": [
+                            ["html.Element", "div", 0.0],
+                            [
+                              "html.Attribute",
+                              "[animate.leave]",
+                              "['bar', 'baz']",
+                              ["['bar', 'baz']"]
+                            ]
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should parse animate.enter as an event binding",
+                      "path": "HtmlParser/parse/attributes/animate instructions/should parse animate.enter as an event binding",
+                      "assertions": [
+                        {
+                          "type": "HumanizeDom",
+                          "input": "<div (animate.enter)=\"onAnimation($event)\"></div>",
+                          "expected": [
+                            ["html.Element", "div", 0.0],
+                            [
+                              "html.Attribute",
+                              "(animate.enter)",
+                              "onAnimation($event)",
+                              ["onAnimation($event)"]
+                            ]
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should parse animate.leave as an event binding",
+                      "path": "HtmlParser/parse/attributes/animate instructions/should parse animate.leave as an event binding",
+                      "assertions": [
+                        {
+                          "type": "HumanizeDom",
+                          "input": "<div (animate.leave)=\"onAnimation($event)\"></div>",
+                          "expected": [
+                            ["html.Element", "div", 0.0],
+                            [
+                              "html.Attribute",
+                              "(animate.leave)",
+                              "onAnimation($event)",
+                              ["onAnimation($event)"]
+                            ]
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should not parse other animate prefixes as animate.leave",
+                      "path": "HtmlParser/parse/attributes/animate instructions/should not parse other animate prefixes as animate.leave",
+                      "assertions": [
+                        {
+                          "type": "HumanizeDom",
+                          "input": "<div (animateXYZ)=\"onAnimation()\"></div>",
+                          "expected": [
+                            ["html.Element", "div", 0.0],
+                            ["html.Attribute", "(animateXYZ)", "onAnimation()", ["onAnimation()"]]
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "should parse a combination of animate property and event bindings",
+                      "path": "HtmlParser/parse/attributes/animate instructions/should parse a combination of animate property and event bindings",
+                      "assertions": [
+                        {
+                          "type": "HumanizeDom",
+                          "input": "<div [animate.enter]=\"'foo'\" (animate.leave)=\"onAnimation($event)\"></div>",
+                          "expected": [
+                            ["html.Element", "div", 0.0],
+                            ["html.Attribute", "[animate.enter]", "'foo'", ["'foo'"]],
+                            [
+                              "html.Attribute",
+                              "(animate.leave)",
+                              "onAnimation($event)",
+                              ["onAnimation($event)"]
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "tests": [
+                {
+                  "name": "should parse attributes on regular elements case sensitive",
+                  "path": "HtmlParser/parse/attributes/should parse attributes on regular elements case sensitive",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div kEy=\"v\" key2=v2></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        ["html.Attribute", "kEy", "v", ["v"]],
+                        ["html.Attribute", "key2", "v2", ["v2"]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse attributes containing interpolation",
+                  "path": "HtmlParser/parse/attributes/should parse attributes containing interpolation",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div foo=\"1{{message}}2\"></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        [
+                          "html.Attribute",
+                          "foo",
+                          "1{{message}}2",
+                          ["1"],
+                          ["{{", "message", "}}"],
+                          ["2"]
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse attributes containing unquoted interpolation",
+                  "path": "HtmlParser/parse/attributes/should parse attributes containing unquoted interpolation",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div foo={{message}}></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        [
+                          "html.Attribute",
+                          "foo",
+                          "{{message}}",
+                          [""],
+                          ["{{", "message", "}}"],
+                          [""]
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse bound inputs with expressions containing newlines",
+                  "path": "HtmlParser/parse/attributes/should parse bound inputs with expressions containing newlines",
+                  "assertions": []
+                },
+                {
+                  "name": "should parse attributes containing encoded entities",
+                  "path": "HtmlParser/parse/attributes/should parse attributes containing encoded entities",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div foo=\"&amp;\"></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        ["html.Attribute", "foo", "&", [""], ["&", "&amp;"], [""]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse attributes containing encoded entities (5+ hex digits)",
+                  "path": "HtmlParser/parse/attributes/should parse attributes containing encoded entities (5+ hex digits)",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div foo=\"&#x1F6C8;\"></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        ["html.Attribute", "foo", "🛈", [""], ["🛈", "&#x1F6C8;"], [""]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse attributes containing encoded decimal entities (5+ digits)",
+                  "path": "HtmlParser/parse/attributes/should parse attributes containing encoded decimal entities (5+ digits)",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div foo=\"&#128712;\"></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        ["html.Attribute", "foo", "🛈", [""], ["🛈", "&#128712;"], [""]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse attributes containing unquoted interpolation",
+                  "path": "HtmlParser/parse/attributes/should parse attributes containing unquoted interpolation",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div foo={{message}}></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        [
+                          "html.Attribute",
+                          "foo",
+                          "{{message}}",
+                          [""],
+                          ["{{", "message", "}}"],
+                          [""]
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse bound inputs with expressions containing newlines",
+                  "path": "HtmlParser/parse/attributes/should parse bound inputs with expressions containing newlines",
+                  "assertions": []
+                },
+                {
+                  "name": "should decode HTML entities in interpolated attributes",
+                  "path": "HtmlParser/parse/attributes/should decode HTML entities in interpolated attributes",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDomSourceSpans",
+                      "input": "<div foo=\"{{&amp;}}\"></div>",
+                      "expected": [
+                        [
+                          "html.Element",
+                          "div",
+                          0.0,
+                          "<div foo=\"{{&amp;}}\"></div>",
+                          "<div foo=\"{{&amp;}}\">",
+                          "</div>"
+                        ],
+                        [
+                          "html.Attribute",
+                          "foo",
+                          "{{&}}",
+                          [""],
+                          ["{{", "&amp;", "}}"],
+                          [""],
+                          "foo=\"{{&amp;}}\""
+                        ]
+                      ],
+                      "options": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should normalize line endings within attribute values",
+                  "path": "HtmlParser/parse/attributes/should normalize line endings within attribute values",
+                  "assertions": []
+                },
+                {
+                  "name": "should parse attributes without values",
+                  "path": "HtmlParser/parse/attributes/should parse attributes without values",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div k></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0],
+                        ["html.Attribute", "k", ""]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse attributes on svg elements case sensitive",
+                  "path": "HtmlParser/parse/attributes/should parse attributes on svg elements case sensitive",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<svg viewBox=\"0\"></svg>",
+                      "expected": [
+                        ["html.Element", ":svg:svg", 0.0],
+                        ["html.Attribute", "viewBox", "0", ["0"]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse attributes on <ng-template> elements",
+                  "path": "HtmlParser/parse/attributes/should parse attributes on <ng-template> elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<ng-template k=\"v\"></ng-template>",
+                      "expected": [
+                        ["html.Element", "ng-template", 0.0],
+                        ["html.Attribute", "k", "v", ["v"]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should support namespace",
+                  "path": "HtmlParser/parse/attributes/should support namespace",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<svg:use xlink:href=\"Port\" />",
+                      "expected": [
+                        ["html.Element", ":svg:use", 0.0, "#selfClosing"],
+                        ["html.Attribute", ":xlink:href", "Port", ["Port"]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should support a prematurely terminated interpolation in attribute",
+                  "path": "HtmlParser/parse/attributes/should support a prematurely terminated interpolation in attribute",
+                  "assertions": []
+                },
+                {
+                  "name": "should parse square-bracketed attributes more permissively",
+                  "path": "HtmlParser/parse/attributes/should parse square-bracketed attributes more permissively",
+                  "assertions": []
+                }
+              ]
+            },
+            {
+              "name": "comments",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should preserve comments",
+                  "path": "HtmlParser/parse/comments/should preserve comments",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<!-- comment --><div></div>",
+                      "expected": [
+                        ["html.Comment", "comment", 0.0],
+                        ["html.Element", "div", 0.0]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should normalize line endings within comments",
+                  "path": "HtmlParser/parse/comments/should normalize line endings within comments",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<!-- line 1 \r\n line 2 -->",
+                      "expected": [["html.Comment", "line 1 \n line 2", 0.0]]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "expansion forms",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should parse out expansion forms",
+                  "path": "HtmlParser/parse/expansion forms/should parse out expansion forms",
+                  "assertions": []
+                },
+                {
+                  "name": "should normalize line-endings in expansion forms in inline templates if `i18nNormalizeLineEndingsInICUs` is true",
+                  "path": "HtmlParser/parse/expansion forms/should normalize line-endings in expansion forms in inline templates if `i18nNormalizeLineEndingsInICUs` is true",
+                  "assertions": []
+                },
+                {
+                  "name": "should not normalize line-endings in ICU expressions in external templates when `i18nNormalizeLineEndingsInICUs` is not set",
+                  "path": "HtmlParser/parse/expansion forms/should not normalize line-endings in ICU expressions in external templates when `i18nNormalizeLineEndingsInICUs` is not set",
+                  "assertions": []
+                },
+                {
+                  "name": "should normalize line-endings in expansion forms in external templates if `i18nNormalizeLineEndingsInICUs` is true",
+                  "path": "HtmlParser/parse/expansion forms/should normalize line-endings in expansion forms in external templates if `i18nNormalizeLineEndingsInICUs` is true",
+                  "assertions": []
+                },
+                {
+                  "name": "should not normalize line-endings in ICU expressions in external templates when `i18nNormalizeLineEndingsInICUs` is not set",
+                  "path": "HtmlParser/parse/expansion forms/should not normalize line-endings in ICU expressions in external templates when `i18nNormalizeLineEndingsInICUs` is not set",
+                  "assertions": []
+                },
+                {
+                  "name": "should parse out expansion forms",
+                  "path": "HtmlParser/parse/expansion forms/should parse out expansion forms",
+                  "assertions": []
+                },
+                {
+                  "name": "should parse out nested expansion forms",
+                  "path": "HtmlParser/parse/expansion forms/should parse out nested expansion forms",
+                  "assertions": []
+                },
+                {
+                  "name": "should normalize line endings in nested expansion forms for inline templates, when `i18nNormalizeLineEndingsInICUs` is true",
+                  "path": "HtmlParser/parse/expansion forms/should normalize line endings in nested expansion forms for inline templates, when `i18nNormalizeLineEndingsInICUs` is true",
+                  "assertions": []
+                },
+                {
+                  "name": "should not normalize line endings in nested expansion forms for inline templates, when `i18nNormalizeLineEndingsInICUs` is not defined",
+                  "path": "HtmlParser/parse/expansion forms/should not normalize line endings in nested expansion forms for inline templates, when `i18nNormalizeLineEndingsInICUs` is not defined",
+                  "assertions": []
+                },
+                {
+                  "name": "should not normalize line endings in nested expansion forms for external templates, when `i18nNormalizeLineEndingsInICUs` is not set",
+                  "path": "HtmlParser/parse/expansion forms/should not normalize line endings in nested expansion forms for external templates, when `i18nNormalizeLineEndingsInICUs` is not set",
+                  "assertions": []
+                },
+                {
+                  "name": "should error when expansion form is not closed",
+                  "path": "HtmlParser/parse/expansion forms/should error when expansion form is not closed",
+                  "assertions": []
+                },
+                {
+                  "name": "should support ICU expressions with cases that contain numbers",
+                  "path": "HtmlParser/parse/expansion forms/should support ICU expressions with cases that contain numbers",
+                  "assertions": []
+                },
+                {
+                  "name": "should support ICU expressions with cases that contain any character except '}'",
+                  "path": "HtmlParser/parse/expansion forms/should support ICU expressions with cases that contain any character except '}'",
+                  "assertions": []
+                },
+                {
+                  "name": "should error when expansion case is not properly closed",
+                  "path": "HtmlParser/parse/expansion forms/should error when expansion case is not properly closed",
+                  "assertions": []
+                },
+                {
+                  "name": "should error when expansion case is not closed",
+                  "path": "HtmlParser/parse/expansion forms/should error when expansion case is not closed",
+                  "assertions": []
+                },
+                {
+                  "name": "should error when invalid html in the case",
+                  "path": "HtmlParser/parse/expansion forms/should error when invalid html in the case",
+                  "assertions": []
+                }
+              ]
+            },
+            {
+              "name": "blocks",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should parse a block",
+                  "path": "HtmlParser/parse/blocks/should parse a block",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "@defer (a b; c d){hello}",
+                      "expected": [
+                        ["html.Block", "defer", 0.0],
+                        ["html.BlockParameter", "a b"],
+                        ["html.BlockParameter", "c d"],
+                        ["html.Text", "hello", 1.0, ["hello"]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a block with an HTML element",
+                  "path": "HtmlParser/parse/blocks/should parse a block with an HTML element",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "@defer {<my-cmp/>}",
+                      "expected": [
+                        ["html.Block", "defer", 0.0],
+                        ["html.Element", "my-cmp", 1.0, "#selfClosing"]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a block containing mixed plain text and HTML",
+                  "path": "HtmlParser/parse/blocks/should parse a block containing mixed plain text and HTML",
+                  "assertions": []
+                },
+                {
+                  "name": "should parse nested blocks",
+                  "path": "HtmlParser/parse/blocks/should parse nested blocks",
+                  "assertions": []
+                },
+                {
+                  "name": "should infer namespace through block boundary",
+                  "path": "HtmlParser/parse/blocks/should infer namespace through block boundary",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<svg>@if (cond) {<circle/>}</svg>",
+                      "expected": [
+                        ["html.Element", ":svg:svg", 0.0],
+                        ["html.Block", "if", 1.0],
+                        ["html.BlockParameter", "cond"],
+                        ["html.Element", ":svg:circle", 2.0, "#selfClosing"]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse an empty block",
+                  "path": "HtmlParser/parse/blocks/should parse an empty block",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "@defer{}",
+                      "expected": [["html.Block", "defer", 0.0]]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a block with void elements",
+                  "path": "HtmlParser/parse/blocks/should parse a block with void elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "@defer {<br>}",
+                      "expected": [
+                        ["html.Block", "defer", 0.0],
+                        ["html.Element", "br", 1.0]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse consecutive @case statements",
+                  "path": "HtmlParser/parse/blocks/should parse consecutive @case statements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "@switch (expr) {@case ('foo') @case ('bar') { <input> }}",
+                      "expected": [
+                        ["html.Block", "switch", 0.0],
+                        ["html.BlockParameter", "expr"],
+                        ["html.Block", "case", 1.0],
+                        ["html.BlockParameter", "'foo'"],
+                        ["html.Block", "case", 1.0],
+                        ["html.BlockParameter", "'bar'"],
+                        ["html.Text", " ", 2.0, [" "]],
+                        ["html.Element", "input", 2.0],
+                        ["html.Text", " ", 2.0, [" "]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse empty cases in a switch block",
+                  "path": "HtmlParser/parse/blocks/should parse empty cases in a switch block",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "@switch (expr) {@case ('foo') {} @case ('bar') {bar} @case('baz') { baz }}",
+                      "expected": [
+                        ["html.Block", "switch", 0.0],
+                        ["html.BlockParameter", "expr"],
+                        ["html.Block", "case", 1.0],
+                        ["html.BlockParameter", "'foo'"],
+                        ["html.Text", " ", 1.0, [" "]],
+                        ["html.Block", "case", 1.0],
+                        ["html.BlockParameter", "'bar'"],
+                        ["html.Text", "bar", 2.0, ["bar"]],
+                        ["html.Text", " ", 1.0, [" "]],
+                        ["html.Block", "case", 1.0],
+                        ["html.BlockParameter", "'baz'"],
+                        ["html.Text", " baz ", 2.0, [" baz "]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should close void elements used right before a block",
+                  "path": "HtmlParser/parse/blocks/should close void elements used right before a block",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<img>@defer {hello}",
+                      "expected": [
+                        ["html.Element", "img", 0.0],
+                        ["html.Block", "defer", 0.0],
+                        ["html.Text", "hello", 1.0, ["hello"]]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should report an unclosed block",
+                  "path": "HtmlParser/parse/blocks/should report an unclosed block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an unexpected block close",
+                  "path": "HtmlParser/parse/blocks/should report an unexpected block close",
+                  "assertions": []
+                },
+                {
+                  "name": "should report unclosed tags inside of a block",
+                  "path": "HtmlParser/parse/blocks/should report unclosed tags inside of a block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report an unexpected closing tag inside a block",
+                  "path": "HtmlParser/parse/blocks/should report an unexpected closing tag inside a block",
+                  "assertions": []
+                },
+                {
+                  "name": "should report a final @case without a body",
+                  "path": "HtmlParser/parse/blocks/should report a final @case without a body",
+                  "assertions": []
+                },
+                {
+                  "name": "should store the source locations of blocks",
+                  "path": "HtmlParser/parse/blocks/should store the source locations of blocks",
+                  "assertions": []
+                },
+                {
+                  "name": "should parse an incomplete block with no parameters",
+                  "path": "HtmlParser/parse/blocks/should parse an incomplete block with no parameters",
+                  "assertions": []
+                },
+                {
+                  "name": "should parse an incomplete block with no parameters",
+                  "path": "HtmlParser/parse/blocks/should parse an incomplete block with no parameters",
+                  "assertions": []
+                }
+              ]
+            },
+            {
+              "name": "let declaration",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should parse a let declaration",
+                  "path": "HtmlParser/parse/let declaration/should parse a let declaration",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "@let foo = 123;",
+                      "expected": [["html.LetDeclaration", "foo", "123"]]
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a let declaration that is nested in a parent",
+                  "path": "HtmlParser/parse/let declaration/should parse a let declaration that is nested in a parent",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "@defer {@if (true) {@let foo = 123;}}",
+                      "expected": [
+                        ["html.Block", "defer", 0.0],
+                        ["html.Block", "if", 1.0],
+                        ["html.BlockParameter", "true"],
+                        ["html.LetDeclaration", "foo", "123"]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "should store the source location of a @let declaration",
+                  "path": "HtmlParser/parse/let declaration/should store the source location of a @let declaration",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDomSourceSpans",
+                      "input": "@let foo = 123 + 456;",
+                      "expected": [
+                        [
+                          "html.LetDeclaration",
+                          "foo",
+                          "123 + 456",
+                          "@let foo = 123 + 456",
+                          "foo",
+                          "123 + 456"
+                        ]
+                      ],
+                      "options": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should report an error for an incomplete let declaration",
+                  "path": "HtmlParser/parse/let declaration/should report an error for an incomplete let declaration",
+                  "assertions": []
+                },
+                {
+                  "name": "should store the locations of an incomplete let declaration",
+                  "path": "HtmlParser/parse/let declaration/should store the locations of an incomplete let declaration",
+                  "assertions": []
+                }
+              ]
+            },
+            {
+              "name": "directive nodes",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should parse a directive with no attributes",
+                  "path": "HtmlParser/parse/directive nodes/should parse a directive with no attributes",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div @Dir></div>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a directive with attributes",
+                  "path": "HtmlParser/parse/directive nodes/should parse a directive with attributes",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div @Dir(a=\"1\" [b]=\"two\" (c)=\"c()\")></div>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse directives on a component node",
+                  "path": "HtmlParser/parse/directive nodes/should parse directives on a component node",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<MyComp @Dir @OtherDir(a=\"1\" [b]=\"two\" (c)=\"c()\")></MyComp>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should report a missing directive closing paren",
+                  "path": "HtmlParser/parse/directive nodes/should report a missing directive closing paren",
+                  "assertions": []
+                },
+                {
+                  "name": "should parse a directive mixed with other attributes",
+                  "path": "HtmlParser/parse/directive nodes/should parse a directive mixed with other attributes",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div before=\"foo\" @Dir middle @OtherDir([a]=\"a\" (b)=\"b()\") after=\"123\"></div>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should store the source locations of directives",
+                  "path": "HtmlParser/parse/directive nodes/should store the source locations of directives",
+                  "assertions": []
+                }
+              ]
+            },
+            {
+              "name": "component nodes",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should parse a simple component node",
+                  "path": "HtmlParser/parse/component nodes/should parse a simple component node",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<MyComp>Hello</MyComp>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a self-closing component node",
+                  "path": "HtmlParser/parse/component nodes/should parse a self-closing component node",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<MyComp/>Hello",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a component node with a tag name",
+                  "path": "HtmlParser/parse/component nodes/should parse a component node with a tag name",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<MyComp:button>Hello</MyComp:button>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a component node with a tag name and namespace",
+                  "path": "HtmlParser/parse/component nodes/should parse a component node with a tag name and namespace",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<MyComp:svg:title>Hello</MyComp:svg:title>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a component node with an inferred namespace and no tag name",
+                  "path": "HtmlParser/parse/component nodes/should parse a component node with an inferred namespace and no tag name",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<svg><MyComp>Hello</MyComp></svg>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a component node with an inferred namespace and a tag name",
+                  "path": "HtmlParser/parse/component nodes/should parse a component node with an inferred namespace and a tag name",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<svg><MyComp:button>Hello</MyComp:button></svg>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a component node with an inferred namespace plus an explicit namespace and tag name",
+                  "path": "HtmlParser/parse/component nodes/should parse a component node with an inferred namespace plus an explicit namespace and tag name",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<math><MyComp:svg:title>Hello</MyComp:svg:title></math>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should distinguish components with tag names from ones without",
+                  "path": "HtmlParser/parse/component nodes/should distinguish components with tag names from ones without",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<MyComp:button><MyComp>Hello</MyComp></MyComp:button>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should implicitly close a component",
+                  "path": "HtmlParser/parse/component nodes/should implicitly close a component",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<MyComp>Hello",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should parse a component tag nested within other markup",
+                  "path": "HtmlParser/parse/component nodes/should parse a component tag nested within other markup",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "@if (expr) {<div>Hello: <MyComp><span><OtherComp/></span></MyComp></div>}",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should report closing tag whose tag name does not match the opening tag",
+                  "path": "HtmlParser/parse/component nodes/should report closing tag whose tag name does not match the opening tag",
+                  "assertions": []
+                },
+                {
+                  "name": "should parse a component node with attributes and directives",
+                  "path": "HtmlParser/parse/component nodes/should parse a component node with attributes and directives",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<MyComp before=\"foo\" @Dir middle @OtherDir([a]=\"a\" (b)=\"b()\") after=\"123\">Hello</MyComp>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should store the source locations of a component with attributes and content",
+                  "path": "HtmlParser/parse/component nodes/should store the source locations of a component with attributes and content",
+                  "assertions": []
+                },
+                {
+                  "name": "should store the source locations of self-closing components",
+                  "path": "HtmlParser/parse/component nodes/should store the source locations of self-closing components",
+                  "assertions": []
+                }
+              ]
+            },
+            {
+              "name": "source spans",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should store the location",
+                  "path": "HtmlParser/parse/source spans/should store the location",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDomSourceSpans",
+                      "input": "<div [prop]=\"v1\" (e)=\"do()\" attr=\"v2\" noValue>\na\n</div>",
+                      "expected": [
+                        [
+                          "html.Element",
+                          "div",
+                          0.0,
+                          "<div [prop]=\"v1\" (e)=\"do()\" attr=\"v2\" noValue>\na\n</div>",
+                          "<div [prop]=\"v1\" (e)=\"do()\" attr=\"v2\" noValue>",
+                          "</div>"
+                        ],
+                        ["html.Attribute", "[prop]", "v1", ["v1"], "[prop]=\"v1\""],
+                        ["html.Attribute", "(e)", "do()", ["do()"], "(e)=\"do()\""],
+                        ["html.Attribute", "attr", "v2", ["v2"], "attr=\"v2\""],
+                        ["html.Attribute", "noValue", "", "noValue"],
+                        ["html.Text", "\na\n", 1.0, ["\na\n"], "\na\n"]
+                      ],
+                      "options": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should set the start and end source spans",
+                  "path": "HtmlParser/parse/source spans/should set the start and end source spans",
+                  "assertions": []
+                },
+                {
+                  "name": "should decode HTML entities in interpolations",
+                  "path": "HtmlParser/parse/source spans/should decode HTML entities in interpolations",
+                  "assertions": []
+                },
+                {
+                  "name": "should decode HTML entities with 5+ hex digits in interpolations",
+                  "path": "HtmlParser/parse/source spans/should decode HTML entities with 5+ hex digits in interpolations",
+                  "assertions": []
+                },
+                {
+                  "name": "should support interpolations in text",
+                  "path": "HtmlParser/parse/source spans/should support interpolations in text",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDomSourceSpans",
+                      "input": "<div> pre {{ value }} post </div>",
+                      "expected": [
+                        [
+                          "html.Element",
+                          "div",
+                          0.0,
+                          "<div> pre {{ value }} post </div>",
+                          "<div>",
+                          "</div>"
+                        ],
+                        [
+                          "html.Text",
+                          " pre {{ value }} post ",
+                          1.0,
+                          [" pre "],
+                          ["{{", " value ", "}}"],
+                          [" post "],
+                          " pre {{ value }} post "
+                        ]
+                      ],
+                      "options": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should not set the end source span for void elements",
+                  "path": "HtmlParser/parse/source spans/should not set the end source span for void elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDomSourceSpans",
+                      "input": "<div><br></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0, "<div><br></div>", "<div>", "</div>"],
+                        ["html.Element", "br", 1.0, "<br>", "<br>", null]
+                      ],
+                      "options": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should not set the end source span for multiple void elements",
+                  "path": "HtmlParser/parse/source spans/should not set the end source span for multiple void elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDomSourceSpans",
+                      "input": "<div><br><hr></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0, "<div><br><hr></div>", "<div>", "</div>"],
+                        ["html.Element", "br", 1.0, "<br>", "<br>", null],
+                        ["html.Element", "hr", 1.0, "<hr>", "<hr>", null]
+                      ],
+                      "options": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should not set the end source span for standalone void elements",
+                  "path": "HtmlParser/parse/source spans/should not set the end source span for standalone void elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDomSourceSpans",
+                      "input": "<br>",
+                      "expected": [["html.Element", "br", 0.0, "<br>", "<br>", null]],
+                      "options": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should set the end source span for standalone self-closing elements",
+                  "path": "HtmlParser/parse/source spans/should set the end source span for standalone self-closing elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDomSourceSpans",
+                      "input": "<br/>",
+                      "expected": [
+                        ["html.Element", "br", 0.0, "<br/>", "#selfClosing", "<br/>", "<br/>"]
+                      ],
+                      "options": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should set the end source span for self-closing elements",
+                  "path": "HtmlParser/parse/source spans/should set the end source span for self-closing elements",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDomSourceSpans",
+                      "input": "<div><br/></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0, "<div><br/></div>", "<div>", "</div>"],
+                        ["html.Element", "br", 1.0, "<br/>", "#selfClosing", "<br/>", "<br/>"]
+                      ],
+                      "options": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should not include leading trivia from the following node of an element in the end source",
+                  "path": "HtmlParser/parse/source spans/should not include leading trivia from the following node of an element in the end source",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDomSourceSpans",
+                      "input": "<input type=\"text\" />\n\n\n  <span>\n</span>",
+                      "expected": [
+                        [
+                          "html.Element",
+                          "input",
+                          0.0,
+                          "<input type=\"text\" />",
+                          "#selfClosing",
+                          "<input type=\"text\" />",
+                          "<input type=\"text\" />"
+                        ],
+                        ["html.Attribute", "type", "text", ["text"], "type=\"text\""],
+                        ["html.Text", "\n\n\n  ", 0.0, ["\n\n\n  "], "", "\n\n\n  "],
+                        ["html.Element", "span", 0.0, "<span>\n</span>", "<span>", "</span>"],
+                        ["html.Text", "\n", 1.0, ["\n"], "", "\n"]
+                      ],
+                      "options": {
+                        "leading_trivia_chars": [" ", "\n", "\r", "\t"]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "should not set the end source span for elements that are implicitly closed",
+                  "path": "HtmlParser/parse/source spans/should not set the end source span for elements that are implicitly closed",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDomSourceSpans",
+                      "input": "<div><p></div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0, "<div><p></div>", "<div>", "</div>"],
+                        ["html.Element", "p", 1.0, "<p>", "<p>", null]
+                      ],
+                      "options": null
+                    },
+                    {
+                      "type": "HumanizeDomSourceSpans",
+                      "input": "<div><li>A<li>B</div>",
+                      "expected": [
+                        ["html.Element", "div", 0.0, "<div><li>A<li>B</div>", "<div>", "</div>"],
+                        ["html.Element", "li", 1.0, "<li>", "<li>", null],
+                        ["html.Text", "A", 2.0, ["A"], "A"],
+                        ["html.Element", "li", 1.0, "<li>", "<li>", null],
+                        ["html.Text", "B", 2.0, ["B"], "B"]
+                      ],
+                      "options": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should support expansion form",
+                  "path": "HtmlParser/parse/source spans/should support expansion form",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDomSourceSpans",
+                      "input": "<div>{count, plural, =0 {msg}}</div>",
+                      "expected": [
+                        [
+                          "html.Element",
+                          "div",
+                          0.0,
+                          "<div>{count, plural, =0 {msg}}</div>",
+                          "<div>",
+                          "</div>"
+                        ],
+                        ["html.Expansion", "count", "plural", 1.0, "{count, plural, =0 {msg}}"],
+                        ["html.ExpansionCase", "=0", 2.0, "=0 {msg}"]
+                      ],
+                      "options": null
+                    }
+                  ]
+                },
+                {
+                  "name": "should not report a value span for an attribute without a value",
+                  "path": "HtmlParser/parse/source spans/should not report a value span for an attribute without a value",
+                  "assertions": []
+                },
+                {
+                  "name": "should report a value span for an attribute with a value",
+                  "path": "HtmlParser/parse/source spans/should report a value span for an attribute with a value",
+                  "assertions": []
+                },
+                {
+                  "name": "should report a value span for an unquoted attribute value",
+                  "path": "HtmlParser/parse/source spans/should report a value span for an unquoted attribute value",
+                  "assertions": []
+                }
+              ]
+            },
+            {
+              "name": "visitor",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should visit text nodes",
+                  "path": "HtmlParser/parse/visitor/should visit text nodes",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "text",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should visit element nodes",
+                  "path": "HtmlParser/parse/visitor/should visit element nodes",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div></div>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should visit attribute nodes",
+                  "path": "HtmlParser/parse/visitor/should visit attribute nodes",
+                  "assertions": [
+                    {
+                      "type": "HumanizeDom",
+                      "input": "<div id=\"foo\"></div>",
+                      "expected": []
+                    }
+                  ]
+                },
+                {
+                  "name": "should visit all nodes",
+                  "path": "HtmlParser/parse/visitor/should visit all nodes",
+                  "assertions": []
+                },
+                {
+                  "name": "should skip typed visit if visit() returns a truthy value",
+                  "path": "HtmlParser/parse/visitor/should skip typed visit if visit() returns a truthy value",
+                  "assertions": []
+                }
+              ]
+            },
+            {
+              "name": "errors",
+              "groups": [
+                {
+                  "name": "incomplete element tag",
+                  "groups": [],
+                  "tests": [
+                    {
+                      "name": "should parse and report incomplete tags after the tag name",
+                      "path": "HtmlParser/parse/errors/incomplete element tag/should parse and report incomplete tags after the tag name",
+                      "assertions": []
+                    },
+                    {
+                      "name": "should parse and report incomplete tags after attribute",
+                      "path": "HtmlParser/parse/errors/incomplete element tag/should parse and report incomplete tags after attribute",
+                      "assertions": []
+                    },
+                    {
+                      "name": "should parse and report incomplete tags after quote",
+                      "path": "HtmlParser/parse/errors/incomplete element tag/should parse and report incomplete tags after quote",
+                      "assertions": []
+                    },
+                    {
+                      "name": "should report subsequent open tags without proper close tag",
+                      "path": "HtmlParser/parse/errors/incomplete element tag/should report subsequent open tags without proper close tag",
+                      "assertions": []
+                    }
+                  ]
+                }
+              ],
+              "tests": [
+                {
+                  "name": "should report unexpected closing tags",
+                  "path": "HtmlParser/parse/errors/should report unexpected closing tags",
+                  "assertions": []
+                },
+                {
+                  "name": "gets correct close tag for parent when a child is not closed",
+                  "path": "HtmlParser/parse/errors/gets correct close tag for parent when a child is not closed",
+                  "assertions": []
+                },
+                {
+                  "name": "should report closing tag for void elements",
+                  "path": "HtmlParser/parse/errors/should report closing tag for void elements",
+                  "assertions": []
+                },
+                {
+                  "name": "should report self closing html element",
+                  "path": "HtmlParser/parse/errors/should report self closing html element",
+                  "assertions": []
+                },
+                {
+                  "name": "should not report self closing custom element",
+                  "path": "HtmlParser/parse/errors/should not report self closing custom element",
+                  "assertions": []
+                },
+                {
+                  "name": "should also report lexer errors",
+                  "path": "HtmlParser/parse/errors/should also report lexer errors",
+                  "assertions": []
+                }
+              ]
+            }
+          ],
+          "tests": []
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

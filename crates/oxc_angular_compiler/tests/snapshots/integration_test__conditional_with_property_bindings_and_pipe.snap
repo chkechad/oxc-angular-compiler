@@ -1,0 +1,28 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+const _c0 = () =>["/"];
+function TestComponent_Conditional_0_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0,"\n  ");
+    i0.ɵɵelementStart(1,"a",0);
+    i0.ɵɵtext(2,"\n    ");
+    i0.ɵɵelement(3,"bit-icon",1);
+    i0.ɵɵpipe(4,"i18n");
+    i0.ɵɵtext(5,"\n  ");
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(6,"\n");
+  }
+  if ((rf & 2)) {
+    const ctx_r0 = i0.ɵɵnextContext();
+    i0.ɵɵadvance();
+    i0.ɵɵproperty("routerLink",i0.ɵɵpureFunction0(5,_c0));
+    i0.ɵɵadvance(2);
+    i0.ɵɵproperty("icon",ctx_r0.logo)("ariaLabel",i0.ɵɵpipeBind1(4,3,"appLogoLabel"));
+  }
+}
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) { i0.ɵɵconditionalCreate(0,TestComponent_Conditional_0_Template,7,6); }
+  if ((rf & 2)) { i0.ɵɵconditional((!ctx.hideLogo? 0: -1)); }
+}

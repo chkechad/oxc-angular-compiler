@@ -1,0 +1,53 @@
+{
+  "name": "i18n_ast_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/i18n/i18n_ast_spec.ts",
+  "test_groups": [
+    {
+      "name": "Message",
+      "groups": [
+        {
+          "name": "messageText()",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should serialize simple text",
+              "path": "Message/messageText()/should serialize simple text",
+              "assertions": []
+            },
+            {
+              "name": "should serialize text with interpolations",
+              "path": "Message/messageText()/should serialize text with interpolations",
+              "assertions": []
+            },
+            {
+              "name": "should serialize HTML elements",
+              "path": "Message/messageText()/should serialize HTML elements",
+              "assertions": []
+            },
+            {
+              "name": "should serialize ICU placeholders",
+              "path": "Message/messageText()/should serialize ICU placeholders",
+              "assertions": []
+            },
+            {
+              "name": "should serialize ICU expressions",
+              "path": "Message/messageText()/should serialize ICU expressions",
+              "assertions": []
+            },
+            {
+              "name": "should serialize nested ICU expressions",
+              "path": "Message/messageText()/should serialize nested ICU expressions",
+              "assertions": []
+            },
+            {
+              "name": "should serialize blocks",
+              "path": "Message/messageText()/should serialize blocks",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

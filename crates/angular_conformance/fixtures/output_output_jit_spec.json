@@ -1,0 +1,34 @@
+{
+  "name": "output_jit_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/output/output_jit_spec.ts",
+  "test_groups": [
+    {
+      "name": "Output JIT",
+      "groups": [
+        {
+          "name": "regression",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should generate unique argument names",
+              "path": "Output JIT/regression/should generate unique argument names",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "name": "should use strict mode",
+          "path": "Output JIT/should use strict mode",
+          "assertions": []
+        },
+        {
+          "name": "should not add more than one strict mode statement if there is already one present",
+          "path": "Output JIT/should not add more than one strict mode statement if there is already one present",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

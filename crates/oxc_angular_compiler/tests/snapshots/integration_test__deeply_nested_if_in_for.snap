@@ -1,0 +1,32 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+const _forTrack0 = ($index,$item) =>$item.id;
+function TestComponent_For_1_Conditional_1_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0,"\n    ");
+    i0.ɵɵelement(1,"app-avatar",0);
+    i0.ɵɵtext(2,"\n  ");
+  }
+  if ((rf & 2)) {
+    const account_r1 = i0.ɵɵnextContext().$implicit;
+    i0.ɵɵadvance();
+    i0.ɵɵproperty("id",account_r1.id)("name",account_r1.name);
+  }
+}
+function TestComponent_For_1_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0,"\n  ");
+    i0.ɵɵconditionalCreate(1,TestComponent_For_1_Conditional_1_Template,3,2);
+  }
+  if ((rf & 2)) {
+    const account_r1 = ctx.$implicit;
+    i0.ɵɵadvance();
+    i0.ɵɵconditional(((account_r1.email != null)? 1: -1));
+  }
+}
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) { i0.ɵɵrepeaterCreate(0,TestComponent_For_1_Template,2,1,null,null,_forTrack0); }
+  if ((rf & 2)) { i0.ɵɵrepeater(ctx.accounts); }
+}

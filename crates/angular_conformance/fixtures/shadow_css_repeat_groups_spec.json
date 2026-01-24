@@ -1,0 +1,27 @@
+{
+  "name": "repeat_groups_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/shadow_css/repeat_groups_spec.ts",
+  "test_groups": [
+    {
+      "name": "ShadowCss, repeatGroups()",
+      "groups": [],
+      "tests": [
+        {
+          "name": "should do nothing if `multiples` is 0",
+          "path": "ShadowCss, repeatGroups()/should do nothing if `multiples` is 0",
+          "assertions": []
+        },
+        {
+          "name": "should do nothing if `multiples` is 1",
+          "path": "ShadowCss, repeatGroups()/should do nothing if `multiples` is 1",
+          "assertions": []
+        },
+        {
+          "name": "should add clones of the original groups if `multiples` is greater than 1",
+          "path": "ShadowCss, repeatGroups()/should add clones of the original groups if `multiples` is greater than 1",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

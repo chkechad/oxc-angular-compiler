@@ -1,0 +1,397 @@
+{
+  "name": "extractor_merger_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/i18n/extractor_merger_spec.ts",
+  "test_groups": [
+    {
+      "name": "Extractor",
+      "groups": [
+        {
+          "name": "elements",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract from elements",
+              "path": "Extractor/elements/should extract from elements",
+              "assertions": []
+            },
+            {
+              "name": "should extract from attributes",
+              "path": "Extractor/elements/should extract from attributes",
+              "assertions": []
+            },
+            {
+              "name": "should extract from attributes with id",
+              "path": "Extractor/elements/should extract from attributes with id",
+              "assertions": []
+            },
+            {
+              "name": "should trim whitespace from custom ids (but not meanings)",
+              "path": "Extractor/elements/should trim whitespace from custom ids (but not meanings)",
+              "assertions": []
+            },
+            {
+              "name": "should extract from attributes without meaning and with id",
+              "path": "Extractor/elements/should extract from attributes without meaning and with id",
+              "assertions": []
+            },
+            {
+              "name": "should extract from attributes with id only",
+              "path": "Extractor/elements/should extract from attributes with id only",
+              "assertions": []
+            },
+            {
+              "name": "should extract from ICU messages",
+              "path": "Extractor/elements/should extract from ICU messages",
+              "assertions": []
+            },
+            {
+              "name": "should not create a message for empty elements",
+              "path": "Extractor/elements/should not create a message for empty elements",
+              "assertions": []
+            },
+            {
+              "name": "should not create a message for placeholder-only elements",
+              "path": "Extractor/elements/should not create a message for placeholder-only elements",
+              "assertions": []
+            },
+            {
+              "name": "should ignore implicit elements in translatable elements",
+              "path": "Extractor/elements/should ignore implicit elements in translatable elements",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "blocks",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract from elements inside blocks",
+              "path": "Extractor/blocks/should extract from elements inside blocks",
+              "assertions": []
+            },
+            {
+              "name": "should extract from i18n comment blocks inside blocks",
+              "path": "Extractor/blocks/should extract from i18n comment blocks inside blocks",
+              "assertions": []
+            },
+            {
+              "name": "should extract ICUs from elements inside blocks",
+              "path": "Extractor/blocks/should extract ICUs from elements inside blocks",
+              "assertions": []
+            },
+            {
+              "name": "should not extract messages from ICUs directly inside blocks",
+              "path": "Extractor/blocks/should not extract messages from ICUs directly inside blocks",
+              "assertions": []
+            },
+            {
+              "name": "should handle blocks inside of translated elements",
+              "path": "Extractor/blocks/should handle blocks inside of translated elements",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "i18n comment blocks",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract from blocks",
+              "path": "Extractor/i18n comment blocks/should extract from blocks",
+              "assertions": []
+            },
+            {
+              "name": "should ignore implicit elements in blocks",
+              "path": "Extractor/i18n comment blocks/should ignore implicit elements in blocks",
+              "assertions": []
+            },
+            {
+              "name": "should extract siblings",
+              "path": "Extractor/i18n comment blocks/should extract siblings",
+              "assertions": []
+            },
+            {
+              "name": "should ignore other comments",
+              "path": "Extractor/i18n comment blocks/should ignore other comments",
+              "assertions": []
+            },
+            {
+              "name": "should not create a message for empty blocks",
+              "path": "Extractor/i18n comment blocks/should not create a message for empty blocks",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "ICU messages",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract ICU messages from translatable elements",
+              "path": "Extractor/ICU messages/should extract ICU messages from translatable elements",
+              "assertions": []
+            },
+            {
+              "name": "should extract ICU messages from translatable block",
+              "path": "Extractor/ICU messages/should extract ICU messages from translatable block",
+              "assertions": []
+            },
+            {
+              "name": "should not extract ICU messages outside of i18n sections",
+              "path": "Extractor/ICU messages/should not extract ICU messages outside of i18n sections",
+              "assertions": []
+            },
+            {
+              "name": "should ignore nested ICU messages",
+              "path": "Extractor/ICU messages/should ignore nested ICU messages",
+              "assertions": []
+            },
+            {
+              "name": "should ignore implicit elements in non translatable ICU messages",
+              "path": "Extractor/ICU messages/should ignore implicit elements in non translatable ICU messages",
+              "assertions": []
+            },
+            {
+              "name": "should ignore implicit elements in non translatable ICU messages",
+              "path": "Extractor/ICU messages/should ignore implicit elements in non translatable ICU messages",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "attributes",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract from attributes outside of translatable sections",
+              "path": "Extractor/attributes/should extract from attributes outside of translatable sections",
+              "assertions": []
+            },
+            {
+              "name": "should extract from attributes in translatable elements",
+              "path": "Extractor/attributes/should extract from attributes in translatable elements",
+              "assertions": []
+            },
+            {
+              "name": "should extract from attributes in translatable blocks",
+              "path": "Extractor/attributes/should extract from attributes in translatable blocks",
+              "assertions": []
+            },
+            {
+              "name": "should extract from attributes in translatable ICUs",
+              "path": "Extractor/attributes/should extract from attributes in translatable ICUs",
+              "assertions": []
+            },
+            {
+              "name": "should extract from attributes in non translatable ICUs",
+              "path": "Extractor/attributes/should extract from attributes in non translatable ICUs",
+              "assertions": []
+            },
+            {
+              "name": "should not create a message for empty attributes",
+              "path": "Extractor/attributes/should not create a message for empty attributes",
+              "assertions": []
+            },
+            {
+              "name": "should not create a message for placeholder-only attributes",
+              "path": "Extractor/attributes/should not create a message for placeholder-only attributes",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "implicit elements",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract from implicit elements",
+              "path": "Extractor/implicit elements/should extract from implicit elements",
+              "assertions": []
+            },
+            {
+              "name": "should allow nested implicit elements",
+              "path": "Extractor/implicit elements/should allow nested implicit elements",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "implicit attributes",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract implicit attributes",
+              "path": "Extractor/implicit attributes/should extract implicit attributes",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "errors",
+          "groups": [
+            {
+              "name": "elements",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should report nested translatable elements",
+                  "path": "Extractor/errors/elements/should report nested translatable elements",
+                  "assertions": []
+                },
+                {
+                  "name": "should report translatable elements in implicit elements",
+                  "path": "Extractor/errors/elements/should report translatable elements in implicit elements",
+                  "assertions": []
+                },
+                {
+                  "name": "should report translatable elements in translatable blocks",
+                  "path": "Extractor/errors/elements/should report translatable elements in translatable blocks",
+                  "assertions": []
+                }
+              ]
+            },
+            {
+              "name": "blocks",
+              "groups": [],
+              "tests": [
+                {
+                  "name": "should report nested blocks",
+                  "path": "Extractor/errors/blocks/should report nested blocks",
+                  "assertions": []
+                },
+                {
+                  "name": "should report unclosed blocks",
+                  "path": "Extractor/errors/blocks/should report unclosed blocks",
+                  "assertions": []
+                },
+                {
+                  "name": "should report translatable blocks in translatable elements",
+                  "path": "Extractor/errors/blocks/should report translatable blocks in translatable elements",
+                  "assertions": []
+                },
+                {
+                  "name": "should report translatable blocks in implicit elements",
+                  "path": "Extractor/errors/blocks/should report translatable blocks in implicit elements",
+                  "assertions": []
+                },
+                {
+                  "name": "should report when start and end of a block are not at the same level",
+                  "path": "Extractor/errors/blocks/should report when start and end of a block are not at the same level",
+                  "assertions": []
+                }
+              ]
+            }
+          ],
+          "tests": []
+        }
+      ],
+      "tests": []
+    },
+    {
+      "name": "Merger",
+      "groups": [
+        {
+          "name": "elements",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should merge elements",
+              "path": "Merger/elements/should merge elements",
+              "assertions": []
+            },
+            {
+              "name": "should merge nested elements",
+              "path": "Merger/elements/should merge nested elements",
+              "assertions": []
+            },
+            {
+              "name": "should merge empty messages",
+              "path": "Merger/elements/should merge empty messages",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "i18n comment blocks",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should console.warn if we use i18n comments",
+              "path": "Merger/i18n comment blocks/should console.warn if we use i18n comments",
+              "assertions": []
+            },
+            {
+              "name": "should merge blocks",
+              "path": "Merger/i18n comment blocks/should merge blocks",
+              "assertions": []
+            },
+            {
+              "name": "should merge nested blocks",
+              "path": "Merger/i18n comment blocks/should merge nested blocks",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "attributes",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should merge attributes",
+              "path": "Merger/attributes/should merge attributes",
+              "assertions": []
+            },
+            {
+              "name": "should merge attributes with ids",
+              "path": "Merger/attributes/should merge attributes with ids",
+              "assertions": []
+            },
+            {
+              "name": "should merge nested attributes",
+              "path": "Merger/attributes/should merge nested attributes",
+              "assertions": []
+            },
+            {
+              "name": "should merge attributes without values",
+              "path": "Merger/attributes/should merge attributes without values",
+              "assertions": []
+            },
+            {
+              "name": "should merge empty attributes",
+              "path": "Merger/attributes/should merge empty attributes",
+              "assertions": []
+            }
+          ]
+        },
+        {
+          "name": "no translations",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should remove i18n attributes",
+              "path": "Merger/no translations/should remove i18n attributes",
+              "assertions": []
+            },
+            {
+              "name": "should remove i18n- attributes",
+              "path": "Merger/no translations/should remove i18n- attributes",
+              "assertions": []
+            },
+            {
+              "name": "should remove i18n comment blocks",
+              "path": "Merger/no translations/should remove i18n comment blocks",
+              "assertions": []
+            },
+            {
+              "name": "should remove nested i18n markup",
+              "path": "Merger/no translations/should remove nested i18n markup",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

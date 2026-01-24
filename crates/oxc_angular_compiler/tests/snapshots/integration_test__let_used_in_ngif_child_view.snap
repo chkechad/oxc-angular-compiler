@@ -1,0 +1,31 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+function TestComponent_div_2_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵelementStart(0,"div")(1,"span",1);
+    i0.ɵɵtext(2);
+    i0.ɵɵelementEnd()();
+  }
+  if ((rf & 2)) {
+    i0.ɵɵnextContext();
+    const val_r1 = i0.ɵɵreadContextLet(0);
+    i0.ɵɵadvance();
+    i0.ɵɵproperty("title",val_r1);
+    i0.ɵɵadvance();
+    i0.ɵɵtextInterpolate(val_r1);
+  }
+}
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵdeclareLet(0);
+    i0.ɵɵtext(1," ");
+    i0.ɵɵtemplate(2,TestComponent_div_2_Template,3,2,"div",0);
+  }
+  if ((rf & 2)) {
+    const val_r2 = i0.ɵɵstoreLet(ctx.getData());
+    i0.ɵɵadvance(2);
+    i0.ɵɵproperty("ngIf",(val_r2 !== null));
+  }
+}

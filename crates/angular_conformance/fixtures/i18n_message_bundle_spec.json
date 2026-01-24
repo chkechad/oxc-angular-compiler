@@ -1,0 +1,28 @@
+{
+  "name": "message_bundle_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/i18n/message_bundle_spec.ts",
+  "test_groups": [
+    {
+      "name": "MessageBundle",
+      "groups": [
+        {
+          "name": "Messages",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should extract the message to the catalog",
+              "path": "MessageBundle/Messages/should extract the message to the catalog",
+              "assertions": []
+            },
+            {
+              "name": "should extract and dedup messages",
+              "path": "MessageBundle/Messages/should extract and dedup messages",
+              "assertions": []
+            }
+          ]
+        }
+      ],
+      "tests": []
+    }
+  ]
+}

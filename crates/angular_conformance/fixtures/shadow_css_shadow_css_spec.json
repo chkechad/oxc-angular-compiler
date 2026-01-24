@@ -1,0 +1,984 @@
+{
+  "name": "shadow_css_spec.ts",
+  "file_path": "/Users/brooklyn/workspace/github/oxc/crates/oxc_angular_compiler/angular/packages/compiler/test/shadow_css/shadow_css_spec.ts",
+  "test_groups": [
+    {
+      "name": "ShadowCss",
+      "groups": [
+        {
+          "name": "comments",
+          "groups": [],
+          "tests": [
+            {
+              "name": "should replace multiline comments with newline",
+              "path": "ShadowCss/comments/should replace multiline comments with newline",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": "/* b {c} */ b {c}",
+                  "content_attr": "contenta",
+                  "host_attr": null,
+                  "expected": "\n b[contenta] {c}",
+                  "normalized": false
+                }
+              ]
+            },
+            {
+              "name": "should replace multiline comments with newline in the original position",
+              "path": "ShadowCss/comments/should replace multiline comments with newline in the original position",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": "/* b {c}\n */ b {c}",
+                  "content_attr": "contenta",
+                  "host_attr": null,
+                  "expected": "\n\n b[contenta] {c}",
+                  "normalized": false
+                }
+              ]
+            },
+            {
+              "name": "should replace comments with newline in the original position",
+              "path": "ShadowCss/comments/should replace comments with newline in the original position",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": "/* b {c} */ b {c} /* a {c} */ a {c}",
+                  "content_attr": "contenta",
+                  "host_attr": null,
+                  "expected": "\n b[contenta] {c} \n a[contenta] {c}",
+                  "normalized": false
+                }
+              ]
+            },
+            {
+              "name": "should keep sourceMappingURL comments",
+              "path": "ShadowCss/comments/should keep sourceMappingURL comments",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": "b {c} /*# sourceMappingURL=data:x */",
+                  "content_attr": "contenta",
+                  "host_attr": null,
+                  "expected": "b[contenta] {c} /*# sourceMappingURL=data:x */",
+                  "normalized": false
+                },
+                {
+                  "type": "ShimCss",
+                  "input": "b {c}/* #sourceMappingURL=data:x */",
+                  "content_attr": "contenta",
+                  "host_attr": null,
+                  "expected": "b[contenta] {c}/* #sourceMappingURL=data:x */",
+                  "normalized": false
+                }
+              ]
+            },
+            {
+              "name": "should handle adjacent comments",
+              "path": "ShadowCss/comments/should handle adjacent comments",
+              "assertions": [
+                {
+                  "type": "ShimCss",
+                  "input": "/* comment 1 */ /* comment 2 */ b {c}",
+                  "content_attr": "contenta",
+                  "host_attr": null,
+                  "expected": "\n \n b[contenta] {c}",
+                  "normalized": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "name": "should handle empty string",
+          "path": "ShadowCss/should handle empty string",
+          "assertions": [
+            {
+              "type": "ShimCss",
+              "input": "",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "",
+              "normalized": true
+            }
+          ]
+        },
+        {
+          "name": "should add an attribute to every rule",
+          "path": "ShadowCss/should add an attribute to every rule",
+          "assertions": []
+        },
+        {
+          "name": "should handle invalid css",
+          "path": "ShadowCss/should handle invalid css",
+          "assertions": []
+        },
+        {
+          "name": "should add an attribute to every selector",
+          "path": "ShadowCss/should add an attribute to every selector",
+          "assertions": []
+        },
+        {
+          "name": "should support newlines in the selector and content ",
+          "path": "ShadowCss/should support newlines in the selector and content ",
+          "assertions": []
+        },
+        {
+          "name": "should support newlines in the same selector and content ",
+          "path": "ShadowCss/should support newlines in the same selector and content ",
+          "assertions": []
+        },
+        {
+          "name": "should handle complicated selectors",
+          "path": "ShadowCss/should handle complicated selectors",
+          "assertions": [
+            {
+              "type": "ShimCss",
+              "input": "one::before {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[contenta]::before {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one two {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[contenta] two[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one > two {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[contenta] > two[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one + two {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[contenta] + two[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one ~ two {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[contenta] ~ two[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ".one.two > three {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": ".one.two[contenta] > three[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one[attr=\"value\"] {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[attr=\"value\"][contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one[attr=value] {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[attr=value][contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one[attr^=\"value\"] {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[attr^=\"value\"][contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one[attr$=\"value\"] {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[attr$=\"value\"][contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one[attr*=\"value\"] {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[attr*=\"value\"][contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one[attr|=\"value\"] {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[attr|=\"value\"][contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one[attr~=\"value\"] {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[attr~=\"value\"][contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one[attr=\"va lue\"] {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[attr=\"va lue\"][contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one[attr] {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one[attr][contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "[is=\"one\"] {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "[is=\"one\"][contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "[attr] {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "[attr][contenta] {}",
+              "normalized": true
+            }
+          ]
+        },
+        {
+          "name": "should transform :host with attributes",
+          "path": "ShadowCss/should transform :host with attributes",
+          "assertions": [
+            {
+              "type": "ShimCss",
+              "input": ":host [attr] {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[hosta] [attr][contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":host(create-first-project) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "create-first-project[hosta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":host[attr] {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[attr][hosta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":host[attr]:where(:not(.cm-button)) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[attr][hosta]:where(:not(.cm-button)) {}",
+              "normalized": true
+            }
+          ]
+        },
+        {
+          "name": "should handle escaped sequences in selectors",
+          "path": "ShadowCss/should handle escaped sequences in selectors",
+          "assertions": [
+            {
+              "type": "ShimCss",
+              "input": "one\\/two {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one\\/two[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one\\:two {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one\\:two[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "one\\\\:two {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "one\\\\[contenta]:two {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ".one\\:two {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": ".one\\:two[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ".one\\:\\fc ber {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": ".one\\:\\fc ber[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ".one\\:two .three\\:four {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": ".one\\:two[contenta] .three\\:four[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "div:where(.one) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "div[contenta]:where(.one) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "div:where() {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "div[contenta]:where() {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(a):where(b) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where(a[contenta]):where(b[contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "*:where(.one) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "*[contenta]:where(.one) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "*:where(.one) ::ng-deep .foo {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "*[contenta]:where(.one) .foo {}",
+              "normalized": true
+            }
+          ]
+        },
+        {
+          "name": "should handle pseudo functions correctly",
+          "path": "ShadowCss/should handle pseudo functions correctly",
+          "assertions": [
+            {
+              "type": "ShimCss",
+              "input": ":where(.one) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where(.one[contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(div.one span.two) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where(div.one[contenta] span.two[contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(.one) .two {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where(.one[contenta]) .two[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(:host) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where([hosta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(:host) .one {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where([hosta]) .one[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(.one) :where(:host) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where(.one) :where([hosta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(.one :host) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where(.one [hosta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "div :where(.one) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "div[contenta] :where(.one[contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":host :where(.one .two) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[hosta] :where(.one[contenta] .two[contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(.one, .two) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where(.one[contenta], .two[contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(.one > .two) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where(.one[contenta] > .two[contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(> .one) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where( > .one[contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(:not(.one) ~ .two) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where([contenta]:not(.one) ~ .two[contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where([foo]) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where([foo][contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "div:is(.foo) {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": "div[contenta]:is(.foo) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":is(.dark :host) {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": ":is(.dark [a-host]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":is(.dark) :is(:host) {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": ":is(.dark) :is([a-host]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":host:is(.foo) {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": "[a-host]:is(.foo) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":is(.foo) {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": ":is(.foo[contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":is(.foo, .bar, .baz) {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": ":is(.foo[contenta], .bar[contenta], .baz[contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":is(.foo, .bar) :host {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": ":is(.foo, .bar) [a-host] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":is(.foo, .bar) :is(.baz) :where(.one, .two) :host :where(.three:first-child) {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": ":is(.foo, .bar) :is(.baz) :where(.one, .two) [a-host] :where(.three[contenta]:first-child) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(:is(a)) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where(:is(a[contenta])) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(:is(a, b)) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where(:is(a[contenta], b[contenta])) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(:host:is(.one, .two)) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where([hosta]:is(.one, .two)) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(:host :is(.one, .two)) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where([hosta] :is(.one[contenta], .two[contenta])) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(:is(a, b) :is(.one, .two)) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where(:is(a[contenta], b[contenta]) :is(.one[contenta], .two[contenta])) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(:where(a:has(.foo), b) :is(.one, .two:where(.foo > .bar))) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where(:where(a[contenta]:has(.foo), b[contenta]) :is(.one[contenta], .two[contenta]:where(.foo > .bar))) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(.two):first-child {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[contenta]:where(.two):first-child {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":first-child:where(.two) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[contenta]:first-child:where(.two) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(.two):nth-child(3) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[contenta]:where(.two):nth-child(3) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "table :where(td, th):hover { color: lime; }",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "table[contenta] [contenta]:where(td, th):hover { color:lime;}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":nth-child(3n of :not(p, a), :is(.foo)) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[contenta]:nth-child(3n of :not(p, a), :is(.foo)) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "li:nth-last-child(-n + 3) {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": "li[contenta]:nth-last-child(-n + 3) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "dd:nth-last-of-type(3n) {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": "dd[contenta]:nth-last-of-type(3n) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "dd:nth-of-type(even) {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": "dd[contenta]:nth-of-type(even) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":host:is([foo],[foo-2])>div.example-2 {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": "[a-host]:is([foo],[foo-2]) > div.example-2[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":host:is([foo], [foo-2]) > div.example-2 {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": "[a-host]:is([foo], [foo-2]) > div.example-2[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":host:has([foo],[foo-2])>div.example-2 {}",
+              "content_attr": "contenta",
+              "host_attr": "a-host",
+              "expected": "[a-host]:has([foo],[foo-2]) > div.example-2[contenta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "div:has(a) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "div[contenta]:has(a) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "div:has(a) :host {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "div:has(a) [hosta] {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":has(a) :host :has(b) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":has(a) [hosta] [contenta]:has(b) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": "div:has(~ .one) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "div[contenta]:has(~ .one) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":has(a) :has(b) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[contenta]:has(a) [contenta]:has(b) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":has(a, b) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[contenta]:has(a, b) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":has(a, b:where(.foo), :is(.bar)) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[contenta]:has(a, b:where(.foo), :is(.bar)) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":has(a, b:where(.foo), :is(.bar):first-child):first-letter {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[contenta]:has(a, b:where(.foo), :is(.bar):first-child):first-letter {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(a, b:where(.foo), :has(.bar):first-child) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":where(a[contenta], b[contenta]:where(.foo), [contenta]:has(.bar):first-child) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":has(.one :host, .two) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[contenta]:has(.one [hosta], .two) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":has(.one, :host) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[contenta]:has(.one, [hosta]) {}",
+              "normalized": true
+            }
+          ]
+        },
+        {
+          "name": "should handle :host inclusions inside pseudo-selectors selectors",
+          "path": "ShadowCss/should handle :host inclusions inside pseudo-selectors selectors",
+          "assertions": [
+            {
+              "type": "ShimCss",
+              "input": ".header:not(.admin) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ".header[contenta]:not(.admin) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ".header:is(:host > .toolbar, :host ~ .panel) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ".header[contenta]:is([hosta] > .toolbar, [hosta] ~ .panel) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ".header:where(:host > .toolbar, :host ~ .panel) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ".header[contenta]:where([hosta] > .toolbar, [hosta] ~ .panel) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ".header:not(.admin, :host.super .header) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ".header[contenta]:not(.admin, .super[hosta] .header) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ".header:not(.admin, :host.super .header, :host.mega .header) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ".header[contenta]:not(.admin, .super[hosta] .header, .mega[hosta] .header) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ".one :where(.two, :host) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ".one :where(.two[contenta], [hosta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ".one :where(:host, .two) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ".one :where([hosta], .two[contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":is(.foo):is(:host):is(.two) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": ":is(.foo):is([hosta]):is(.two[contenta]) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(.one, :host .two):first-letter {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[contenta]:where(.one, [hosta] .two):first-letter {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":first-child:where(.one, :host .two) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[contenta]:first-child:where(.one, [hosta] .two) {}",
+              "normalized": true
+            },
+            {
+              "type": "ShimCss",
+              "input": ":where(.one, :host .two):nth-child(3):is(.foo, a:where(.bar)) {}",
+              "content_attr": "contenta",
+              "host_attr": "hosta",
+              "expected": "[contenta]:where(.one, [hosta] .two):nth-child(3):is(.foo, a:where(.bar)) {}",
+              "normalized": true
+            }
+          ]
+        },
+        {
+          "name": "should handle escaped selector with space (if followed by a hex char)",
+          "path": "ShadowCss/should handle escaped selector with space (if followed by a hex char)",
+          "assertions": [
+            {
+              "type": "ShimCss",
+              "input": ".\\fc ber {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": ".\\fc ber[contenta] {}",
+              "normalized": false
+            },
+            {
+              "type": "ShimCss",
+              "input": ".\\fc ker {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": ".\\fc[contenta]   ker[contenta] {}",
+              "normalized": false
+            },
+            {
+              "type": "ShimCss",
+              "input": ".pr\\fc fung {}",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": ".pr\\fc fung[contenta] {}",
+              "normalized": false
+            }
+          ]
+        },
+        {
+          "name": "should handle ::shadow",
+          "path": "ShadowCss/should handle ::shadow",
+          "assertions": []
+        },
+        {
+          "name": "should leave calc() unchanged",
+          "path": "ShadowCss/should leave calc() unchanged",
+          "assertions": []
+        },
+        {
+          "name": "should shim rules with quoted content",
+          "path": "ShadowCss/should shim rules with quoted content",
+          "assertions": []
+        },
+        {
+          "name": "should handle when quoted content contains a closing parenthesis",
+          "path": "ShadowCss/should handle when quoted content contains a closing parenthesis",
+          "assertions": [
+            {
+              "type": "ShimCss",
+              "input": "p { background-image: url(\")\") } p { color: red }",
+              "content_attr": "contenta",
+              "host_attr": null,
+              "expected": "p[contenta] { background-image: url(\")\") } p[contenta] { color: red }",
+              "normalized": true
+            }
+          ]
+        },
+        {
+          "name": "should shim rules with an escaped quote inside quoted content",
+          "path": "ShadowCss/should shim rules with an escaped quote inside quoted content",
+          "assertions": []
+        },
+        {
+          "name": "should shim rules with curly braces inside quoted content",
+          "path": "ShadowCss/should shim rules with curly braces inside quoted content",
+          "assertions": []
+        },
+        {
+          "name": "should keep retain multiline selectors",
+          "path": "ShadowCss/should keep retain multiline selectors",
+          "assertions": []
+        }
+      ]
+    }
+  ]
+}

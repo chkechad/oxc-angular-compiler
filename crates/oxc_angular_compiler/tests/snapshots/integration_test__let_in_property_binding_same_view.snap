@@ -1,0 +1,16 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0," ");
+    i0.ɵɵelement(1,"div",0);
+  }
+  if ((rf & 2)) {
+    const id_r1 = "test-id";
+    i0.ɵɵadvance();
+    i0.ɵɵproperty("id",id_r1);
+    i0.ɵɵattribute("data-id",id_r1);
+  }
+}

@@ -1,0 +1,21 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+function TestComponent_button_0_Template(rf,ctx) {
+  if ((rf & 1)) {
+    const _r1 = i0.ɵɵgetCurrentView();
+    i0.ɵɵelementStart(0,"button",1);
+    i0.ɵɵlistener("click",function TestComponent_button_0_Template_button_click_0_listener() {
+      i0.ɵɵrestoreView(_r1);
+      const ctx_r1 = i0.ɵɵnextContext();
+      return i0.ɵɵresetView(ctx_r1.handleClick());
+    });
+    i0.ɵɵtext(1,"Click me");
+    i0.ɵɵelementEnd();
+  }
+}
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) { i0.ɵɵtemplate(0,TestComponent_button_0_Template,2,0,"button",0); }
+  if ((rf & 2)) { i0.ɵɵproperty("ngIf",ctx.isVisible); }
+}
