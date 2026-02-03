@@ -110,6 +110,21 @@ fn collect_and_pool_regexes_from_create_op<'a>(
                 collect_and_pool_regexes_from_update_op(handler_op, pool, replacements);
             }
         }
+        CreateOp::TwoWayListener(listener) => {
+            for handler_op in listener.handler_ops.iter() {
+                collect_and_pool_regexes_from_update_op(handler_op, pool, replacements);
+            }
+        }
+        CreateOp::AnimationListener(listener) => {
+            for handler_op in listener.handler_ops.iter() {
+                collect_and_pool_regexes_from_update_op(handler_op, pool, replacements);
+            }
+        }
+        CreateOp::Animation(animation) => {
+            for handler_op in animation.handler_ops.iter() {
+                collect_and_pool_regexes_from_update_op(handler_op, pool, replacements);
+            }
+        }
         _ => {}
     }
 }
@@ -184,6 +199,21 @@ fn transform_regexes_in_create_op<'a>(
         }
         CreateOp::Listener(listener) => {
             for handler_op in listener.handler_ops.iter_mut() {
+                transform_regexes_in_update_op(handler_op, allocator, replacements);
+            }
+        }
+        CreateOp::TwoWayListener(listener) => {
+            for handler_op in listener.handler_ops.iter_mut() {
+                transform_regexes_in_update_op(handler_op, allocator, replacements);
+            }
+        }
+        CreateOp::AnimationListener(listener) => {
+            for handler_op in listener.handler_ops.iter_mut() {
+                transform_regexes_in_update_op(handler_op, allocator, replacements);
+            }
+        }
+        CreateOp::Animation(animation) => {
+            for handler_op in animation.handler_ops.iter_mut() {
                 transform_regexes_in_update_op(handler_op, allocator, replacements);
             }
         }

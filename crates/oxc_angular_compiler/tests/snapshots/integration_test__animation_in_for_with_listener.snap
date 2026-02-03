@@ -1,0 +1,47 @@
+---
+source: crates/oxc_angular_compiler/tests/integration_test.rs
+expression: js
+---
+function TestComponent_For_1_Conditional_1_Template(rf,ctx) {
+  if ((rf & 1)) {
+    const _r1 = i0.ɵɵgetCurrentView();
+    i0.ɵɵtext(0,"\n                ");
+    i0.ɵɵelementStart(1,"div",0);
+    i0.ɵɵanimateEnter(function TestComponent_For_1_Conditional_1_Template_animateenter_cb() {
+      i0.ɵɵrestoreView(_r1);
+      const item_r2 = i0.ɵɵnextContext().$implicit;
+      return i0.ɵɵresetView(item_r2.animation);
+    });
+    i0.ɵɵlistener("click",function TestComponent_For_1_Conditional_1_Template_div_click_1_listener() {
+      i0.ɵɵrestoreView(_r1);
+      const ctx_r2 = i0.ɵɵnextContext();
+      const item_r2 = ctx_r2.$implicit;
+      const ɵ$index_1_r4 = ctx_r2.$index;
+      const ctx_r4 = i0.ɵɵnextContext();
+      return i0.ɵɵresetView(ctx_r4.handleClick(item_r2,ɵ$index_1_r4));
+    });
+    i0.ɵɵtext(2);
+    i0.ɵɵelementEnd();
+    i0.ɵɵtext(3,"\n            ");
+  }
+  if ((rf & 2)) {
+    const item_r2 = i0.ɵɵnextContext().$implicit;
+    i0.ɵɵadvance(2);
+    i0.ɵɵtextInterpolate1("\n                    ",item_r2.label,"\n                ");
+  }
+}
+function TestComponent_For_1_Template(rf,ctx) {
+  if ((rf & 1)) {
+    i0.ɵɵtext(0,"\n            ");
+    i0.ɵɵconditionalCreate(1,TestComponent_For_1_Conditional_1_Template,4,1);
+  }
+  if ((rf & 2)) {
+    const item_r2 = ctx.$implicit;
+    i0.ɵɵadvance();
+    i0.ɵɵconditional((item_r2.active? 1: -1));
+  }
+}
+function TestComponent_Template(rf,ctx) {
+  if ((rf & 1)) { i0.ɵɵrepeaterCreate(0,TestComponent_For_1_Template,2,1,null,null,i0.ɵɵrepeaterTrackByIdentity); }
+  if ((rf & 2)) { i0.ɵɵrepeater(ctx.items); }
+}

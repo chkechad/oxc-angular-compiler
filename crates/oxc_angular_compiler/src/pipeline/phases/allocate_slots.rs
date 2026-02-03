@@ -802,6 +802,11 @@ fn propagate_slots_to_expressions(
                     update_op_expression_slots(handler_op, slot_map);
                 }
             }
+            CreateOp::Animation(animation) => {
+                for handler_op in animation.handler_ops.iter_mut() {
+                    update_op_expression_slots(handler_op, slot_map);
+                }
+            }
             _ => {}
         }
     }
@@ -822,6 +827,11 @@ fn propagate_slots_to_expressions(
                 }
                 CreateOp::AnimationListener(listener) => {
                     for handler_op in listener.handler_ops.iter_mut() {
+                        update_op_expression_slots(handler_op, slot_map);
+                    }
+                }
+                CreateOp::Animation(animation) => {
+                    for handler_op in animation.handler_ops.iter_mut() {
                         update_op_expression_slots(handler_op, slot_map);
                     }
                 }

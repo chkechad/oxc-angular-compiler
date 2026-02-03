@@ -112,6 +112,16 @@ fn process_lexical_scope_create<'a>(
                     &mut None,
                 );
             }
+            CreateOp::Animation(animation) => {
+                // Animation has no handler_expression
+                process_listener_handler_ops(
+                    allocator,
+                    view_xref,
+                    is_root,
+                    &mut animation.handler_ops,
+                    &mut None,
+                );
+            }
             _ => {
                 transform_expressions_in_create_op(
                     op,

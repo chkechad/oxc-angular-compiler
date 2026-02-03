@@ -120,6 +120,11 @@ fn visit_expressions_for_required_parens(
                 visit_update_expressions_for_required_parens(handler_op, required);
             }
         }
+        CreateOp::Animation(a) => {
+            for handler_op in a.handler_ops.iter() {
+                visit_update_expressions_for_required_parens(handler_op, required);
+            }
+        }
         CreateOp::AnimationString(a) => {
             check_ir_expression_for_required_parens(&a.expression, required);
         }

@@ -565,7 +565,7 @@ fn test_let_inside_for_if_with_component_method_call() {
     //   ...
     //   const b_rN = i0.ɵɵstoreLet(i0.ɵɵnextContext().computeB(item_rN.text));
     let js = compile_template_to_js(
-        r#"@for (item of items; track item) { @if (showDetail()) { @let a = computeA(item.id); @let b = computeB(item.text); @if (a > 0) { <div>{{b}}</div> } } }"#,
+        r"@for (item of items; track item) { @if (showDetail()) { @let a = computeA(item.id); @let b = computeB(item.text); @if (a > 0) { <div>{{b}}</div> } } }",
         "TestComponent",
     );
     // The output must NOT contain _unnamed_ - all variables should be properly named
@@ -3132,7 +3132,7 @@ fn test_parenthesized_safe_navigation_keyed_access() {
 #[test]
 fn test_dom_only_mode_not_used_when_component_has_imports() {
     let allocator = Allocator::default();
-    let source = r#"
+    let source = r"
 import { Component, Directive } from '@angular/core';
 
 @Directive({ selector: '[appHighlight]', standalone: true })
@@ -3152,7 +3152,7 @@ export class HighlightDirective {}
 export class TestComponent {
   items: string[] = [];
 }
-"#;
+";
 
     // Even with use_dom_only_mode: true, the compiler should detect directive dependencies
     // from the imports array and use Full mode (elementStart, not domElementStart)
@@ -3176,7 +3176,7 @@ export class TestComponent {
 #[test]
 fn test_dom_only_mode_used_for_standalone_without_imports() {
     let allocator = Allocator::default();
-    let source = r#"
+    let source = r"
 import { Component } from '@angular/core';
 
 @Component({
@@ -3188,7 +3188,7 @@ import { Component } from '@angular/core';
   `
 })
 export class TestComponent {}
-"#;
+";
 
     let options = ComponentTransformOptions { use_dom_only_mode: true, ..Default::default() };
     let result = transform_angular_file(&allocator, "test.ts", source, &options, None);
@@ -3210,7 +3210,7 @@ export class TestComponent {}
 #[test]
 fn test_dom_only_mode_not_used_for_non_standalone() {
     let allocator = Allocator::default();
-    let source = r#"
+    let source = r"
 import { Component } from '@angular/core';
 
 @Component({
@@ -3219,7 +3219,7 @@ import { Component } from '@angular/core';
   template: `<div>Hello</div>`
 })
 export class TestComponent {}
-"#;
+";
 
     let options = ComponentTransformOptions { use_dom_only_mode: true, ..Default::default() };
     let result = transform_angular_file(&allocator, "test.ts", source, &options, None);
@@ -3237,11 +3237,99 @@ export class TestComponent {}
     );
 }
 
+// ============================================================================
+// Animation Binding Variable Naming Tests
+// ============================================================================
+
+#[test]
+fn test_animation_enter_in_embedded_view_variable_naming() {
+    // Animation bindings (animate.enter) in an embedded view (@if) should:
+    // 1. Generate a SavedView (getCurrentView) for the embedded view
+    // 2. The animation handler should restoreView to the saved view
+    // 3. Variable naming (_rN) should be sequential without gaps
+    //
+    // This reproduces a bug where the animation handler's restoreView target
+    // was not properly resolved, leading to _unnamed_N references and
+    // off-by-one errors in variable naming indices.
+    // [animate.enter] with brackets makes it a value binding (dynamic expression),
+    // which creates an AnimationOp with handler function that needs save/restore view.
+    let js = compile_template_to_js(
+        r#"@if (show) { <div [animate.enter]="getValue()">{{label}}</div> }"#,
+        "TestComponent",
+    );
+    assert!(
+        !js.contains("_unnamed_"),
+        "Generated JS contains _unnamed_ references, indicating animation handler naming bug.\nGenerated JS:\n{js}"
+    );
+    // Verify getCurrentView is generated for the embedded view.
+    // Even though the animation handler's restoreView gets optimized away
+    // (because getValue() doesn't reference view-specific variables),
+    // the SavedView variable is eagerly created per Angular's spec.
+    assert!(
+        js.contains("getCurrentView"),
+        "Embedded view with animation should have getCurrentView.\nGenerated JS:\n{js}"
+    );
+    insta::assert_snapshot!("animation_enter_in_embedded_view", js);
+}
+
+#[test]
+fn test_animation_enter_in_nested_for_if_variable_naming() {
+    // Reproduces the form.component.ts pattern:
+    // @for creates outer embedded view, @if creates inner embedded view,
+    // animate.enter in the inner view references variables from the @for scope.
+    //
+    // NG output pattern:
+    //   const _r3 = i0.ɵɵgetCurrentView();
+    //   i0.ɵɵelementStart(0, "div");
+    //   i0.ɵɵanimateEnter(function() {
+    //     i0.ɵɵrestoreView(_r3);
+    //     const field_r4 = i0.ɵɵnextContext().$implicit;
+    //     return i0.ɵɵresetView(field_r4.value);
+    //   });
+    //
+    // OXC bug: missing getCurrentView, uses _unnamed_N in restoreView
+    let js = compile_template_to_js(
+        r#"@for (field of fields; track field) {
+            @if (field.visible) {
+                <div [animate.enter]="field.value">{{field.name}}</div>
+            }
+        }"#,
+        "TestComponent",
+    );
+    assert!(
+        !js.contains("_unnamed_"),
+        "Generated JS contains _unnamed_ references in nested for/if animation.\nGenerated JS:\n{js}"
+    );
+    insta::assert_snapshot!("animation_enter_nested_for_if", js);
+}
+
+#[test]
+fn test_animation_in_for_with_listener_variable_naming() {
+    // Tests that when a view has both a regular listener AND an animation callback,
+    // all variable names are consistent and properly sequenced.
+    let js = compile_template_to_js(
+        r#"@for (item of items; track item; let i = $index) {
+            @if (item.active) {
+                <div [animate.enter]="item.animation"
+                     (click)="handleClick(item, i)">
+                    {{item.label}}
+                </div>
+            }
+        }"#,
+        "TestComponent",
+    );
+    assert!(
+        !js.contains("_unnamed_"),
+        "Generated JS contains _unnamed_ references in animation+listener case.\nGenerated JS:\n{js}"
+    );
+    insta::assert_snapshot!("animation_in_for_with_listener", js);
+}
+
 /// Test that standalone components with empty imports use DomOnly mode.
 #[test]
 fn test_dom_only_mode_used_for_standalone_with_empty_imports() {
     let allocator = Allocator::default();
-    let source = r#"
+    let source = r"
 import { Component } from '@angular/core';
 
 @Component({
@@ -3251,7 +3339,7 @@ import { Component } from '@angular/core';
   template: `<div>Hello</div>`
 })
 export class TestComponent {}
-"#;
+";
 
     let options = ComponentTransformOptions { use_dom_only_mode: true, ..Default::default() };
     let result = transform_angular_file(&allocator, "test.ts", source, &options, None);
@@ -3261,5 +3349,41 @@ export class TestComponent {}
         result.code.contains("ɵɵdomElementStart"),
         "Standalone with empty imports should use ɵɵdomElementStart. Output:\n{}",
         result.code
+    );
+}
+
+/// Test that @let declaration in nested @if correctly preserves context variable.
+///
+/// When a `@let` declaration and a subsequent expression both reference the component
+/// context (via properties like `data$` and `canEdit$`), the compiler should:
+/// 1. Create a single context variable (`ctx_r0 = nextContext(N)`)
+/// 2. Use it for BOTH the @let's storeLet expression AND the conditional
+/// 3. NOT inline the context variable (since it's used twice)
+///
+/// Bug: The context variable was incorrectly inlined into the storeLet, leaving
+/// the second reference as `_unnamed_N` because the variable no longer existed
+/// when the naming phase ran.
+#[test]
+fn test_let_declaration_with_multiple_context_refs_variable_naming() {
+    let js = compile_template_to_js(
+        r"@if (show) {
+            @if (loading) {
+                <span>Loading</span>
+            } @else {
+                @let data = items$ | async;
+                @if (!(data?.length) && (canEdit$ | async)) {
+                    <span>Empty</span>
+                } @else {
+                    <span>{{data}}</span>
+                }
+            }
+        }",
+        "TestComponent",
+    );
+
+    // The output must NOT contain _unnamed_ references
+    assert!(
+        !js.contains("_unnamed_"),
+        "Context variable used by both @let and conditional should be named properly, not _unnamed_. Output:\n{js}"
     );
 }

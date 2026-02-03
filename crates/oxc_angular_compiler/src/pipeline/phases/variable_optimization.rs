@@ -362,6 +362,13 @@ fn collect_create_op_fences(op: &CreateOp<'_>) -> Fence {
             }
             fences
         }
+        CreateOp::Animation(animation) => {
+            let mut fences = Fence::NONE;
+            for handler_op in animation.handler_ops.iter() {
+                fences |= collect_op_fences(handler_op);
+            }
+            fences
+        }
         // DeclareLet doesn't have expressions at the create phase
         CreateOp::DeclareLet(_) => Fence::NONE,
         _ => Fence::NONE,
@@ -519,6 +526,13 @@ fn inline_always_inline_in_listener_handler_ops<'a>(
                 inline_always_inline_in_handler_ops_and_expr(
                     &mut listener.handler_ops,
                     None, // AnimationListener doesn't have handler_expression
+                    allocator,
+                );
+            }
+            CreateOp::Animation(animation) => {
+                inline_always_inline_in_handler_ops_and_expr(
+                    &mut animation.handler_ops,
+                    None, // Animation doesn't have handler_expression
                     allocator,
                 );
             }
@@ -1408,6 +1422,29 @@ where
                 visit_all_expressions(value, visitor);
             }
         }
+        IrExpression::Not(n) => {
+            visit_all_expressions(&n.expr, visitor);
+        }
+        IrExpression::Unary(u) => {
+            visit_all_expressions(&u.expr, visitor);
+        }
+        IrExpression::Typeof(t) => {
+            visit_all_expressions(&t.expr, visitor);
+        }
+        IrExpression::Void(v) => {
+            visit_all_expressions(&v.expr, visitor);
+        }
+        IrExpression::ResolvedTemplateLiteral(rtl) => {
+            for e in rtl.expressions.iter() {
+                visit_all_expressions(e, visitor);
+            }
+        }
+        IrExpression::ArrowFunction(arrow_fn) => {
+            visit_all_expressions(&arrow_fn.body, visitor);
+        }
+        IrExpression::Parenthesized(paren) => {
+            visit_all_expressions(&paren.expr, visitor);
+        }
         // Leaf expressions
         _ => {}
     }
@@ -2215,6 +2252,11 @@ fn count_in_create_op(op: &CreateOp<'_>, counts: &mut HashMap<XrefId, usize>) {
                 count_in_update_op(handler_op, counts);
             }
         }
+        CreateOp::Animation(animation) => {
+            for handler_op in animation.handler_ops.iter() {
+                count_in_update_op(handler_op, counts);
+            }
+        }
         CreateOp::Conditional(_cond) => {
             // ConditionalOp (CREATE) no longer has test/branches/processed_expression.
             // Those are now on ConditionalUpdateOp (UPDATE) and handled in count_in_update_op.
@@ -2991,6 +3033,11 @@ fn transform_expressions_in_create_op<'a, F>(
         }
         CreateOp::AnimationListener(listener) => {
             for handler_op in listener.handler_ops.iter_mut() {
+                transform_expressions_in_update_op(handler_op, allocator, &mut transform);
+            }
+        }
+        CreateOp::Animation(animation) => {
+            for handler_op in animation.handler_ops.iter_mut() {
                 transform_expressions_in_update_op(handler_op, allocator, &mut transform);
             }
         }

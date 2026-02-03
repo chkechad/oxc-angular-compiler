@@ -42,6 +42,9 @@ pub fn merge_next_context_expressions(job: &mut ComponentCompilationJob<'_>) {
                     CreateOp::AnimationListener(listener) => {
                         merge_next_contexts_in_handler_ops(&mut listener.handler_ops);
                     }
+                    CreateOp::Animation(animation) => {
+                        merge_next_contexts_in_handler_ops(&mut animation.handler_ops);
+                    }
                     _ => {}
                 }
             }
