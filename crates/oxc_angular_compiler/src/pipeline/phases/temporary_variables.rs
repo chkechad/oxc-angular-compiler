@@ -39,7 +39,8 @@ use rustc_hash::{FxHashMap, FxHashSet};
 
 use crate::ir::expression::{
     IrExpression, VisitorContextFlag, transform_expressions_in_create_op,
-    transform_expressions_in_update_op, visit_expressions_in_create_op,
+    transform_expressions_in_expression, transform_expressions_in_update_op,
+    visit_expressions_in_create_op, visit_expressions_in_expression,
     visit_expressions_in_update_op,
 };
 use crate::ir::list::{CreateOpList, UpdateOpList};
@@ -132,8 +133,16 @@ fn generate_temporaries_for_create<'a>(
         // for nested ops lists and the results are prepended to those lists.
         match op {
             CreateOp::Listener(listener) => {
-                let mut handler_stmts =
-                    generate_temporaries_for_handler_ops(&mut listener.handler_ops, allocator);
+                // Process handler_ops and handler_expression together.
+                // In Angular TS, the handler_expression is part of handlerOps.
+                // In our IR, it's a separate field, so we must include it in
+                // temporary variable processing to generate the correct `let tmp_N_0;`
+                // declarations inside the listener function.
+                let mut handler_stmts = generate_temporaries_for_handler_ops_with_expression(
+                    &mut listener.handler_ops,
+                    &mut listener.handler_expression,
+                    allocator,
+                );
                 prepend_update_ops(&mut listener.handler_ops, &mut handler_stmts, allocator);
             }
             CreateOp::AnimationListener(listener) => {
@@ -214,6 +223,74 @@ fn generate_temporaries_for_handler_ops<'a>(
         }
 
         op_count += 1;
+    }
+
+    generated_statements
+}
+
+/// Generates temporary variable declarations for handler_ops AND handler_expression together.
+///
+/// In Angular TS, the handler_expression is part of handlerOps (there is no separate field).
+/// In our IR, handler_expression is a separate field on ListenerOp. We must include it in
+/// temporary variable processing so that `let tmp_N_0;` declarations are generated inside
+/// the listener function scope rather than the parent create scope.
+///
+/// The handler_ops are processed first (same as `generate_temporaries_for_handler_ops`),
+/// then handler_expression is processed once AFTER the loop with op_count equal to
+/// handler_ops.len(). This matches Angular TS where the return expression is the last
+/// entry in handlerOps at index N.
+fn generate_temporaries_for_handler_ops_with_expression<'a>(
+    ops: &mut [UpdateOp<'a>],
+    handler_expression: &mut Option<oxc_allocator::Box<'a, IrExpression<'a>>>,
+    allocator: &'a Allocator,
+) -> Vec<UpdateOp<'a>> {
+    // First, process handler_ops exactly like generate_temporaries_for_handler_ops
+    let mut generated_statements = generate_temporaries_for_handler_ops(ops, allocator);
+
+    // Then process handler_expression once, with op_count = ops.len().
+    // In Angular TS, the return expression is the last entry in handlerOps,
+    // so its op index equals the number of preceding ops.
+    if let Some(handler_expr) = handler_expression.as_mut() {
+        let op_count = ops.len();
+
+        // Pass 1: Count reads per xref to determine final reads
+        let read_counts = RefCell::new(FxHashMap::<XrefId, usize>::default());
+        visit_expressions_in_expression(
+            handler_expr,
+            &|expr, flags| {
+                if flags.contains(VisitorContextFlag::IN_CHILD_OPERATION) {
+                    return;
+                }
+                if let IrExpression::ReadTemporary(read) = expr {
+                    *read_counts.borrow_mut().entry(read.xref).or_insert(0) += 1;
+                }
+            },
+            VisitorContextFlag::NONE,
+        );
+        let total_reads = read_counts.into_inner();
+
+        // Pass 2: Assign names with reuse when final read is encountered
+        let tracker = RefCell::new(TempVarTracker::new(op_count, total_reads));
+        transform_expressions_in_expression(
+            handler_expr,
+            &|expr, flags| {
+                if flags.contains(VisitorContextFlag::IN_CHILD_OPERATION) {
+                    return;
+                }
+                assign_temp_names(expr, &tracker, allocator);
+            },
+            VisitorContextFlag::NONE,
+        );
+
+        // Collect unique names and create declarations
+        let defs = tracker.into_inner().defs;
+        for name in collect_unique_names(&defs) {
+            let stmt = create_declare_var_statement(allocator, &name);
+            generated_statements.push(UpdateOp::Statement(StatementOp {
+                base: UpdateOpBase::default(),
+                statement: stmt,
+            }));
+        }
     }
 
     generated_statements

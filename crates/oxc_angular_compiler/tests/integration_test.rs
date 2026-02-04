@@ -1040,6 +1040,41 @@ fn test_safe_call() {
     insta::assert_snapshot!("safe_call", js);
 }
 
+#[test]
+fn test_safe_call_in_listener() {
+    // When a listener handler contains `fn()?.method()`, Angular generates a temporary variable
+    // because `fn()` is a function call that shouldn't be evaluated twice.
+    // Expected output should contain `let tmp_N_0;` declaration inside the listener function.
+    let js = compile_template_to_js(
+        r#"<button (click)="getPopover()?.close()">Close</button>"#,
+        "TestComponent",
+    );
+    insta::assert_snapshot!("safe_call_in_listener", js);
+}
+
+#[test]
+fn test_safe_property_read_with_call_receiver_in_listener() {
+    // Pattern: `fn()?.prop` in listener — receiver is a call, needs tmp variable
+    let js = compile_template_to_js(
+        r#"<button (click)="getDialog()?.visible">Toggle</button>"#,
+        "TestComponent",
+    );
+    insta::assert_snapshot!("safe_property_read_with_call_receiver_in_listener", js);
+}
+
+#[test]
+fn test_safe_call_in_listener_inside_conditional() {
+    // When a listener is inside an embedded view (e.g., @if), handler_ops contains
+    // restoreView and nextContext statements. The handler_expression (return value)
+    // must be processed AFTER those ops, not once per op, to get the correct
+    // tmp variable name (tmp_2_0, matching the op index after restoreView and nextContext).
+    let js = compile_template_to_js(
+        r#"@if (show) { <button (click)="getPopover()?.close()">Close</button> }"#,
+        "TestComponent",
+    );
+    insta::assert_snapshot!("safe_call_in_listener_inside_conditional", js);
+}
+
 // ============================================================================
 // Event Modifier Tests
 // ============================================================================
