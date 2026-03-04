@@ -85,17 +85,17 @@ jobs:
       - name: Build ${{ matrix.target }}
         working-directory: napi/angular-compiler
         if: ${{ !contains(matrix.target , 'gnu') && !contains(matrix.target, 'musl') }}
-        run: pnpm build-dev -- --release --target ${{ matrix.target }}
+        run: pnpm build-dev --release --target ${{ matrix.target }}
 
       - name: Build ${{ matrix.target }}
         working-directory: napi/angular-compiler
         if: ${{ contains(matrix.target , 'gnu') }}
-        run: pnpm build-dev -- --release --target ${{ matrix.target }} --use-napi-cross
+        run: pnpm build-dev --release --target ${{ matrix.target }} --use-napi-cross
 
       - name: Build ${{ matrix.target }}
         working-directory: napi/angular-compiler
         if: ${{ contains(matrix.target, 'musl') }}
-        run: pnpm build-dev -- --release --target ${{ matrix.target }} -x
+        run: pnpm build-dev --release --target ${{ matrix.target }} -x
 
       - name: Upload artifact
         uses: actions/upload-artifact@v6
