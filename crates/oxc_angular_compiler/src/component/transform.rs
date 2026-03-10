@@ -38,6 +38,7 @@ use crate::directive::{
     extract_content_queries, extract_directive_metadata, extract_view_queries,
     find_directive_decorator_span, generate_directive_definitions,
 };
+use crate::dts;
 use crate::injectable::{
     extract_injectable_metadata, find_injectable_decorator_span,
     generate_injectable_definition_from_decorator,
@@ -276,6 +277,20 @@ pub struct TransformResult {
 
     /// Number of components found in the file.
     pub component_count: usize,
+
+    /// `.d.ts` type declarations for Angular classes.
+    ///
+    /// Each entry contains the class name and the static member declarations
+    /// that should be injected into the corresponding `.d.ts` class body.
+    /// This enables library builds to include proper Ivy type declarations
+    /// for template type-checking by consumers.
+    ///
+    /// The declarations use `i0` as the namespace alias for `@angular/core`.
+    /// Consumers must ensure their `.d.ts` files include:
+    /// ```typescript
+    /// import * as i0 from "@angular/core";
+    /// ```
+    pub dts_declarations: Vec<crate::dts::DtsDeclaration>,
 }
 
 impl TransformResult {
@@ -1565,6 +1580,11 @@ pub fn transform_angular_file(
                     // Signal-based queries (contentChild(), contentChildren()) are also detected here
                     let content_queries = extract_content_queries(allocator, class);
 
+                    // Collect content query property names for .d.ts generation
+                    // (before content_queries is moved into compile_component_full)
+                    let content_query_names: Vec<String> =
+                        content_queries.iter().map(|q| q.property_name.to_string()).collect();
+
                     // 4. Compile the template and generate ɵcmp/ɵfac
                     // Pass the shared pool index to ensure unique constant names
                     // Pass the file-level namespace registry to ensure consistent namespace assignments
@@ -1617,15 +1637,14 @@ pub fn transform_angular_file(
 
                             // Check if the class also has an @Injectable decorator.
                             // @Injectable is SHARED precedence and can coexist with @Component.
-                            if let Some(injectable_metadata) =
-                                extract_injectable_metadata(allocator, class)
-                            {
+                            let has_injectable = extract_injectable_metadata(allocator, class);
+                            if let Some(injectable_metadata) = &has_injectable {
                                 if let Some(span) = find_injectable_decorator_span(class) {
                                     decorator_spans_to_remove.push(span);
                                 }
                                 if let Some(inj_def) = generate_injectable_definition_from_decorator(
                                     allocator,
-                                    &injectable_metadata,
+                                    injectable_metadata,
                                 ) {
                                     let emitter = JsEmitter::new();
                                     property_assignments.push_str(&format!(
@@ -1634,6 +1653,7 @@ pub fn transform_angular_file(
                                     ));
                                 }
                             }
+                            let has_injectable = has_injectable.is_some();
 
                             // Split declarations into two groups:
                             // 1. decls_before_class: child view functions, constants (needed BEFORE class)
@@ -1736,6 +1756,19 @@ pub fn transform_angular_file(
                                 result.dependencies.push(style_url.to_string());
                             }
 
+                            // Generate .d.ts type declaration for this component
+                            let type_argument_count = class
+                                .type_parameters
+                                .as_ref()
+                                .map_or(0, |tp| tp.params.len() as u32);
+                            result.dts_declarations.push(dts::generate_component_dts(
+                                &metadata,
+                                type_argument_count,
+                                &content_query_names,
+                                has_injectable,
+                                &compilation_result.ng_content_selectors,
+                            ));
+
                             result.component_count += 1;
                         }
                         Err(diags) => {
@@ -1814,14 +1847,14 @@ pub fn transform_angular_file(
 
                     // Check if the class also has an @Injectable decorator.
                     // @Injectable is SHARED precedence and can coexist with @Directive.
-                    if let Some(injectable_metadata) = extract_injectable_metadata(allocator, class)
-                    {
+                    let has_injectable = extract_injectable_metadata(allocator, class);
+                    if let Some(injectable_metadata) = &has_injectable {
                         if let Some(span) = find_injectable_decorator_span(class) {
                             decorator_spans_to_remove.push(span);
                         }
                         if let Some(inj_def) = generate_injectable_definition_from_decorator(
                             allocator,
-                            &injectable_metadata,
+                            injectable_metadata,
                         ) {
                             property_assignments.push_str(&format!(
                                 "\nstatic ɵprov = {};",
@@ -1829,6 +1862,15 @@ pub fn transform_angular_file(
                             ));
                         }
                     }
+                    let has_injectable = has_injectable.is_some();
+
+                    // Generate .d.ts type declaration for this directive
+                    let type_argument_count =
+                        class.type_parameters.as_ref().map_or(0, |tp| tp.params.len() as u32);
+                    directive_metadata.type_argument_count = type_argument_count;
+                    result
+                        .dts_declarations
+                        .push(dts::generate_directive_dts(&directive_metadata, has_injectable));
 
                     class_positions.push((
                         class_name.clone(),
@@ -1879,15 +1921,14 @@ pub fn transform_angular_file(
 
                         // Check if the class also has an @Injectable decorator (issue #65).
                         // @Injectable is SHARED precedence and can coexist with @Pipe.
-                        if let Some(injectable_metadata) =
-                            extract_injectable_metadata(allocator, class)
-                        {
+                        let has_injectable = extract_injectable_metadata(allocator, class);
+                        if let Some(injectable_metadata) = &has_injectable {
                             if let Some(span) = find_injectable_decorator_span(class) {
                                 decorator_spans_to_remove.push(span);
                             }
                             if let Some(inj_def) = generate_injectable_definition_from_decorator(
                                 allocator,
-                                &injectable_metadata,
+                                injectable_metadata,
                             ) {
                                 property_assignments.push_str(&format!(
                                     "\nstatic ɵprov = {};",
@@ -1895,6 +1936,16 @@ pub fn transform_angular_file(
                                 ));
                             }
                         }
+                        let has_injectable = has_injectable.is_some();
+
+                        // Generate .d.ts type declaration for this pipe
+                        let type_argument_count =
+                            class.type_parameters.as_ref().map_or(0, |tp| tp.params.len() as u32);
+                        result.dts_declarations.push(dts::generate_pipe_dts(
+                            &pipe_metadata,
+                            type_argument_count,
+                            has_injectable,
+                        ));
 
                         class_positions.push((
                             class_name.clone(),
@@ -1951,15 +2002,14 @@ pub fn transform_angular_file(
 
                         // Check if the class also has an @Injectable decorator.
                         // @Injectable is SHARED precedence and can coexist with @NgModule.
-                        if let Some(injectable_metadata) =
-                            extract_injectable_metadata(allocator, class)
-                        {
+                        let has_injectable = extract_injectable_metadata(allocator, class);
+                        if let Some(injectable_metadata) = &has_injectable {
                             if let Some(span) = find_injectable_decorator_span(class) {
                                 decorator_spans_to_remove.push(span);
                             }
                             if let Some(inj_def) = generate_injectable_definition_from_decorator(
                                 allocator,
-                                &injectable_metadata,
+                                injectable_metadata,
                             ) {
                                 property_assignments.push_str(&format!(
                                     "\nstatic ɵprov = {};",
@@ -1967,6 +2017,7 @@ pub fn transform_angular_file(
                                 ));
                             }
                         }
+                        let has_injectable = has_injectable.is_some();
 
                         // Collect any side-effect statements as external declarations
                         let mut external_decls = String::new();
@@ -1976,6 +2027,15 @@ pub fn transform_angular_file(
                             }
                             external_decls.push_str(&emitter.emit_statement(stmt));
                         }
+
+                        // Generate .d.ts type declaration for this NgModule
+                        let type_argument_count =
+                            class.type_parameters.as_ref().map_or(0, |tp| tp.params.len() as u32);
+                        result.dts_declarations.push(dts::generate_ng_module_dts(
+                            &ng_module_metadata,
+                            type_argument_count,
+                            has_injectable,
+                        ));
 
                         // NgModule: external_decls go AFTER the class (they reference the class name)
                         class_positions.push((
@@ -2027,6 +2087,14 @@ pub fn transform_angular_file(
                             emitter.emit_expression(&definition.fac_definition),
                             emitter.emit_expression(&definition.prov_definition)
                         );
+
+                        // Generate .d.ts type declaration for this injectable
+                        let type_argument_count =
+                            class.type_parameters.as_ref().map_or(0, |tp| tp.params.len() as u32);
+                        result.dts_declarations.push(dts::generate_injectable_dts(
+                            &injectable_metadata,
+                            type_argument_count,
+                        ));
 
                         class_positions.push((
                             class_name.clone(),
@@ -2172,6 +2240,9 @@ struct FullCompilationResult {
     /// The next constant pool index to use for the next component.
     /// This is used to share pool state across multiple components in the same file.
     next_pool_index: u32,
+
+    /// The ng-content selectors found in the template (e.g., `["*", ".header"]`).
+    ng_content_selectors: Vec<String>,
 }
 
 /// Compile a component template and generate ɵcmp/ɵfac definitions.
@@ -2245,6 +2316,10 @@ fn compile_component_full<'a>(
         }
         return Err(diagnostics);
     }
+
+    // Capture ng-content selectors from the R3 AST for .d.ts generation
+    let ng_content_selectors: Vec<String> =
+        r3_result.ng_content_selectors.iter().map(|s| s.to_string()).collect();
 
     // Merge inline template styles into component metadata
     // These are styles from <style> tags directly in the template HTML
@@ -2486,6 +2561,7 @@ fn compile_component_full<'a>(
         hmr_initializer_js,
         class_debug_info_js,
         next_pool_index,
+        ng_content_selectors,
     })
 }
 
