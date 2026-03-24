@@ -5,6 +5,8 @@
 
 use std::collections::HashMap;
 
+use std::path::Path;
+
 use oxc_allocator::{Allocator, Vec as OxcVec};
 use oxc_ast::ast::{
     Argument, ArrayExpressionElement, Declaration, ExportDefaultDeclarationKind, Expression,
@@ -695,6 +697,8 @@ struct JitClassInfo {
     is_exported: bool,
     /// Whether the class is export default.
     is_default_export: bool,
+    /// Whether the class is abstract.
+    is_abstract: bool,
     /// Constructor parameter info for ctorParameters.
     ctor_params: std::vec::Vec<JitCtorParam>,
     /// Member decorator info for propDecorators.
@@ -1138,6 +1142,37 @@ fn build_jit_decorator_text(
 
 /// Transform an Angular TypeScript file in JIT (Just-In-Time) compilation mode.
 ///
+/// Strip TypeScript syntax from JIT output using oxc_transformer.
+///
+/// This runs as a post-pass after JIT text-edits, converting TypeScript → JavaScript.
+/// It handles abstract members, type annotations, parameter properties, etc.
+fn strip_typescript(allocator: &Allocator, path: &str, code: &str) -> String {
+    let source_type = SourceType::from_path(path).unwrap_or_default();
+    let parser_ret = Parser::new(allocator, code, source_type).parse();
+    if parser_ret.panicked {
+        return code.to_string();
+    }
+
+    let mut program = parser_ret.program;
+
+    let semantic_ret =
+        oxc_semantic::SemanticBuilder::new().with_excess_capacity(2.0).build(&program);
+
+    let ts_options =
+        oxc_transformer::TypeScriptOptions { only_remove_type_imports: true, ..Default::default() };
+
+    let transform_options =
+        oxc_transformer::TransformOptions { typescript: ts_options, ..Default::default() };
+
+    let transformer =
+        oxc_transformer::Transformer::new(allocator, Path::new(path), &transform_options);
+    transformer.build_with_scoping(semantic_ret.semantic.into_scoping(), &mut program);
+
+    let codegen_ret = oxc_codegen::Codegen::new().with_source_text(code).build(&program);
+
+    codegen_ret.code
+}
+
 /// JIT mode produces output compatible with Angular's JIT runtime compiler:
 /// - Decorators are downleveled using `__decorate` from tslib
 /// - `templateUrl` is replaced with `angular:jit:template:file;` imports
@@ -1224,6 +1259,7 @@ fn transform_angular_file_jit(
             class_body_end: class.body.span.end,
             is_exported,
             is_default_export,
+            is_abstract: class.r#abstract,
             ctor_params,
             member_decorators,
             decorator_text,
@@ -1343,15 +1379,25 @@ fn transform_angular_file_jit(
         }
 
         // 4c. Class restructuring: `export class X` → `let X = class X`
+        // For abstract classes, also strip the `abstract` keyword since class expressions can't be abstract.
+        let class_keyword_start = if jit_info.is_abstract {
+            let rest = &source[jit_info.class_start as usize..];
+            let offset = rest.find("class").unwrap_or(0);
+            jit_info.class_start + offset as u32
+        } else {
+            jit_info.class_start
+        };
+
         if jit_info.is_exported || jit_info.is_default_export {
             edits.push(Edit::replace(
                 jit_info.stmt_start,
-                jit_info.class_start,
+                class_keyword_start,
                 format!("let {} = ", jit_info.class_name),
             ));
         } else {
-            edits.push(Edit::insert(
+            edits.push(Edit::replace(
                 jit_info.class_start,
+                class_keyword_start,
                 format!("let {} = ", jit_info.class_name),
             ));
         }
@@ -1394,6 +1440,9 @@ fn transform_angular_file_jit(
     } else {
         result.code = apply_edits(source, edits);
     }
+
+    // 5. Strip TypeScript syntax from JIT output
+    result.code = strip_typescript(allocator, path, &result.code);
 
     result
 }
